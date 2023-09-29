@@ -52,9 +52,7 @@ public class LockerManager {
         * */
 
         //처음 안내 출력
-        //locker.print(); //Locker class의 print 기능사용하여 사물함 프린트
-
-
+        locker.print(); //Locker class의 print 기능사용하여 사물함 프린트
 
         //입력
         int LockerNumber=0;

@@ -27,6 +27,8 @@ public class Locker {
         /*
          * 여기서 사물함 print
          */
+        System.out.println("사물함 출력");
+                
     }
 
 }
