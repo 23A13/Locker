@@ -1,6 +1,6 @@
 public class Locker {
 
-
+    //constructor
     public Locker() {
     }
     public Locker(int LockerNumber) {
@@ -23,5 +23,10 @@ public class Locker {
         * */
     }
 
+    public void print(){
+        /*
+         * 여기서 사물함 print
+         */
+    }
 
 }
