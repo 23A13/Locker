@@ -3,7 +3,12 @@
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("정상실행확인");
+        //System.out.println("정상실행확인");
+
+        //LockerManager Test
+        //LockerManager lockerManager = new LockerManager();
+        //lockerManager.Booking();
+        LockerManager.Menu();
 
     }
 }
