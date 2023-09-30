@@ -1,4 +1,9 @@
 public class Locker {
+    private int password;
+
+    public int getpwd(){
+        return password;
+    }
 
     //constructor
     public Locker() {
