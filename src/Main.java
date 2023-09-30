@@ -12,7 +12,7 @@ public class Main {
     static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
 
-        System.out.println("정상실행확인");
+        System.out.println("정상 실행 확인");
 
         date_check();
 
@@ -31,7 +31,7 @@ public class Main {
         boolean flag = todayCheck(today);
 
         while(!flag) {
-            System.out.print("오늘 날짜를 6자리의 수로 입력해주세요. (ex.230330): ");
+            System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) :");
             today = scan.next();
             flag =	todayCheck(today);
             if(flag) {
