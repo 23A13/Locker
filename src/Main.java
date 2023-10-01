@@ -8,7 +8,8 @@ public class Main {
         //LockerManager Test
         //LockerManager lockerManager = new LockerManager();
         //lockerManager.Booking();
-        LockerManager.Menu();
+        LockerManager test=new LockerManager();
+        test.Menu();
 
     }
 }
