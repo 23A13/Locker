@@ -18,14 +18,18 @@ public class LockerManager {
     }
 
     public static void Menu(){
-        System.out.println("——MENU—— ");
-        System.out.println("1. 보관하기");
-        System.out.println("2. 수거하기");
-        System.out.println("3. 예약하기");
-        System.out.println("4. 예약 확인 및 예약 확정");
-        System.out.println(("5. 로그아웃"));
-        System.out.println("6. 종료");
-        System.out.println(" ——————— ");
+        String menu = """
+                ——MENU——\s
+                1. 보관하기\s
+                2. 수거하기\s
+                3. 예약하기\s
+                4. 예약 확인 및 예약 확정\s
+                5. 로그아웃\s
+                6. 종료
+                 ———————\s
+                               
+                """;
+        System.out.println(menu);
         System.out.print(">>");
         int number = sc.nextInt();
 
