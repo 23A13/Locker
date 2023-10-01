@@ -32,6 +32,7 @@ public class LockerManager {
         System.out.println(menu);
         System.out.print(">>");
         int number = sc.nextInt();
+        sc.nextLine();
 
         System.out.println();
         switch(number){
