@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
@@ -184,7 +185,65 @@ public class LockerManager {
 
     //예약 확정 메소드
     public static void ConfirmBooking(){
-        /**/
+        String str;//메뉴 입력(1.예약확정/ Q,q
+
+        int password; //비밀번호 입력받는 변수
+        int u_locknum=0; //임의로 정한 변수(객체 완성되면 수정필요)
+        int u_payment=0; //임의로 정한 변수(객체 완성되면 수정필요)
+        int u_password=0; //임의로 정한 변수(객체 완성되면 수정필요)
+
+        int flag=0; //flag==0이면 올바르지 않은 입력
+        while(flag==0){
+            try{
+                System.out.println("-----예약 내역------");
+                System.out.println("보관함 번호 : "+u_locknum+"번"); //사용자의 사물함 객체 정보 받아야함
+                System.out.println("결제 금액: "+u_payment+"원"); //사용자의 사물함 객체 정보 받아야함
+                System.out.println("------------------");
+                System.out.println("1. 예약 확정");
+                System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
+                //메인메뉴에 nextInt()하고 나서 추가하기@@@@@@@ github 에 push!!
+                str=sc.nextLine();
+                if(str.equals("Q")|| str.equals("q")){
+                    flag=1;
+                }
+                else if(str.equals("1")){
+                    flag=2;
+                }
+                else{
+                    //flag=0;
+                    //System.out.println("1"); 확인용. 나중에 지우기
+                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                }
+
+            }catch(InputMismatchException e){
+                //flag=0;
+                //System.out.println("2"); 확인용. 나중에 지우기
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+            }
+        }
+        int flag_=5;//flag_ !=1 이면 올바르지 않은 입력
+        if(flag==2){//예약확정하기
+            while(flag_!=1){
+                try{
+                    System.out.print("비밀번호 4자리를 입력하세요.>>");
+                    password=sc.nextInt();
+                    sc.nextLine();
+                    if(password==u_password){
+                        flag_=1;//예약확정 성공
+                    }else{
+                        flag_=2;//비밀번호가 올바르지 않은 경우
+                        System.out.println("비밀번호가 올바르지 않습니다.\n");
+                    }
+
+                }catch(InputMismatchException e){
+                    flag_=0;//잘못된 입력을 받은 경우(문법적 오류)
+                    sc.nextLine();
+                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                }
+            }
+            System.out.println("예약이 확정되었습니다.");
+        }
+        Menu();// flag==1이거나,(flag==2인 경우에서 작업 마치면) 이전 메뉴로 돌아감.
 
     }
 
