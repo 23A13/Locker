@@ -5,7 +5,7 @@ import java.util.concurrent.locks.Lock;
 public class Locker {
 
     public int LockerNumber;
-    public Calendar StartTime; //사용시작시각 (yyyymmddtt)
+    public Date StartTime; //사용시작시각 (yyyymmddtt)
     public boolean isUsing;
     public int size;
     private int password;
@@ -45,31 +45,6 @@ public class Locker {
 
         return false;
 
-    }
-
-
-    //해당 정보 불러오는 메소드
-    public void RecallLockerInfo(){
-        //Date currentTime = Main.RecallDate(); 또는 Main.CurrentTime
-	/*
-	LockerInfo.txt파일에서
-	보관함 번호(LockerNumber)와 현재 시간대(currentTime)에 맞는 정보 찾기..
-	없으면 isUsing = false;
-
-	있으면
-	isUsing = true;
-	setpwd(배열[?]);
-	StartTime = yyyymmddtt;
-
-
-
-	*/
-    }
-
-    //File Update
-    public void UpdateLockerInfo(){
-        //보관, 예약 -> 파일에 추가 쓰기
-        //수거 -> 해당부분 삭제
     }
 
 }

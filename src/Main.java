@@ -9,6 +9,8 @@ import java.util.Scanner;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
 
+    public static String currentTimeString;
+    public static Date currentTimeDate;
     static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
 
@@ -56,11 +58,10 @@ public class Main {
 
         // 글자 수가 10이 아닐 경우 false 반환
         if(dTrim.length() != 10) {
-            System.out.println("올바른 입력이 아닙니다.");
+            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             System.out.println();
             return flag;
         }
-
 
         //기존 날짜 불러오기
         try(Scanner scan = new Scanner(timeFile))
@@ -106,7 +107,6 @@ public class Main {
             System.out.println("파일 명을 확인하세요.");
         }
 
-
         // 위와 같은 방식으로 새로 입력한 날짜 확인
         try {
             int num = 0;
@@ -137,8 +137,11 @@ public class Main {
             newCalendar.set(Calendar.SECOND, 0);
             newDate = newCalendar.getTime();
 
+            //내가 임의로 일단 선언쓰..
+            currentTimeDate = newDate;
+
         } catch(Exception e) {
-            System.out.println("올바른 입력이 아닙니다.");
+            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             System.out.println();
             return flag;
         }
@@ -158,7 +161,7 @@ public class Main {
         }
         else {
             // 날짜 틀림
-            System.out.println("지난 날짜 입니다.");
+            System.out.println("지난 날짜입니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
         }
@@ -169,17 +172,18 @@ public class Main {
         // 예약 내역 수정 함수
         deleteLinesBeforeDate(dTrim);
 
+        // 오늘 날짜 변수에 string 값 저장
+        currentTimeString = dTrim;
+
         System.out.println();
 
         // flag를 이용해 반복 조절
         return flag;
     }
 
-    // 예약 내역 수정 함수
     private static void deleteLinesBeforeDate(String dTrim) {
     }
 
-    // Date.txt 파일에 기존 날짜 지우고 새로 날짜 입력
     private static void beforeRemove(String dTrim, String oldD) {
     }
 

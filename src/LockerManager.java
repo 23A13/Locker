@@ -1,14 +1,11 @@
-import java.util.Calendar;
-import java.util.Scanner;
-import java.util.Objects;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
 
 public class LockerManager {
     //class 선언
     static Scanner sc = new Scanner(System.in);
     static Locker locker = new Locker();
-
+    static List<Locker> LockerList;
 
     //Constructor
     public LockerManager() {
@@ -84,7 +81,7 @@ public class LockerManager {
                 if (LockerNumber < 1 || LockerNumber > 16)
                     throw new IllegalArgumentException();
 
-                //예약 확인 처리
+                //사용중이지 않은 보관함을 선택했을 때 처리
                 if (!locker.BooingCheck(LockerNumber))
                     throw new IllegalAccessException();
 
@@ -135,21 +132,32 @@ public class LockerManager {
 
 
         //보관함 비밀번호가 올바른 경우
+
+        //파일에서 현재 시간 불러오기 -> Main.todayDateDate사용
+        //Locker.txt에서 저장해온 LockerList에서 해당 보관함 사용 정보 불러와서 시간 비교
+
+        int target=0;
+        for (int i=0; i<=LockerList.size(); i++){
+            if(LockerList.get(i).LockerNumber == LockerNumber){ //보관함 번호가 맞고
+                //if(Integer.parseInt(LockerList.get(i).StartTime) <= Integer.parseInt(Main.todayDateString)){ //날짜가 오늘보다 이전에 시작된거라면
+                   target = i;
+                //}
+            }
+        }
+
+
+        //시간 차이 구하기
+        long timeDiff = (Main.currentTimeDate.getTime() - LockerList.get(target).StartTime.getTime())/3600000;
+
         //추가 결제가 필요한 경우 = 예약시간+4시간 초과인 경우
-
-        /*
-        //Calendar currentTime = Main.RecallDate(); //파일에서 현재 시간 불러오기
-        //Locker.txt에서 해당 보관함 사용 정보 불러와서 시간 비교 -> Locker 클래스에서 할까?
-
-        int timeDiff = //Main.currentTime - locker.StartTime
         if (timeDiff > 4){
             while(true){
-                Print_AddPayPrompt(timeDiff);
+                Print_AddPayPrompt((int) timeDiff);
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
                 try{
                      // Y or y 말고 다른 것을 입력한 경우
-                    if(!(Objects.equals(yn, "Y") || Objects.equals(yn, "y"))
+                    if(!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
                         throw new IllegalArgumentException();
 
                 }catch  (IllegalArgumentException e){
@@ -191,11 +199,15 @@ public class LockerManager {
             break;
         }
 
+
+        //수거완료한 보관함 정보(?) 삭제
+        LockerList.remove(target);
+
         System.out.println("물품 수거가 완료되었습니다.");
         System.out.println("이용해주셔서 감사합니다.");
         System.exit(0);
 
-         */
+         //*/
 
 
 
