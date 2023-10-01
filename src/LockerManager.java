@@ -1,10 +1,17 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
 
 public class LockerManager {
-    
+    ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
+
+
     //class 선언
     static Scanner sc = new Scanner(System.in);
     static Locker locker = new Locker();
@@ -14,11 +21,57 @@ public class LockerManager {
     public LockerManager() {
 
     }
+    //수정필요해보임
     public LockerManager(String userId, String userPassword) {
 
     }
 
-    public static void Menu(){
+    //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
+    public void LockerFileInput(){
+        String filename="C:\\bprj_2\\Locker\\Locker.txt";
+        try(Scanner scan=new Scanner(new File(filename))){
+            while(scan.hasNextLine()) {
+                String str=scan.nextLine();
+                String[] temp1=str.split(" ");
+                int[] temp=new int[temp1.length-1];//string을 int형으로 바꿈
+                for(int i=0;i< temp1.length-1;i++){
+                    temp[i]=Integer.parseInt(temp1[i+1].trim());
+                }
+                LockerList.add(new Locker(temp1[0].trim(),temp[0],temp[1],temp[2],temp[3]));//최초로 저장구조에 locker정보 저장
+            }
+        }catch(FileNotFoundException e){
+            System.out.println("파일 입력이 잘못되었습니다.");
+        }
+    }
+
+    //프로그램 종료 시 locker 데이터 txt파일에 저장하는 함수
+    public void LockerFileWrite(){
+        try{
+            File file = new File("C:\\bprj_2\\Locker\\Locker.txt");
+            if(!file.exists()){
+                System.out.println("파일경로를 다시 확인하세요.");
+            }else{
+                FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
+                for(int i=0;i< LockerList.size();i++){
+                    writer.write(LockerList.get(i).locknum+" "+LockerList.get(i).locksize+" "+LockerList.get(i).use+" "+LockerList.get(i).date+" "+LockerList.get(i).confirmbook+"\n");
+                    writer.flush();
+                }
+                writer.close();
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void Menu(){
+        LockerFileInput();
+        //arrayList 잘 저장됐나 확인용-나중에 삭제
+        /*for(int i=0;i<LockerList.size();i++){
+            System.out.println(LockerList.get(i).locknum);
+        }
+        System.out.println();*/
+        //LockerList.set(0,new Locker("01",1,1,1,1)); //프로그램 종료시 txt파일에 변경사항 잘 저장되는지 확인용-나중에 삭제
+        //LockerFileWrite();
         String menu = """
                 ——MENU——\s
                 1. 보관하기\s
@@ -38,10 +91,10 @@ public class LockerManager {
         System.out.println();
         switch(number){
             case 3:
-                LockerManager.Booking();
+                Booking();
                 break;
             case 4:
-                LockerManager.ConfirmBooking();
+                ConfirmBooking();
                 break;
             default:
                 break;
@@ -50,7 +103,7 @@ public class LockerManager {
     }
 
     //예약 메소드
-    public static void Booking(){
+    public void Booking(){
         /* <해야할 것>
         * 예약 저장 - Y에서 파일에 예약 정보 저장 Locker methods 제작
         * 예약 확인 - 예약 확인 부분에서 Locker methods 제작
@@ -58,7 +111,7 @@ public class LockerManager {
         * */
 
         //처음 안내 출력
-        locker.print(); //Locker class의 print 기능사용하여 사물함 프린트
+        //locker.print(); //Locker class의 print 기능사용하여 사물함 프린트
 
         String tariff = """
                 ——————요금표——————————————————————————\s
@@ -100,7 +153,7 @@ public class LockerManager {
                 if(Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
                     //!!!!!!!!!!!!!!아직 상의 안 된 부분 바뀔 수도 있음
                     System.out.println("\n\nmenu2.1로 돌아가기\n");
-                    LockerManager.Menu();
+                    Menu();
                     break;
 
                }
@@ -113,7 +166,7 @@ public class LockerManager {
                 if (LockerNumber<1 || LockerNumber > 16) throw new IllegalArgumentException();
 
                 //예약 확인 처리 !!!!!!!1아직 상의 안 된 부분 바뀔 수도 있음
-                if(locker.BooingCheck(LockerNumber)) throw new IllegalAccessException();
+                //if(locker.BookingCheck(LockerNumber)) throw new IllegalAccessException();
 
                 //아무 문제 없다면 사이즈 별 안내 창으로 이동
                 flow = 2;
@@ -122,9 +175,9 @@ public class LockerManager {
             }catch(IllegalArgumentException e){ //나머지 입력 예외 처리
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
 
-            }catch(IllegalAccessException e){
+            }/*catch(IllegalAccessException e){
                 System.out.println("이용 중인 보관함입니다.\n");
-            }
+            }*/
 
         }
 
@@ -168,14 +221,14 @@ public class LockerManager {
 
                 //여기서 Locker 객체 불러와서 예약 여부 정해야 합니다. 혹은 여기서 파일 바로 저장.
                 // 근데 Locker 객체에서 저장하는게 더 좋을듯
-                locker.BooingFileInput(LockerNumber);
+                //locker.BookingFileInput(LockerNumber);
 
                 return;
             }
             else{
                 //!!!!!!!!!!!!!!아직 상의 안 된 부분 바뀔 수도 있음
                 System.out.println("\n\nmenu2.1로 돌아가기\n");
-                LockerManager.Menu();
+                Menu();
                 return;
             }
         }
@@ -184,7 +237,7 @@ public class LockerManager {
     }
 
     //예약 확정 메소드
-    public static void ConfirmBooking(){
+    public void ConfirmBooking(){
         String str;//메뉴 입력(1.예약확정/ Q,q
 
         int password; //비밀번호 입력받는 변수
