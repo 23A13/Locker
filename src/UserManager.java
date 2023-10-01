@@ -29,7 +29,7 @@ public class UserManager {
                     login();
 
                 else if(choice.equals("3"))
-                    break;
+                    LockerManager.Menu();
 
                 else if(choice.equals("4")) {
                     System.out.println("프로그램을 종료합니다");
@@ -57,4 +57,5 @@ public class UserManager {
 
     private void login() {
     }
+
 }

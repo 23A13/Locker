@@ -61,6 +61,7 @@ public class Main {
             return flag;
         }
 
+
         //기존 날짜 불러오기
         try(Scanner scan = new Scanner(timeFile))
         {
@@ -104,6 +105,7 @@ public class Main {
         {
             System.out.println("파일 명을 확인하세요.");
         }
+
 
         // 위와 같은 방식으로 새로 입력한 날짜 확인
         try {
@@ -173,9 +175,11 @@ public class Main {
         return flag;
     }
 
+    // 예약 내역 수정 함수
     private static void deleteLinesBeforeDate(String dTrim) {
     }
 
+    // Date.txt 파일에 기존 날짜 지우고 새로 날짜 입력
     private static void beforeRemove(String dTrim, String oldD) {
     }
 
