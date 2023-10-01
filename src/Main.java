@@ -9,6 +9,7 @@ import java.util.Scanner;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
 
+    public static String todayDateString;
     static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
 
@@ -17,6 +18,8 @@ public class Main {
         date_check();
 
         UserManager user = new UserManager();
+
+
         user.menu1();
 
 
@@ -56,7 +59,7 @@ public class Main {
 
         // 글자 수가 10이 아닐 경우 false 반환
         if(dTrim.length() != 10) {
-            System.out.println("올바른 입력이 아닙니다.");
+            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             System.out.println();
             return flag;
         }
@@ -136,7 +139,7 @@ public class Main {
             newDate = newCalendar.getTime();
 
         } catch(Exception e) {
-            System.out.println("올바른 입력이 아닙니다.");
+            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             System.out.println();
             return flag;
         }
@@ -156,7 +159,7 @@ public class Main {
         }
         else {
             // 날짜 틀림
-            System.out.println("지난 날짜 입니다.");
+            System.out.println("지난 날짜입니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
         }
@@ -166,6 +169,9 @@ public class Main {
         
         // 예약 내역 수정 함수
         deleteLinesBeforeDate(dTrim);
+
+        // 오늘 날짜 변수에 string 값 저장
+        todayDateString = dTrim;
 
         System.out.println();
 
