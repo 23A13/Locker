@@ -43,7 +43,7 @@ public class UserManager {
                     writer.write(entry.getValue().toString());
                     writer.flush();
                 }
-                for (Map.Entry<String, User> entry : nonmem.entrySet()) {//회원 데이터 저장
+                for (Map.Entry<String, User> entry : nonmem.entrySet()) {//비회원 데이터 저장
                     writer.write(entry.getValue().toString());
                     writer.flush();
                 }
