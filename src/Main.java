@@ -9,8 +9,7 @@ import java.util.Scanner;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
 
-    public static String currentTimeString;
-    public static Date currentTimeDate;
+    public static String todayDateString;
     static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
 
@@ -26,14 +25,14 @@ public class Main {
 
     // 날짜 체크 함수
     public static void date_check(){
-        System.out.println("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) :\n");
+        System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) : ");
 
         String today = scan.next();
 
         boolean flag = todayCheck(today);
 
         while(!flag) {
-            System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) :");
+            System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) : ");
             today = scan.next();
             flag =	todayCheck(today);
             if(flag) {
@@ -137,9 +136,6 @@ public class Main {
             newCalendar.set(Calendar.SECOND, 0);
             newDate = newCalendar.getTime();
 
-            //내가 임의로 일단 선언쓰..
-            currentTimeDate = newDate;
-
         } catch(Exception e) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             System.out.println();
@@ -173,7 +169,7 @@ public class Main {
         deleteLinesBeforeDate(dTrim);
 
         // 오늘 날짜 변수에 string 값 저장
-        currentTimeString = dTrim;
+        todayDateString = dTrim;
 
         System.out.println();
 

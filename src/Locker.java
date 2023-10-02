@@ -1,50 +1,50 @@
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.locks.Lock;
-
 public class Locker {
-
-    public int LockerNumber;
-    public Date StartTime; //사용시작시각 (yyyymmddtt)
-    public boolean isUsing;
-    public int size;
-    private int password;
-
-    public int getpwd() { return password; }
-
-    public void setpwd(int pwd){
-        this.password = pwd;
-    }
+    String locknum; //보관함 번호
+    String locksize; //보관함 크기(0/1/2-S/M/L)
+    String use; //사용여부(0/1/2-미사용/사용중/예약중)
+    String date; //날짜시각
+    String confirmbook; //예약확정 여부(0/1-미확/확정)
 
     //constructor
     public Locker() {
     }
-    public Locker(int LockerNumber) {
-        this.LockerNumber = LockerNumber;
-        if (LockerNumber <= 8) size = 1;
-        else if (LockerNumber <= 12) size = 2;
-        else if (LockerNumber <= 16) size = 3;
+    public Locker(String locknum, String locksize,String date){
+        this.locknum=locknum;
+        this.locksize=locksize;
+        this.use="0";
+        this.date=date;
+        this.confirmbook="0";
+    }
+    public Locker(String locknum, String locksize,String use,String date,String confirmbook){
+        this.locknum=locknum;
+        this.locksize=locksize;
+        this.use=use;
+        this.date=date;
+        this.confirmbook=confirmbook;
     }
 
-    public void print() {
-        /*
-         * 여기서 사물함 print
-         */
-        System.out.println("사물함 출력");
-    }
-
-    //보관함 비밀번호 설정
-
-
-    public boolean BooingCheck(int LockerNumber){
-        /*
-         * 파일 입력, locker 예약 확인
-         */
-        if(LockerNumber==5)
-            return true;
-
-        return false;
-
+    public void print(){
+        System.out.println("---------------------------------------------------------------------------------------");
+        System.out.println("| 01        | 02        | 03        | 04        | 13               | 14               |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|-----------------------------------------------|                  |                  |");
+        System.out.println("| 05        | 06        | 07        | 08        |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|-----------|-----------|-----------|-----------|------------------|------------------|");
+        System.out.println("| 09        | 10        | 11        | 12        | 15               | 16               |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("---------------------------------------------------------------------------------------");
     }
 
 }
