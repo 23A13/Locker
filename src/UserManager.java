@@ -8,13 +8,14 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UserManager {
-
+    static Map<String,User> mem=new HashMap<>(); //회원 정보 저장 구조
+    static Map<String,User> nonmem=new HashMap<>(); //비회원 정보 저장 구조
     //constructor
     public UserManager(){
 
     }
     //프로그램 최초 시작 시 user 데이터 txt파일로부터 불러오는 함수
-    public void UserFileInput(Map<String,User> mem, Map<String,User> nonmem){
+    public void UserFileInput(){
         String filename="./Locker/User.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
@@ -32,7 +33,7 @@ public class UserManager {
     }
 
     //프로그램 종료 시 user 데이터 txt파일에 저장하는 함수
-    public void UserFileWrite(Map<String,User> mem, Map<String,User> nonmem){
+    public void UserFileWrite(){
         try{
             File file = new File("./Locker/User.txt");
             if(!file.exists()){
