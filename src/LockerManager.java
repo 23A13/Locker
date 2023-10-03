@@ -282,66 +282,6 @@ public class LockerManager {
         }
 
 
-
-        /* @로그인 상태여도 비회원으로 이용한 보관함 수거 가능한지?
-        if(isLogin){ //회원인 경우
-
-            for(String id : mem.keySet()) {
-                if (Integer.parseInt(mem.get(id).locknum)==LockerNumber)
-                    target_key = id;
-            }
-        }else{ //비회원인 경우
-            for(String lnum : nonmem.keySet()) {
-                if(Integer.parseInt(nonmem.get(lnum).locknum)==LockerNumber)
-                    target_key = lnum;
-            }
-        }*/
-
-
-        //보관함 비밀번호 입력받기
-        /*
-
-        String LockerPwd;
-        String pwd_prompt2 = "비밀번호 4자리를 입력하세요. ";
-        while (true) {
-
-            //보관함 비밀번호 입력
-            System.out.println(pwd_prompt2);
-            System.out.print(">>");
-
-
-            //보관함 비밀번호 입력받기
-            LockerPwd = String.valueOf(sc.next());
-            sc.nextLine();
-
-            try {
-                //숫자 입력이 아닌 경우
-                if (!isNumeric(LockerPwd))
-                    throw new IllegalArgumentException();
-
-                //4자리가 아닌 경우
-                if (LockerPwd.length() != 4)
-                    throw new IllegalArgumentException();
-
-            } catch (IllegalArgumentException e) {
-                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-
-            }
-
-            //보관함 비밀번호가 올바르지 않을 경우
-            if(isLogin){ //회원인 경우
-                if (!Objects.equals(LockerPwd, mem.get(target_key))) {
-                    System.out.println("비밀번호가 올바르지 않습니다.");
-                }
-            }else{ //비회원인 경우
-                if (!Objects.equals(LockerPwd, nonmem.get(target_key))) {
-                    System.out.println("비밀번호가 올바르지 않습니다.");
-                }
-            }
-
-            break;
-
-        }*/
         String pwd_prompt2 = "비밀번호 4자리를 입력하세요. ";
         pwdCheck(pwd_prompt2, isMemLocker, targetKey);
 
@@ -350,7 +290,7 @@ public class LockerManager {
         //보관함 비밀번호가 올바른 경우
 
         //시간 차이 구하기
-        Date currentTime = StringToDate(Main.todayDateString);
+        Date currentTime = StringToDate(Main.currentTimeString);
         Date startTime = StringToDate(LockerList.get(target).date);
         int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
 
@@ -524,5 +464,75 @@ public class LockerManager {
     }
 
 
+    public void deleteLockerBeforeDate(Date newDate) {
+
+        String filename = "Locker.txt";
+
+        ArrayList<String> lockersToDelete = new ArrayList<>();
+
+        try (Scanner scan = new Scanner(new File(filename))) {
+            while (scan.hasNextLine()) {
+                String str = scan.nextLine();
+
+                String[] temp = str.split(" ");
+
+                // 날짜만 가져와 비교
+                Date lockerDate;
+                String dateStr = temp[3];
+                System.out.println(dateStr);
+                String[] dateStrTemp = new String[4];
+                int num = 0;
+
+                //이용 중인 보관함이 아니라서 날짜 부분이 "-" 일 경우
+                if(temp[3].length() <= 1)
+                {
+                    LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
+                    continue;
+                }
+
+                // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
+                for(int i=0; i<4; i++) {
+                    if(i==0)
+                    {
+                        dateStrTemp[i] = dateStr.substring(num, num+4);
+                        num += 4;
+                    }
+                    else
+                    {
+                        dateStrTemp[i] = dateStr.substring(num, num+2);
+                        num += 2;
+                    }
+                }
+
+                // 배열에 저장한 숫자 이용해서 날짜 객체 생성
+                Calendar oldCalendar = new GregorianCalendar(Integer.parseInt(dateStrTemp[0]),
+                        Integer.parseInt(dateStrTemp[1])-1, Integer.parseInt(dateStrTemp[2]));
+                oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateStrTemp[3]));
+                oldCalendar.set(Calendar.MINUTE, 0);
+                oldCalendar.set(Calendar.SECOND, 0);
+                lockerDate = oldCalendar.getTime();
+
+                // 예약 날짜가 입력 받은 날보다 앞일 경우에만 저장
+                if(!(lockerDate.before(newDate))){
+                    LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
+                } else
+                {
+                    LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", "-", "0"));//저장구조에 보관/예약 정보를 수정해서 locker정보 저장
+                    lockersToDelete.add(temp[0]);
+                }
+
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("파일 입력이 잘못되었습니다.");
+        }
+
+        UserManager tmpUserManager = new UserManager();
+        tmpUserManager.deleteUserBeforeDate(lockersToDelete);
+        LockerFileWrite(LockerList);
+    }
+
 }
+
+
+
 

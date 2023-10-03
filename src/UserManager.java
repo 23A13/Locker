@@ -2,10 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.InputMismatchException;
+import java.util.*;
 
 public class UserManager {
 
@@ -65,6 +62,45 @@ public class UserManager {
             e.printStackTrace();
         }
     }
+
+    // 날짜/시간 입력 후에 지난 내역들 파일에서 삭제하는 메소드
+    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete)
+    {
+        try{
+            File file = new File("User.txt");
+            if(!file.exists()){
+                System.out.println("파일경로를 다시 확인하세요.");
+            }else{
+                FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
+                for (Map.Entry<String, User> entry : memMap.entrySet()) {//회원 데이터 저장
+                    // 지워야 할 이용 내역이 있다면
+                    if(lockersToDelete.contains(entry.getValue().locknum))
+                    {
+                        entry.getValue().locknum = "-";
+                        entry.getValue().lockPW = "-";
+                        writer.write(entry.getValue().toString());
+                        writer.flush();
+                    } else // 없다면
+                    {
+                        writer.write(entry.getValue().toString());
+                        writer.flush();
+                    }
+                }
+                for (Map.Entry<String, User> entry : nonmemMap.entrySet()) {//비회원 데이터 저장
+                    // 지워야 할 이용이 아니면
+                    if(!(lockersToDelete.contains(entry.getValue().locknum)))
+                    {
+                        writer.write(entry.getValue().toString());
+                        writer.flush();
+                    }
+                }
+                writer.close();
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void menu1() {
         // TODO Auto-generated method stub
 
@@ -97,7 +133,7 @@ public class UserManager {
 
 
                         LockerManager memLockerManager = new LockerManager();
-                        if(menuEndFlag) memLockerManager.Menu_1();
+                        memLockerManager.Menu_1();
                         // loguser = null; (회원 메뉴에서 로그아웃 시 로그인 중인 회원 정보를 null로)
                         // (이렇게 하면 로그아웃 하면 메뉴 1로 돌아가게 됨. 아마도..?)
                         // (민진님은 회원 메뉴에서 로그아웃 하면 그냥 return 되게 만드시면 될 것 같습니다!)
