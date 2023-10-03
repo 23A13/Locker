@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class LockerManager {
-    ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
-    Map<String,User> mem=new HashMap<>(); //회원 정보 저장 구조
-    Map<String,User> nonmem=new HashMap<>(); //비회원 정보 저장 구조
-
+    static ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
 
     UserManager u=new UserManager();
     //class 선언
@@ -26,7 +23,7 @@ public class LockerManager {
     }
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
-    public void LockerFileInput(ArrayList<Locker> List){
+    public void LockerFileInput(){
         String filename="./Locker/Locker.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
@@ -36,7 +33,7 @@ public class LockerManager {
                 for(int i=0;i< temp1.length-1;i++){
                     temp[i]=Integer.parseInt(temp1[i+1].trim());
                 }*/
-                List.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
+                LockerList.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
             }
         }catch(FileNotFoundException e){
             System.out.println("파일 입력이 잘못되었습니다.");
@@ -44,15 +41,15 @@ public class LockerManager {
     }
 
     //프로그램 종료 시 locker 데이터 txt파일에 저장하는 함수
-    public void LockerFileWrite(ArrayList<Locker> List){
+    public void LockerFileWrite(){
         try{
             File file = new File("./Locker/Locker.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
                 FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for(int i=0;i< List.size();i++){
-                    writer.write(List.get(i).locknum+" "+List.get(i).locksize+" "+List.get(i).use+" "+List.get(i).date+" "+List.get(i).confirmbook+"\n");
+                for(int i=0;i< LockerList.size();i++){
+                    writer.write(LockerList.get(i).locknum+" "+LockerList.get(i).locksize+" "+LockerList.get(i).use+" "+LockerList.get(i).date+" "+LockerList.get(i).confirmbook+"\n");
                     writer.flush();
                 }
                 writer.close();
@@ -63,20 +60,20 @@ public class LockerManager {
     }
     
     public void Menu(){
-        LockerFileInput(LockerList);
+        LockerFileInput();
         //arrayList 잘 저장됐나 확인용-나중에 삭제
         /*for(int i=0;i<LockerList.size();i++){
             System.out.println(LockerList.get(i).date);
         }*/
         
         //user정보 저장 잘되나 확인용-나중에 삭제
-        /*u.UserFileInput(mem,nonmem);
-        System.out.println(mem.get("25"));
-        System.out.println(nonmem.get("01"));
-        nonmem.put("01",new User(nonmem.get("01").locknum,"1234"));
-        u.UserFileWrite(mem,nonmem);*/
+        u.UserFileInput();
+        System.out.println(u.mem.get("25"));
+        System.out.println(u.nonmem.get("01"));
+        u.nonmem.put("01",new User(u.nonmem.get("01").locknum,"1234"));
+        u.UserFileWrite();
 
-        System.out.println();
+        //System.out.println();
         //LockerList.set(0,new Locker("01",1,1,1,1)); //프로그램 종료시 txt파일에 변경사항 잘 저장되는지 확인용-나중에 삭제
         //LockerFileWrite();
         String menu = """
