@@ -141,7 +141,7 @@ public class UserManager {
                     {
                         menuEndFlag = true;
                         LockerManager nonMemLockerManager = new LockerManager();
-                        // nonMemLockerManager.비회원메뉴출력메소드();
+                        nonMemLockerManager.Menu_2();
                     }
                     else if(choice.equals("4"))
                     {
