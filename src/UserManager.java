@@ -9,8 +9,8 @@ public class UserManager {
     static Scanner scan = new Scanner(System.in);
 
     // 비회원, 회원 정보 저장
-    static Map<String, User> memMap = new HashMap<>();
-    static Map<String, User> nonmemMap = new HashMap<>();
+    static Map<String, User> mem = new HashMap<>();
+    static Map<String, User> nonmem = new HashMap<>();
 
     //로그인 중인 회원 아이디
     User loguser = null;
@@ -18,11 +18,11 @@ public class UserManager {
     //constructor
     public UserManager(){
         // 처음 시작에
-        this.UserFileInput(memMap ,nonmemMap);
+        this.UserFileInput();
     }
 
     //프로그램 최초 시작 시 user 데이터 txt파일로부터 불러오는 함수
-    public void UserFileInput(Map<String,User> mem, Map<String,User> nonmem){
+    public void UserFileInput(){
         String filename="User.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
@@ -41,7 +41,7 @@ public class UserManager {
     }
 
     //프로그램 종료 시 user 데이터 txt파일에 저장하는 함수
-    public void UserFileWrite(Map<String,User> mem, Map<String,User> nonmem){
+    public void UserFileWrite(){
         try{
             File file = new File("User.txt");
             if(!file.exists()){
@@ -71,7 +71,7 @@ public class UserManager {
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
                 FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for (Map.Entry<String, User> entry : memMap.entrySet()) {//회원 데이터 저장
+                for (Map.Entry<String, User> entry : mem.entrySet()) {//회원 데이터 저장
                     // 지워야 할 이용 내역이 있다면
                     if(lockersToDelete.contains(entry.getValue().locknum))
                     {
@@ -85,7 +85,7 @@ public class UserManager {
                         writer.flush();
                     }
                 }
-                for (Map.Entry<String, User> entry : nonmemMap.entrySet()) {//비회원 데이터 저장
+                for (Map.Entry<String, User> entry : nonmem.entrySet()) {//비회원 데이터 저장
                     // 지워야 할 이용이 아니면
                     if(!(lockersToDelete.contains(entry.getValue().locknum)))
                     {
@@ -169,7 +169,7 @@ public class UserManager {
         if(endInput.equals("Y")||endInput.equals("y"))
         {
             // 파일 저장 후 저장
-            this.UserFileWrite(memMap, nonmemMap);
+            this.UserFileWrite();
             System.out.println("프로그램을 종료합니다.");
             System.exit(0);
         }
@@ -193,7 +193,7 @@ public class UserManager {
             return false;
         }
 
-        if (memMap.get(id) != null) {
+        if (mem.get(id) != null) {
             System.out.println("이미 사용 중인 아이디입니다");
             return false;
         }
@@ -232,8 +232,8 @@ public class UserManager {
 
         User newSingUpUser = new User(id, pw, "-", "-");
 
-        memMap.put(id, newSingUpUser);
-        this.UserFileWrite(memMap, nonmemMap);
+        mem.put(id, newSingUpUser);
+        this.UserFileWrite();
 
         System.out.println("회원가입이 완료되었습니다.\n");
 
@@ -269,10 +269,10 @@ public class UserManager {
 
         String pw = scan.nextLine();
 
-        if(memMap.get(id) != null) {
+        if(mem.get(id) != null) {
             //로그인 성공 시 loguser에 로그인 성공한 User 객체 대입
-            if(memMap.get(id).memberPW.equals(pw))
-                this.loguser = memMap.get(id);
+            if(mem.get(id).memberPW.equals(pw))
+                this.loguser = mem.get(id);
 
             else {
                 System.out.println("아이디 또는 비밀번호가 올바르지 않습니다.");

@@ -9,11 +9,7 @@ public class LockerManager {
     //로그인한 사용자 아이디
     String loguser;
 
-    ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
-    Map<String,User> mem=new HashMap<>(); //회원 정보 저장 구조
-    Map<String,User> nonmem=new HashMap<>(); //비회원 정보 저장 구조
-
-
+    static ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
 
     //class 선언
     static Scanner sc = new Scanner(System.in);
@@ -22,8 +18,6 @@ public class LockerManager {
 
     //Constructor
     public LockerManager() {
-        mem = u.memMap;
-        nonmem = u.nonmemMap;
     }
     public LockerManager(String userId, String userPassword) {
     }
@@ -31,7 +25,7 @@ public class LockerManager {
         this.loguser = loguser;
     }
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
-    public void LockerFileInput(ArrayList<Locker> List){
+    public void LockerFileInput(){
         String filename="Locker.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
@@ -41,7 +35,7 @@ public class LockerManager {
                 for(int i=0;i< temp1.length-1;i++){
                     temp[i]=Integer.parseInt(temp1[i+1].trim());
                 }*/
-                List.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
+                LockerList.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
             }
         }catch(FileNotFoundException e){
             System.out.println("파일 입력이 잘못되었습니다.");
@@ -49,15 +43,15 @@ public class LockerManager {
     }
 
     //프로그램 종료 시 locker 데이터 txt파일에 저장하는 함수
-    public void LockerFileWrite(ArrayList<Locker> List){
+    public void LockerFileWrite(){
         try{
             File file = new File("Locker.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
                 FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for(int i=0;i< List.size();i++){
-                    writer.write(List.get(i).locknum+" "+List.get(i).locksize+" "+List.get(i).use+" "+List.get(i).date+" "+List.get(i).confirmbook+"\n");
+                for(int i=0;i< LockerList.size();i++){
+                    writer.write(LockerList.get(i).locknum+" "+LockerList.get(i).locksize+" "+LockerList.get(i).use+" "+LockerList.get(i).date+" "+LockerList.get(i).confirmbook+"\n");
                     writer.flush();
                 }
                 writer.close();
@@ -70,7 +64,12 @@ public class LockerManager {
     //회원메뉴
     public void Menu_1(){
         //파일 읽어오기
-        LockerFileInput(LockerList);
+        LockerFileInput();
+
+        //user정보 저장 잘되나 확인용-나중에 삭제
+        u.UserFileInput();
+        System.out.println(u.mem);
+        System.out.println(u.nonmem);
 
         String menu = """
                 ——MENU——\s
@@ -134,13 +133,13 @@ public class LockerManager {
                 break;
         }
         //locker 데이터 Locker.txt 파일에 저장
-        LockerFileWrite(LockerList);
+        //LockerFileWrite();
     }
 
     //비회원메뉴
     public void Menu_2() { //비회원메뉴
 
-        LockerFileInput(LockerList);
+        LockerFileInput();
 
         String menu = """
                 --MENU--\s
@@ -173,7 +172,7 @@ public class LockerManager {
             default:
                 break;
         }
-        LockerFileWrite(LockerList);
+        LockerFileWrite();
 
     }
 
@@ -276,14 +275,14 @@ public class LockerManager {
         String targetKey=null;
         boolean isMemLocker = false;
 
-        for(String id : mem.keySet()) {
-            if(!mem.get(id).locknum.equals("-")) {
-                if (LockerNumber == Integer.parseInt(mem.get(id).locknum)) {
+        for(String id : u.mem.keySet()) {
+            if(!u.mem.get(id).locknum.equals("-")) {
+                if (LockerNumber == Integer.parseInt(u.mem.get(id).locknum)) {
                     targetKey = id;
 
                     //test확인용출력-나중에삭제
                     System.out.println("mem map에서 찾기 성공");
-                    System.out.println(mem.get(id));
+                    System.out.println(u.mem.get(id));
                     break;
                 }
             }
@@ -292,13 +291,13 @@ public class LockerManager {
             isMemLocker = true;
         }else{
             isMemLocker = false;
-            for (String lnum : nonmem.keySet()) {
-                if (Integer.parseInt(nonmem.get(lnum).locknum) == LockerNumber) {
+            for (String lnum : u.nonmem.keySet()) {
+                if (Integer.parseInt(u.nonmem.get(lnum).locknum) == LockerNumber) {
                     targetKey = lnum;
 
                     //test확인용출력-나중에삭제
                     System.out.println("nonmem map에서 찾기 성공");
-                    System.out.println(nonmem.get(lnum));
+                    System.out.println(u.nonmem.get(lnum));
                     break;
                 }
             }
@@ -355,13 +354,13 @@ public class LockerManager {
         LockerList.get(target).use = "0";
         LockerList.get(target).date = "-";
         if(isMemLocker){
-            mem.get(targetKey).locknum = "-";
-            mem.get(targetKey).lockPW = "-";
+            u.mem.get(targetKey).locknum = "-";
+            u.mem.get(targetKey).lockPW = "-";
         }else{
-            nonmem.remove(targetKey);
+            u.nonmem.remove(targetKey);
         }
-        u.UserFileWrite(mem, nonmem);
-        this.LockerFileWrite(LockerList);
+        u.UserFileWrite();
+        LockerFileWrite();
 
 
         System.out.println("물품 수거가 완료되었습니다.");
@@ -416,10 +415,10 @@ public class LockerManager {
 
                 //보관함 비밀번호가 올바르지 않을 경우
                 if (ismemLocker) {
-                    if (!LockerPwd.equals(mem.get(targetKey).lockPW))
+                    if (!LockerPwd.equals(u.mem.get(targetKey).lockPW))
                         throw new IllegalAccessException();
                 } else {
-                    if (!LockerPwd.equals(nonmem.get(targetKey).lockPW))
+                    if (!LockerPwd.equals(u.nonmem.get(targetKey).lockPW))
                         throw new IllegalAccessException();
                 }
 
@@ -502,7 +501,6 @@ public class LockerManager {
         return true;
     }
 
-
     // 오늘 날짜 입력 시 Locker 데이터 수정 메소드 (날짜는 지났는데 예약 확정이 안된 이용 내역 삭제)
     public void deleteLockerBeforeDate(Date newDate) {
         String filename = "Locker.txt";
@@ -574,7 +572,7 @@ public class LockerManager {
 
         UserManager tmpUserManager = new UserManager();
         tmpUserManager.deleteUserBeforeDate(lockersToDelete);
-        LockerFileWrite(LockerList);
+        LockerFileWrite();
     }
 
 
