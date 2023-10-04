@@ -291,7 +291,6 @@ public class LockerManager {
 
         ArrayList<String> lockersToDelete = new ArrayList<>();
         ArrayList<Locker> tmpLockerList = new ArrayList<>();
-        dateLockerFileInput(tmpLockerList);
 
         try (Scanner scan = new Scanner(new File(filename))) {
             while (scan.hasNextLine()) {
