@@ -182,7 +182,8 @@ public class Main {
     private static void deleteUserLockerBeforeDate(Date newDate) {
 
         LockerManager tmpLockerManager = new LockerManager();
-        tmpLockerManager.deleteLockerBeforeDate(newDate);
+        tmpLockerManager.
+                deleteLockerBeforeDate(newDate);
     }
 
     private static void beforeDateRemove(String dTrim, String oldD) {

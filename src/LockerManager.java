@@ -283,7 +283,7 @@ public class LockerManager {
 
 
         String pwd_prompt2 = "비밀번호 4자리를 입력하세요. ";
-        pwdCheck(pwd_prompt2, isMemLocker, targetKey);
+        pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
 
 
 
@@ -318,7 +318,7 @@ public class LockerManager {
                 "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 비밀번호 4자리를 입력해주세요.\n"+
                 "수거완료 처리가 되지 않은 이용 건은 자동 초과 요금이 부과됩니다. \n";
 
-        pwdCheck(pwd_prompt3, isMemLocker, targetKey);
+        pwdCheck(pwd_prompt3, isMemLocker, targetKey, 0);
 
 
 
@@ -344,21 +344,24 @@ public class LockerManager {
     }
 
     //보관함 비밀번호 입력받기
-    public void pwdCheck(String prompt, boolean ismemLocker, String target_key) {
-        //int th=0;
+    //chacne 0 : 무한루프로
+    public void pwdCheck(String prompt, boolean ismemLocker, String target_key, int chance) {
+        int th=0;
         String LockerPwd;
 
         while (true) {
-            /*if(th > 3) {
-                //!@상의해야함 - 프롬프트도 추가해야해서 그냥 1회만 틀려도 다른곳가도되고.. (이거상의했었나?;;)
-                System.out.println("비밀번호를 3회 틀리셨습니다. 메뉴로 돌아갑니다.");
-                break;
-            }*/
+            if(chance!=0) {
+                if (th > 3) {
+                    //!@상의해야함 - 프롬프트도 추가해야해서 그냥 1회만 틀려도 다른곳가도되고.. (이거상의했었나?;;)
+                    System.out.println("비밀번호를 3회 틀리셨습니다. 메뉴로 돌아갑니다.");
+                    break;
+                }
+            }
 
             //보관함 비밀번호 입력
             System.out.println(prompt);
             System.out.print(">>");
-            //th++;
+            th++;
 
             //보관함 비밀번호 입력받기
             LockerPwd = String.valueOf(sc.next());
