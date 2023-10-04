@@ -1,8 +1,6 @@
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -65,7 +63,7 @@ public class LockerManager {
         }
     }
 
-    public void Menu_1(){
+    public void Menu_1(){ //회원메뉴
         //파일 읽어오기
         LockerFileInput(LockerList);
 
@@ -90,7 +88,7 @@ public class LockerManager {
                 //Storage();
                 break;
             case 2:
-                Pickup(true); //회원일때);
+                Pickup(true);
                 break;
             case 3:
                 /*if () {
@@ -109,7 +107,7 @@ public class LockerManager {
                 }*/
                 break;
             case 6:
-                Exit();
+                Exit(true);
                 break;
             default:
                 break;
@@ -117,7 +115,7 @@ public class LockerManager {
         //locker 데이터 Locker.txt 파일에 저장
         LockerFileWrite(LockerList);
     }
-    public void Menu_2() {
+    public void Menu_2() { //비회원메뉴
 
         LockerFileInput(LockerList);
 
@@ -141,18 +139,19 @@ public class LockerManager {
                 //Storage();
                 break;
             case 2:
-                Pickup(false); //비회원일때
+                Pickup(false);
                 break;
             case 3:
                 u.menu1();
                 break;
             case 4:
-                Exit();
+                Exit(false);
                 break;
             default:
                 break;
         }
         LockerFileWrite(LockerList);
+
     }
 
     public static void logout() {
@@ -160,7 +159,7 @@ public class LockerManager {
         System.out.println("로그아웃되었습니다.");
     }
 
-    public void Exit() {
+    public void Exit(boolean isLogin) {
         Scanner sc = new Scanner(System.in);
         System.out.println("종료하시려면 Y 또는 y를 입력해주세요: ");
         String exit = sc.next();
@@ -169,7 +168,9 @@ public class LockerManager {
             System.exit(0);
             Main.date_check();
         } else {
-            Menu_1(); //어느 메뉴에서 시작했느냐에 따라 달라짐
+            if(isLogin) Menu_1(); //이전 메뉴로 돌아가기
+            else Menu_2();
+            System.exit(0);
         }
     }
 
@@ -185,7 +186,7 @@ public class LockerManager {
                 """;
 
         //보관함 번호 입력받기
-        int LockerNumber = 0;
+        int LockerNumber =  0;
         while (true) {
             //notice 2 출력
             System.out.println(notice2);
@@ -201,7 +202,7 @@ public class LockerManager {
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
                     if(isLogin) Menu_1();
                     else Menu_2();
-                    break;
+                    System.exit(0);
                 }
 
                 //형식 예외 처리(00, 01, 02 등으로 입력해야함)
@@ -243,7 +244,6 @@ public class LockerManager {
         for (int i=0; i<LockerList.size(); i++){
             if(LockerNumber == Integer.parseInt(LockerList.get(i).locknum) ){ //보관함 번호가 맞으면
                 target = i;
-
                 //test확인용출력
                 //System.out.println("LockerList에서 찾기 성공 "+LockerList.get(target).locknum);
             }
@@ -282,8 +282,14 @@ public class LockerManager {
         }
 
 
+        //보관함 비밀번호 입력
         String pwd_prompt2 = "비밀번호 4자리를 입력하세요. ";
-        pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
+        boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
+        if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
+            if(isLogin) Menu_1(); //이전 메뉴로 돌아가기
+            else Menu_2();
+            System.exit(0);
+        }
 
 
 
@@ -294,7 +300,7 @@ public class LockerManager {
         Date startTime = StringToDate(LockerList.get(target).date);
         int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
 
-        //추가 결제가 필요한 경우 = 예약시간+4시간 초과인 경우
+        //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
         if (timeDiff > 4){
             while(true){
                 Print_AddPayPrompt(timeDiff, target);
@@ -344,17 +350,25 @@ public class LockerManager {
     }
 
     //보관함 비밀번호 입력받기
-    //chacne 0 : 무한루프로
-    public void pwdCheck(String prompt, boolean ismemLocker, String target_key, int chance) {
+    /*
+    return type : boolean : 비번입력 성공여부
+    prompt : 출력할 prompt
+    ismemLocker : 해당 Locker가 회원이용인지
+    targetKey : mem/nonmem map에서 찾은 해당 사용내역 key값
+    chacne : 기회 몇번, 0 : 무한루프로 (맞을때까지-수거완료에서 사용)
+     */
+
+
+    public boolean pwdCheck(String prompt, boolean ismemLocker, String targetKey, int chance) {
         int th=0;
         String LockerPwd;
 
         while (true) {
             if(chance!=0) {
                 if (th > 3) {
-                    //!@상의해야함 - 프롬프트도 추가해야해서 그냥 1회만 틀려도 다른곳가도되고.. (이거상의했었나?;;)
                     System.out.println("비밀번호를 3회 틀리셨습니다. 메뉴로 돌아갑니다.");
-                    break;
+                    return false;
+                    //break;
                 }
             }
 
@@ -378,17 +392,16 @@ public class LockerManager {
 
 
                 //보관함 비밀번호가 올바르지 않을 경우
-                //if(target_key!=null) {
-                    if (ismemLocker) {
-                        if (!LockerPwd.equals(mem.get(target_key).lockPW))
-                            throw new IllegalAccessException();
-                    } else {
-                        if (!LockerPwd.equals(nonmem.get(target_key).lockPW))
-                            throw new IllegalAccessException();
-                    }
-                //}
+                if (ismemLocker) {
+                    if (!LockerPwd.equals(mem.get(targetKey).lockPW))
+                        throw new IllegalAccessException();
+                } else {
+                    if (!LockerPwd.equals(nonmem.get(targetKey).lockPW))
+                        throw new IllegalAccessException();
+                }
 
-                break;
+                return true;
+                //break;
 
             } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
