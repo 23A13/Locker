@@ -4,27 +4,90 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import static java.lang.System.exit;
+
 public class LockerManager {
 
-    ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
-    Map<String,User> mem=new HashMap<>(); //회원 정보 저장 구조
-    Map<String,User> nonmem=new HashMap<>(); //비회원 정보 저장 구조
+    //로그인한 사용자 아이디
+    String loguser;
 
 
-    UserManager u=new UserManager();
+    ArrayList<Locker> LockerList = new ArrayList<>(); //Locker정보 저장 구조
+    Map<String, User> mem = new HashMap<>(); //회원 정보 저장 구조
+    Map<String, User> nonmem = new HashMap<>(); //비회원 정보 저장 구조
+
+    UserManager usermanager = new UserManager();
+
+
     //class 선언
     static Scanner sc = new Scanner(System.in);
     static Locker locker = new Locker();
+    UserManager userManager = new UserManager();
+
+    UserManager u=new UserManager();
+
+    //constructor
+
+    public LockerManager(String loguser) {
+        this.loguser = loguser;
+    }
+
+    //안내문구들
+    static String table1 = """
+                ---------------------------------------------------------------------------------------
+                | 01        | 02        | 03        | 04        | 13               | 14               |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |-----------------------------------------------|                  |                  |
+                | 05        | 06        | 07        | 08        |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |-----------|-----------|-----------|-----------|------------------|------------------|
+                | 09        | 10        | 11        | 12        | 15               | 16               |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                ---------------------------------------------------------------------------------------
+
+                """;
+    static String tariff = """
+                ——————요금표——————————————————————————\s
+                기본 4시간\s
+                S : 2000원 / M : 3000원 / L : 4000원\s
+                시간당 추가요금\s
+                S : 500원 / M : 800원 / L : 1000원\s
+                —————————————————————————————————————\s
+                                
+                ——물품보관함 사이즈 안내————————\s
+                S : 01~08번 보관함 (총 8개)\s
+                M : 09~12번 보관함 (총 4개)\s
+                L : 13~16번 보관함 (총 4개)\s
+                ————————————————————————————\s
+                                
+                이용하실 보관함의 번호를 입력하세요.\s
+                                
+                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\s
+                ————————————————————————————————————————\s
+                                
+                                
+                """;
 
 
     //Constructor
     public LockerManager() {
 
     }
-    //수정필요해보임
     public LockerManager(String userId, String userPassword) {
 
     }
+
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(ArrayList<Locker> List){
@@ -33,10 +96,6 @@ public class LockerManager {
             while(scan.hasNextLine()) {
                 String str=scan.nextLine();
                 String[] temp=str.split(" ");
-                /*int[] temp=new int[temp1.length-1];//string을 int형으로 바꿈
-                for(int i=0;i< temp1.length-1;i++){
-                    temp[i]=Integer.parseInt(temp1[i+1].trim());
-                }*/
                 List.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
             }
         }catch(FileNotFoundException e){
@@ -63,7 +122,153 @@ public class LockerManager {
         }
     }
 
-    // 오늘 날짜 입력 시 Locker 데이터 수정 메소드
+    //회원 메뉴
+    public void Menu_Mem(){
+        LockerFileInput(LockerList);
+        userManager.UserFileInput();
+        /*
+        //arrayList 잘 저장됐나 확인용-나중에 삭제
+        for(int i=0;i<LockerList.size();i++){
+            System.out.println(LockerList.get(i).date);
+        }
+
+        //user정보 저장 잘되나 확인용-나중에 삭제
+        userManager.UserFileInput(mem,nonmem);
+        System.out.println(mem.get("Test0823"));
+        System.out.println(nonmem.get("01"));
+        nonmem.put("01",new User(nonmem.get("01").locknum,"1234"));
+        userManager.UserFileWrite(mem,nonmem);*/
+
+        //로그인 됐는지 확인용 지워야함
+        System.out.println(loguser +"님 환영합니다.\n");
+
+
+        String menu = """
+                ——MENU——\s
+                1. 보관하기\s
+                2. 수거하기\s
+                3. 예약하기\s
+                4. 예약 확인 및 예약 확정\s
+                5. 로그아웃\s
+                6. 종료
+                 ———————\s
+                               
+                """;
+
+        System.out.println(menu);
+
+        int number=0;
+
+        while(true){
+
+            try{
+                System.out.print(">>");
+                number = sc.nextInt();
+
+                if(number<1||number>6) throw new InputMismatchException();
+
+                //올바른 입력시
+                break;
+
+            }catch(InputMismatchException e){
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                sc.nextLine();
+            }
+
+        }
+
+        System.out.println();
+
+        switch(number){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                Booking();
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+               programEnd();
+               Menu_Mem();
+            default:
+                break;
+        }
+
+        LockerFileWrite(LockerList);
+        userManager.UserFileWrite();
+    }
+
+
+    public void menu_2() {
+
+        LockerFileInput(LockerList);
+
+        String menu = """
+                --MENU--\s
+                1. 보관하기\s
+                2. 수거하기\s
+                3. 이전 메뉴로 돌아가기\s
+                4. 종료
+                ---------\s
+
+                """;
+
+        System.out.println(menu);
+        System.out.print(">>");
+        int number = sc.nextInt();
+        sc.nextLine();
+
+        switch (number) {
+            case 1:
+                Storage();
+                break;
+            case 2:
+                Pickup();
+                break;
+            case 3:
+                break;
+            case 4:
+                programEnd();
+                menu_2();
+            default:
+                break;
+        }
+        LockerFileWrite(LockerList);
+    }
+
+    private boolean programEnd() {
+        System.out.print("종료하시려면 Y 또는 y를 입력해주세요 >> ");
+        String endInput = sc.nextLine().trim();
+        sc.nextLine();
+        if(endInput.equals("Y")||endInput.equals("y"))
+        {
+            // 파일 저장 후 저장
+            LockerFileWrite(LockerList);
+            System.out.println("프로그램을 종료합니다.");
+            System.exit(0);
+        }
+
+        //Y/y 가 아닐 경우 프로그램 종료 하지 않고 false 리턴
+        return false;
+    }
+
+    private void Pickup() {
+    }
+
+    private void Storage() {
+    }
+
+    public static void logout() {
+        return;
+    }
+    private void Booking() {
+    }
+
+    // 오늘 날짜 입력 시 Locker 데이터 수정 메소드 (날짜는 지났는데 예약 확정이 안된 이용 내역 삭제)
     public void deleteLockerBeforeDate(Date newDate) {
 
         String filename = "Locker.txt";
@@ -117,8 +322,15 @@ public class LockerManager {
                     LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                 } else
                 {
-                    LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", "-", "0"));//저장구조에 보관/예약 정보를 수정해서 locker정보 저장
-                    lockersToDelete.add(temp[0]);
+                    // 보관함 상태가 예약 중(2)인데 예약 확정이 안됐을 경우
+                    if(temp[2].equals("2")&&temp[4].equals("0"))
+                    {
+                        LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", "-", "0"));//저장구조에 보관/예약 정보를 수정해서 locker정보 저장
+                        lockersToDelete.add(temp[0]);
+                    } else
+                    {
+                        LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
+                    }
                 }
 
             }

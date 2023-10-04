@@ -18,41 +18,43 @@ public class UserManager {
     //constructor
     public UserManager(){
         // 처음 시작에
-        this.UserFileInput(memMap ,nonmemMap);
+        this.UserFileInput();
     }
 
     //프로그램 최초 시작 시 user 데이터 txt파일로부터 불러오는 함수
-    public void UserFileInput(Map<String,User> mem, Map<String,User> nonmem){
+    public void UserFileInput(){
         String filename="User.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
                 String str=scan.nextLine();
                 String[] temp=str.split(" ");
                 if(temp[0].trim().equals("1")){
-                    mem.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장 구조에 회원 user 정보 저장
-                }else{
-                    nonmem.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim())); //비회원 user정보->보관함 사용중인 비회원만 정보 저장
+                    memMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 회원 user정보 저장
+                }else if (temp[0].trim().equals("0")){
+                    nonmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim())); //비회원 user정보->보관함 사용중인 비회원만 정보 저장
+                }else
+                {
+                    continue;
                 }
             }
         }catch(FileNotFoundException e){
-            System.out.println("파일 입력 문제");
             System.out.println("파일 입력이 잘못되었습니다.");
         }
     }
 
     //프로그램 종료 시 user 데이터 txt파일에 저장하는 함수
-    public void UserFileWrite(Map<String,User> mem, Map<String,User> nonmem){
+    public void UserFileWrite(){
         try{
             File file = new File("User.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
                 FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for (Map.Entry<String, User> entry : mem.entrySet()) {//회원 데이터 저장
+                for (Map.Entry<String, User> entry : memMap.entrySet()) {//회원 데이터 저장
                     writer.write(entry.getValue().toString());
                     writer.flush();
                 }
-                for (Map.Entry<String, User> entry : nonmem.entrySet()) {//비회원 데이터 저장
+                for (Map.Entry<String, User> entry : nonmemMap.entrySet()) {//비회원 데이터 저장
                     writer.write(entry.getValue().toString());
                     writer.flush();
                 }
@@ -125,24 +127,24 @@ public class UserManager {
                     else if(choice.equals("2"))
                     {
                         menuEndFlag = login();
-
-                        // 나중에 지워야 함
-                        System.out.println("로그인 성공");
-                        System.out.println(loguser);
                         System.out.println();
 
+                        if(menuEndFlag)
+                        {
+                            LockerManager memLockerManager = new LockerManager(loguser.memberID);
+                            memLockerManager.Menu_Mem();
+                        }
 
-                        LockerManager memLockerManager = new LockerManager();
-                        // memLockerManager.회원메뉴출력메소드();
-                        // loguser = null; (회원 메뉴에서 로그아웃 시 로그인 중인 회원 정보를 null로)
+                        menuEndFlag = false;
+                        loguser = null; // (회원 메뉴에서 로그아웃 시 로그인 중인 회원 정보를 null로)
                         // (이렇게 하면 로그아웃 하면 메뉴 1로 돌아가게 됨. 아마도..?)
                         // (민진님은 회원 메뉴에서 로그아웃 하면 그냥 return 되게 만드시면 될 것 같습니다!)
                     }
                     else if(choice.equals("3"))
                     {
-                        menuEndFlag = true;
                         LockerManager nonMemLockerManager = new LockerManager();
-                        // nonMemLockerManager.비회원메뉴출력메소드();
+                        nonMemLockerManager.menu_2(); // 비회원 메뉴 출력
+
                     }
                     else if(choice.equals("4"))
                     {
@@ -170,7 +172,7 @@ public class UserManager {
         if(endInput.equals("Y")||endInput.equals("y"))
         {
             // 파일 저장 후 저장
-            this.UserFileWrite(memMap, nonmemMap);
+            this.UserFileWrite();
             System.out.println("프로그램을 종료합니다.");
             System.exit(0);
         }
@@ -234,7 +236,7 @@ public class UserManager {
         User newSingUpUser = new User(id, pw, "-", "-");
 
         memMap.put(id, newSingUpUser);
-        this.UserFileWrite(memMap, nonmemMap);
+        this.UserFileWrite();
 
         System.out.println("회원가입이 완료되었습니다.\n");
 
