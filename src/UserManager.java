@@ -9,8 +9,8 @@ public class UserManager {
     static Scanner scan = new Scanner(System.in);
 
     // 비회원, 회원 정보 저장
-    Map<String, User> memMap = new HashMap<>();
-    Map<String, User> nonmemMap = new HashMap<>();
+    static Map<String, User> memMap = new HashMap<>();
+    static Map<String, User> nonmemMap = new HashMap<>();
 
     //로그인 중인 회원 아이디
     User loguser = null;
@@ -64,8 +64,7 @@ public class UserManager {
     }
 
     // 날짜/시간 입력 후에 지난 내역들 파일에서 삭제하는 메소드
-    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete)
-    {
+    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete) {
         try{
             File file = new File("User.txt");
             if(!file.exists()){
@@ -125,16 +124,16 @@ public class UserManager {
                     else if(choice.equals("2"))
                     {
                         menuEndFlag = login();
-
-                        // 나중에 지워야 함
-                        System.out.println("로그인 성공");
-                        System.out.println(loguser);
                         System.out.println();
 
+                        if(menuEndFlag)
+                        {
+                            LockerManager memLockerManager = new LockerManager(loguser.memberID);
+                            memLockerManager.Menu_1();
+                        }
 
-                        LockerManager memLockerManager = new LockerManager();
-                        memLockerManager.Menu_1();
-                        // loguser = null; (회원 메뉴에서 로그아웃 시 로그인 중인 회원 정보를 null로)
+                        menuEndFlag = false;
+                        loguser = null; // (회원 메뉴에서 로그아웃 시 로그인 중인 회원 정보를 null로)
                         // (이렇게 하면 로그아웃 하면 메뉴 1로 돌아가게 됨. 아마도..?)
                         // (민진님은 회원 메뉴에서 로그아웃 하면 그냥 return 되게 만드시면 될 것 같습니다!)
                     }

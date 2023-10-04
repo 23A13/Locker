@@ -5,26 +5,30 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class LockerManager {
+
+    //로그인한 사용자 아이디
+    String loguser;
+
     ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
     Map<String,User> mem=new HashMap<>(); //회원 정보 저장 구조
     Map<String,User> nonmem=new HashMap<>(); //비회원 정보 저장 구조
 
 
-    UserManager u=new UserManager();
 
     //class 선언
     static Scanner sc = new Scanner(System.in);
     static Locker locker = new Locker();
-
+    UserManager u = new UserManager();
 
     //Constructor
     public LockerManager() {
         mem = u.memMap;
         nonmem = u.nonmemMap;
     }
-
     public LockerManager(String userId, String userPassword) {
-
+    }
+    public LockerManager(String loguser) {
+        this.loguser = loguser;
     }
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(ArrayList<Locker> List){
@@ -63,7 +67,8 @@ public class LockerManager {
         }
     }
 
-    public void Menu_1(){ //회원메뉴
+    //회원메뉴
+    public void Menu_1(){
         //파일 읽어오기
         LockerFileInput(LockerList);
 
@@ -79,9 +84,25 @@ public class LockerManager {
 
                 """;
         System.out.println(menu);
-        System.out.print(">>");
-        int number = sc.nextInt();
-        sc.nextLine();
+
+        int number=0;
+        while(true){
+            try{
+                System.out.print(">>");
+                number = sc.nextInt();
+
+                if(number<1||number>6) throw new InputMismatchException();
+
+                //올바른 입력시
+                break;
+
+            }catch(InputMismatchException e){
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                sc.nextLine();
+            }
+        }
+
+        System.out.println();
 
         switch(number){
             case 1:
@@ -115,6 +136,8 @@ public class LockerManager {
         //locker 데이터 Locker.txt 파일에 저장
         LockerFileWrite(LockerList);
     }
+
+    //비회원메뉴
     public void Menu_2() { //비회원메뉴
 
         LockerFileInput(LockerList);
@@ -163,7 +186,7 @@ public class LockerManager {
         Scanner sc = new Scanner(System.in);
         System.out.println("종료하시려면 Y 또는 y를 입력해주세요: ");
         String exit = sc.next();
-        if (!(Objects.equals(exit, "Y") || Objects.equals(exit, "y"))) {
+        if (Objects.equals(exit, "Y") || Objects.equals(exit, "y")) {
             System.out.println("프로그램을 종료합니다.");
             System.exit(0);
             Main.date_check();
@@ -233,7 +256,7 @@ public class LockerManager {
             }
 
         }
-        //test확인용출력
+        //test확인용출력-나중에삭제
         System.out.print("선택한 보관함 번호 : ");
         System.out.println(LockerNumber);
 
@@ -244,7 +267,7 @@ public class LockerManager {
         for (int i=0; i<LockerList.size(); i++){
             if(LockerNumber == Integer.parseInt(LockerList.get(i).locknum) ){ //보관함 번호가 맞으면
                 target = i;
-                //test확인용출력
+                //test확인용출력-나중에삭제
                 //System.out.println("LockerList에서 찾기 성공 "+LockerList.get(target).locknum);
             }
         }
@@ -258,7 +281,7 @@ public class LockerManager {
                 if (LockerNumber == Integer.parseInt(mem.get(id).locknum)) {
                     targetKey = id;
 
-                    //test확인용출력
+                    //test확인용출력-나중에삭제
                     System.out.println("mem map에서 찾기 성공");
                     System.out.println(mem.get(id));
                     break;
@@ -273,7 +296,7 @@ public class LockerManager {
                 if (Integer.parseInt(nonmem.get(lnum).locknum) == LockerNumber) {
                     targetKey = lnum;
 
-                    //test확인용출력
+                    //test확인용출력-나중에삭제
                     System.out.println("nonmem map에서 찾기 성공");
                     System.out.println(nonmem.get(lnum));
                     break;
@@ -480,8 +503,8 @@ public class LockerManager {
     }
 
 
+    // 오늘 날짜 입력 시 Locker 데이터 수정 메소드 (날짜는 지났는데 예약 확정이 안된 이용 내역 삭제)
     public void deleteLockerBeforeDate(Date newDate) {
-
         String filename = "Locker.txt";
 
         ArrayList<String> lockersToDelete = new ArrayList<>();
@@ -533,8 +556,15 @@ public class LockerManager {
                     LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                 } else
                 {
-                    LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", "-", "0"));//저장구조에 보관/예약 정보를 수정해서 locker정보 저장
-                    lockersToDelete.add(temp[0]);
+                    // 보관함 상태가 예약 중(2)인데 예약 확정이 안됐을 경우
+                    if(temp[2].equals("2")&&temp[4].equals("0"))
+                    {
+                        LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", "-", "0"));//저장구조에 보관/예약 정보를 수정해서 locker정보 저장
+                        lockersToDelete.add(temp[0]);
+                    } else
+                    {
+                        LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
+                    }
                 }
 
             }
@@ -546,6 +576,7 @@ public class LockerManager {
         tmpUserManager.deleteUserBeforeDate(lockersToDelete);
         LockerFileWrite(LockerList);
     }
+
 
 }
 
