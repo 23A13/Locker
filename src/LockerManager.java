@@ -192,8 +192,7 @@ public class LockerManager {
             case 5:
                 break;
             case 6:
-               programEnd();
-               Menu_Mem();
+                break;
             default:
                 break;
         }
@@ -232,28 +231,11 @@ public class LockerManager {
             case 3:
                 break;
             case 4:
-                programEnd();
-                menu_2();
+                break;
             default:
                 break;
         }
         LockerFileWrite(LockerList);
-    }
-
-    private boolean programEnd() {
-        System.out.print("종료하시려면 Y 또는 y를 입력해주세요 >> ");
-        String endInput = sc.nextLine().trim();
-        sc.nextLine();
-        if(endInput.equals("Y")||endInput.equals("y"))
-        {
-            // 파일 저장 후 저장
-            LockerFileWrite(LockerList);
-            System.out.println("프로그램을 종료합니다.");
-            System.exit(0);
-        }
-
-        //Y/y 가 아닐 경우 프로그램 종료 하지 않고 false 리턴
-        return false;
     }
 
     private void Pickup() {
