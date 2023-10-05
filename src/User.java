@@ -6,22 +6,25 @@ public class User {
     String lockPW; //보관함 비밀번호
 
     //constructor
-    public User(){}
+    public User() {
+    }
 
     //회원 생성자
-    public User(String memberID,String memberPW,String locknum,String lockPW){
-        this.member="1";
-        this.memberID=memberID;
-        this.memberPW=memberPW;
-        this.locknum=locknum;
-        this.lockPW=lockPW;
+    public User(String memberID, String memberPW, String locknum, String lockPW) {
+        this.member = "1";
+        this.memberID = memberID;
+        this.memberPW = memberPW;
+        this.locknum = locknum;
+        this.lockPW = lockPW;
     }
 
     //비회원 생성자
-    public User(String locknum,String lockPW){
-        this.member="0";
-        this.memberID=null;
-        this.memberPW=null;
-        this.locknum=locknum;
-        this.lockPW=lockPW;
+    public User(String locknum, String lockPW) {
+        this.member = "0";
+        this.memberID = null;
+        this.memberPW = null;
+        this.locknum = locknum;
+        this.lockPW = lockPW;
     }
+
+}
