@@ -91,23 +91,23 @@ public class Locker {
         System.out.println("|           |           |           |           |                  |                  |");
         System.out.println("---------------------------------------------------------------------------------------");
 
-        for (User user : memMap.values()) {
+        for (User user : UserManager.memMap.values()) {
             int locknum = Integer.parseInt(user.locknum);
             if (locknum > 0) {
                 System.out.println("사용 중인 보관함 :" + locknum);
             }
             else {
-                System.out.println("사용 중인 보관함이 존재하지 않습니다.")
+                System.out.println("사용 중인 보관함이 존재하지 않습니다.");
             }
         }
         
-        for (User user : nonmemMap.values()) {
+        for (User user : UserManager.nonmemMap.values()) {
             int locknum = Integer.parseInt(user.locknum);
             if (locknum > 0) {
                 System.out.println("사용 중인 보관함 :" + locknum);
             }
             else {
-                System.out.println("사용 중인 보관함이 존재하지 않습니다.")
+                System.out.println("사용 중인 보관함이 존재하지 않습니다.");
             }
         }
     }
