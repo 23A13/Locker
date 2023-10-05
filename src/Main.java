@@ -198,12 +198,13 @@ public class Main {
             String updatedContent = content.toString().replace(oldD, dTrim);
 
             // 새로 쓰인 내용을 txt 파일에 입력하기
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./Locker/Date.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("../Locker/Date.txt"));
             writer.write(updatedContent);
             writer.close();
 
         } catch (Exception e) {
             System.out.println("파일에 문제가 생겼습니다.");
+            e.printStackTrace();
         }
     }
 

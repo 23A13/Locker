@@ -299,7 +299,7 @@ public class UserManager {
             return false;
         }
 
-        System.out.print("\n비밀번호 >>");
+        System.out.print("비밀번호 >>");
 
         String pw = scan.nextLine();
 
