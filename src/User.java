@@ -66,4 +66,16 @@ public class User {
     public void setLockPW(String lockPW) {
         this.lockPW = lockPW;
     }
+
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        if(member.equals("1")){
+            return member+" "+memberID+" "+memberPW+" "+locknum+" "+lockPW+"\n";//회원
+        }else{
+            return member+" "+locknum+" "+lockPW+"\n";//비회원
+        }
+    }
+
 }

@@ -174,7 +174,7 @@ public class UserManager {
                     else if(choice.equals("3"))
                     {
                         LockerManager nonMemLockerManager = new LockerManager();
-                        nonMemLockerManager.menu_nonMem(); // 비회원 메뉴 출력
+                        nonMemLockerManager.Menu_Nonmem(); // 비회원 메뉴 출력
 
                     }
                     else if(choice.equals("4"))
