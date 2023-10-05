@@ -139,6 +139,7 @@ public class LockerManager {
 
         System.out.print(menu);
 
+
         int number=0;
 
         while(true){
@@ -146,7 +147,7 @@ public class LockerManager {
             try{
                 System.out.print(">>");
                 number = sc.nextInt();
-
+                sc.nextLine();
                 if(number<1||number>6) throw new InputMismatchException();
 
                 //올바른 입력시
