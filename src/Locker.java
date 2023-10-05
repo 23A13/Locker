@@ -93,7 +93,7 @@ public class Locker {
         System.out.println("---------------------------------------------------------------------------------------");
 
         try {
-            String filePath = "User.txt";
+            String filePath = "./Locker/User.txt";
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
