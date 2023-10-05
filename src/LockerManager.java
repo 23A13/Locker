@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 
@@ -24,10 +21,11 @@ public class LockerManager {
 
     //Constructor
     public LockerManager(){
-
+        LockerFileInput();
     }
     public LockerManager(String loguser)
     {
+        LockerFileInput();
         this.loguser = loguser;
     }
 
@@ -82,6 +80,9 @@ public class LockerManager {
                                 
                                 
                 """;
+
+    //pwd_prompt1
+    String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(){
@@ -151,7 +152,6 @@ public class LockerManager {
 
     //회원 메뉴
     public void Menu_Mem(){
-        LockerFileInput();
 
         String menu = """
                 ——MENU——\s
@@ -209,13 +209,10 @@ public class LockerManager {
             default:
                 break;
         }
-        LockerFileWrite();
 
     }
     //비회원메뉴
     public void Menu_Nonmem() {
-
-        LockerFileInput();
 
         String menu = """
                 --MENU--\s
@@ -247,7 +244,6 @@ public class LockerManager {
             default:
                 break;
         }
-        LockerFileWrite();
     }
 
     private void Pickup(boolean isLogin) {
@@ -427,10 +423,6 @@ public class LockerManager {
     //예약 메소드
     public void Booking(){
 
-        //pwd_prompt1
-        String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
-
-
 
         //기존 예약 내역 확인
         if(!u.memMap.get(loguser).locknum.equals("-")){
@@ -446,7 +438,7 @@ public class LockerManager {
 
         //흐름에 따라 flow 값 변경. 보관함 선택 (1) -> 사이즈 별 안내, 결제 확인 (2) -> 결제 (3)
         int flow = 1;
-
+        //보관함 번호 입력
         while(true){
             System.out.println(tariff);
 
@@ -479,7 +471,7 @@ public class LockerManager {
                     }
                 }
 
-                //아무 문제 없다면 사이즈 별 안내 창으로 이동
+                //아무 문제 없다면 비민번호 창으로 이동
                 flow = 2;
                 break;
 
@@ -491,12 +483,40 @@ public class LockerManager {
             }
 
         }
-
-        //사이즈 별 입력
-
-        String payment = " ";
-        //사이즈 별
+        //비밀번호 입력
+        String LockerPwd =" ";
         if(flow==2){
+            while (true) {
+                //비밀번호 입력하시오 프롬프트 출력
+                System.out.println(pwd_prompt1);
+
+                //비밀번호 입력
+                System.out.print(">>");
+                LockerPwd = String.valueOf(sc.next());
+                sc.nextLine();
+
+                try {
+                    //숫자 입력이 아닌 경우
+                    if (!isNumeric(LockerPwd))
+                        throw new IllegalArgumentException();
+
+                    //4자리가 아닌 경우
+                    if (LockerPwd.length() != 4)
+                        throw new IllegalArgumentException();
+
+                    //아무 문제 없는 경우 결제 확인 창으로 이동
+                    flow = 3;
+                    break;
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                }
+            }
+        }
+
+        //결제 확인 입력
+        String payment = "";
+        if(flow==3){
             while(true){
                 System.out.print(StoragePaymentPrompt(LockerNumber));
                 payment = String.valueOf(sc.next());
@@ -506,8 +526,8 @@ public class LockerManager {
                     if(!(payment.equals("Y")||payment.equals("N")||payment.equals("y")||payment.equals("n")))
                         throw new IllegalArgumentException();
 
-                    //아무 문제 없다면 결제 창으로 이동
-                    flow = 3;
+                    //아무 문제 없다면 결제 알림 창으로 이동
+                    flow = 4;
                     break;
                 }catch(Exception e){
                     System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
@@ -516,9 +536,8 @@ public class LockerManager {
             }
 
         }
-
-
-        if(flow==3){
+        //마지막
+        if(flow==4){
             if(payment.equals("Y")||payment.equals("y")){
                 System.out.println("\n보관함 예약이 완료되었습니다. ");
                 System.out.println("* 2시간 내로 물품 보관(예약 확정)을 완료해주시기 바랍니다.");
@@ -543,7 +562,10 @@ public class LockerManager {
 
                 //User 회원 lockernumber 저장
                 u.memMap.get(loguser).locknum = String.valueOf(LockerNumber);
-                ExitWrite();
+                u.memMap.get(loguser).lockPW = LockerPwd;
+                LockerFileWrite();
+                System.exit(0);
+                //ExitWrite();
             }
             else{
                 Menu_Mem();
@@ -586,8 +608,7 @@ public class LockerManager {
     private void Storage(boolean isMembership) {
 
 
-        //pwd_prompt1
-        String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
+
 
 
         //입력받은 보관함 번호
@@ -762,10 +783,6 @@ public class LockerManager {
         }
 
 
-    }
-
-    public static void logout() {
-        return;
     }
 
     // 오늘 날짜 입력 시 Locker 데이터 수정 메소드 (날짜는 지났는데 예약 확정이 안된 이용 내역 삭제)
@@ -999,5 +1016,12 @@ public class LockerManager {
         System.out.println(str);
 
     }
+
+    public static void logout() {
+        return;
+    }
+
+
+
 
 }
