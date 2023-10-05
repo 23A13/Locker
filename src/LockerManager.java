@@ -18,9 +18,10 @@ public class LockerManager {
     //로그인한 사용자 아이디
     String loguser;
     User memUser; //유저 아이디로 해당되는 user 찾기
-
+    static int count=0;
     //Constructor
     public LockerManager(){
+
     }
     public LockerManager(String loguser)
     {
@@ -124,7 +125,8 @@ public class LockerManager {
     //회원 메뉴
     public void Menu_Mem(){
 
-        LockerFileInput();
+        //LockerFileInput();
+        if(count==0)LockerFileInput();
 
         String menu = """
                 ——MENU——\s
@@ -190,8 +192,8 @@ public class LockerManager {
 
     //비회원메뉴
     public void Menu_Nonmem() {
-
-        LockerFileInput();
+        if(count==0)LockerFileInput();
+        //LockerFileInput();
 
         String menu = """
                 --MENU--\s
@@ -252,6 +254,7 @@ public class LockerManager {
 
                 //Q,q 처리
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
+                    count++;
                     if(isLogin) Menu_Mem();
                     else Menu_Nonmem();
                     ExitWrite();
@@ -338,6 +341,7 @@ public class LockerManager {
         String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
         boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
         if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
+            count++;
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
             System.exit(0);
@@ -407,6 +411,7 @@ public class LockerManager {
         //기존 예약 내역 확인
         if(!u.memMap.get(loguser).locknum.equals("-")){
             System.out.println("이미 예약 내역이 존재합니다.\n\n");
+            count++;
             Menu_Mem();
             System.exit(0);
         }
@@ -430,6 +435,7 @@ public class LockerManager {
             try{
                 //Q,q 처리
                 if(Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
+                    count++;
                     Menu_Mem();
                     break;
 
@@ -547,6 +553,7 @@ public class LockerManager {
                 ExitWrite();
             }
             else{
+                count++;
                 Menu_Mem();
                 System.exit(0);
             }
@@ -614,9 +621,11 @@ public class LockerManager {
                     //회원 유무에 따라 돌아갈 메뉴 결정
                     if(isLogin) {
                         System.out.println("\n\nmenu2.1로 돌아가기\n");
+                        count++;
                         Menu_Mem();
                     } else {
                         System.out.println("\n\nmenu2.2로 돌아가기\n");
+                        count++;
                         Menu_Nonmem();
                     }
                     break;
@@ -708,9 +717,11 @@ public class LockerManager {
                         //회원 유무에 따라 돌아갈 메뉴 결정
                         if(isLogin) {
                             System.out.println("\n\nmenu2.1로 돌아가기\n");
+                            count++;
                             Menu_Mem();
                         } else {
                             System.out.println("\n\nmenu2.2로 돌아가기\n");
+                            count++;
                             Menu_Nonmem();
                         }
                         break;
@@ -890,6 +901,7 @@ public class LockerManager {
             System.exit(0);
             Main.date_check();
         } else {
+            count++;
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
             System.exit(0);
@@ -1051,6 +1063,7 @@ public class LockerManager {
         }
         int flag_=5;//flag_ !=1 이면 올바르지 않은 입력
         if(flag==1){//이전 메뉴로 돌아감
+            count++;
             Menu_Mem();
             ExitWrite();
         }
