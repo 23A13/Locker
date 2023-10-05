@@ -11,13 +11,7 @@ public class LockerManager {
     //로그인한 사용자 아이디
     String loguser;
 
-
     static ArrayList<Locker> LockerList = new ArrayList<>(); //Locker정보 저장 구조
-    Map<String, User> mem = new HashMap<>(); //회원 정보 저장 구조
-    Map<String, User> nonmem = new HashMap<>(); //비회원 정보 저장 구조
-
-    UserManager usermanager = new UserManager();
-
 
     //class 선언
     static Scanner sc = new Scanner(System.in);
@@ -88,7 +82,6 @@ public class LockerManager {
     public LockerManager(String userId, String userPassword) {
 
     }
-
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(){
