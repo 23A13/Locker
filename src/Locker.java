@@ -92,7 +92,7 @@ public class Locker {
         System.out.println("---------------------------------------------------------------------------------------");
 
         for (User user : UserManager.memMap.values()) {
-            if(user.locknum.equals("-")) {
+            if(!user.locknum.equals("-")) {
                 int locknum = Integer.parseInt(user.locknum);
                 if (locknum > 0) {
                     String formattedLocknum = String.format("%02d", locknum);
@@ -104,7 +104,7 @@ public class Locker {
         }
         
         for (User user : UserManager.nonmemMap.values()) {
-            if(user.locknum.equals("-")) {
+            if(!user.locknum.equals("-")) {
                 int locknum = Integer.parseInt(user.locknum);
                 if (locknum > 0) {
                     String formattedLocknum = String.format("%02d", locknum);
