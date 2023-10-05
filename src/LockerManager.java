@@ -1009,90 +1009,107 @@ public class LockerManager {
 
         String password; //비밀번호 입력받는 변수
 
-        String u_locknum=u.memMap.get(loguser).locknum; //임의로 정한 변수(객체 완성되면 수정필요)
-        String u_payment="0"; //임의로 정한 변수(객체 완성되면 수정필요)
-        String u_password=u.memMap.get(loguser).lockPW; //임의로 정한 변수(객체 완성되면 수정필요)
+        String u_locknum=u.memMap.get(loguser).locknum;//로그인한 회원이 예약한 보관함 번호
+        String u_payment="0";//회원이 지불해야하는 금액
+        String u_password=u.memMap.get(loguser).lockPW; //회원이 저장한 보관함 비밀번호
         Locker temL=null;
-        int index=0;
-        for(int i=0;i< LockerList.size();i++){//해당 락커 정보 저장
-            if(LockerList.get(i).locknum.equals((u_locknum))){
-                temL=new Locker(u_locknum,LockerList.get(i).locksize,LockerList.get(i).use,Main.currentTimeString,LockerList.get(i).confirmbook);
-                index=i;
-                //System.out.println(temL.locksize);
-            }
-        }
-        int payment=0;
-        if(temL.locksize.equals("0")){
-            payment=2000;
-        }else if(temL.locksize.equals("1")){
-            payment=3000;
-        }
-        else{
-            payment=4000;
-        }
-        u_payment=Integer.toString(4*payment);
 
-        int flag=0; //flag==0이면 올바르지 않은 입력
-        while(flag==0){
-            try{
-                System.out.println("-----예약 내역------");
-                System.out.println("보관함 번호 : "+u_locknum+"번"); //사용자의 사물함 객체 정보 받아야함
-                System.out.println("결제 금액: "+u_payment+"원"); //사용자의 사물함 객체 정보 받아야함
-                System.out.println("------------------");
-                System.out.println("1. 예약 확정");
-                System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
-                //메인메뉴에 nextInt()하고 나서 추가하기@@@@@@@ github 에 push!!
-                str=sc.nextLine();
-                if(str.equals("Q")|| str.equals("q")){
-                    flag=1;
+        if(u_locknum.equals("-")){//예약한 보관함이 없다면
+            System.out.println("예약내역이 존재하지 않습니다.");// 출력 후 함수 종료
+        }else{//예약된 내역이 있다면 함수 계속 진행
+            
+            //보관함 정보 가져옴
+            int index=0;
+            for(int i=0;i< LockerList.size();i++){//해당 락커 정보 저장
+                if(LockerList.get(i).locknum.equals((u_locknum))){
+                    temL=new Locker(u_locknum,LockerList.get(i).locksize,LockerList.get(i).use,Main.currentTimeString,LockerList.get(i).confirmbook);
+                    index=i;
                 }
-                else if(str.equals("1")){
-                    flag=2;
+            }
+
+            if(temL.confirmbook.equals("1")){ // 이미 확정된 예약건 처리
+                System.out.println("이미 예약이 확정되었습니다.");  // 출력 후 함수 종료
+            }else{
+                //예외에 해당 사항 없다면 예약확정 처리 시작
+                
+                //가격측정
+                int payment=0;
+                if(temL.locksize.equals("0")){
+                    payment=2000;
+                }else if(temL.locksize.equals("1")){
+                    payment=3000;
                 }
                 else{
-                    //flag=0;
-                    //System.out.println("1"); 확인용. 나중에 지우기
-                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                    payment=4000;
                 }
+                u_payment=Integer.toString(4*payment);
 
-            }catch(InputMismatchException e){
-                //flag=0;
-                //System.out.println("2"); 확인용. 나중에 지우기
-                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-            }
-        }
-        int flag_=5;//flag_ !=1 이면 올바르지 않은 입력
-        if(flag==1){//이전 메뉴로 돌아감
-            count++;
-            Menu_Mem();
-            ExitWrite();
-        }
-        if(flag==2){//예약확정하기->종료
-            while(flag_!=1){
-                try{
-                    System.out.print("비밀번호 4자리를 입력하세요.>>");
-                    password=sc.nextLine();
-                    if(password.equals(u_password)){
-                        flag_=1;//예약확정 성공
-                    }else{
-                        flag_=2;//비밀번호가 올바르지 않은 경우
-                        System.out.println("비밀번호가 올바르지 않습니다.\n");
+                //예약확정
+                int flag=0; //flag==0이면 올바르지 않은 입력
+                while(flag==0){
+                    try{
+                        System.out.println("-----예약 내역------");
+                        System.out.println("보관함 번호 : "+u_locknum+"번"); //사용자의 사물함 객체 정보 받아야함
+                        System.out.println("결제 금액: "+u_payment+"원"); //사용자의 사물함 객체 정보 받아야함
+                        System.out.println("------------------");
+                        System.out.println("1. 예약 확정");
+                        System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
+                        //메인메뉴에 nextInt()하고 나서 추가하기@@@@@@@ github 에 push!!
+                        str=sc.nextLine();
+                        if(str.equals("Q")|| str.equals("q")){
+                            flag=1;
+                        }
+                        else if(str.equals("1")){
+                            flag=2;
+                        }
+                        else{
+                            //flag=0;
+                            //System.out.println("1"); 확인용. 나중에 지우기
+                            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                        }
+
+                    }catch(InputMismatchException e){
+                        //flag=0;
+                        //System.out.println("2"); 확인용. 나중에 지우기
+                        System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                     }
-
-                }catch(InputMismatchException e){
-                    flag_=0;//잘못된 입력을 받은 경우(문법적 오류)
-                    sc.nextLine();
-                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                 }
-            }
-            System.out.println("예약이 확정되었습니다.");
-            LockerList.set(index,new Locker(temL.locknum, temL.locksize,"2" , temL.date,"1" ));
-            //System.out.println(LockerList.get(index).confirmbook);
-            //LockerList의 사용여부-2,예약확정-1로 변경
+                int flag_=5;//flag_ !=1 이면 올바르지 않은 입력
+                if(flag==1){//이전 메뉴로 돌아감
+                    count++;
+                    Menu_Mem();
+                    ExitWrite();
+                }
+                if(flag==2){//예약확정하기->종료
+                    while(flag_!=1){
+                        try{
+                            System.out.print("비밀번호 4자리를 입력하세요.>>");
+                            password=sc.nextLine();
+                            if(password.equals(u_password)){
+                                flag_=1;//예약확정 성공
+                            }else{
+                                flag_=2;//비밀번호가 올바르지 않은 경우
+                                System.out.println("비밀번호가 올바르지 않습니다.\n");
+                            }
 
+                        }catch(InputMismatchException e){
+                            flag_=0;//잘못된 입력을 받은 경우(문법적 오류)
+                            sc.nextLine();
+                            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                        }
+                    }
+                    System.out.println("예약이 확정되었습니다.");
+                    LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"1" ));
+                    //System.out.println(LockerList.get(index).confirmbook);
+                    //LockerList의 사용여부-2,예약확정-1로 변경
+
+
+                }
+                //flag==2작업마치면 프로그램 종료로
+            }
 
         }
-        //flag==2작업마치면 프로그램 종료로
+        
     }
 
 
