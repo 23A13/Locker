@@ -252,7 +252,7 @@ public class LockerManager {
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
                     if(isLogin) Menu_Mem();
                     else Menu_Nonmem();
-                    System.exit(0);
+                    ExitWrite();
                 }
 
                 //형식 예외 처리(00, 01, 02 등으로 입력해야함)
@@ -333,7 +333,8 @@ public class LockerManager {
 
 
         //보관함 비밀번호 입력
-        boolean pwdCheck2 = pwdCheck(pwd_prompt1, isMemLocker, targetKey, 3);
+        String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
+        boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
         if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
