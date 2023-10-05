@@ -69,7 +69,7 @@ public class Locker {
         this.confirmbook=confirmbook;
     }
 
-    public void print(){
+    public static void print(){
         System.out.println("---------------------------------------------------------------------------------------");
         System.out.println("| 01        | 02        | 03        | 04        | 13               | 14               |");
         System.out.println("|           |           |           |           |                  |                  |");
@@ -93,13 +93,14 @@ public class Locker {
         System.out.println("---------------------------------------------------------------------------------------");
 
         try {
-            String filePath = "user.txt";
+            String filePath = "User.txt";
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
+
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] parts = line.split("<>");
+                String[] parts = line.split(" ");
 
                 if (parts[0].equals("1")) {
                     String lockerNumber = parts[3];

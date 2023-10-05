@@ -35,30 +35,6 @@ public class LockerManager {
 
 
     //안내문구들
-    static String table1 = """
-                ---------------------------------------------------------------------------------------
-                | 01        | 02        | 03        | 04        | 13               | 14               |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |-----------------------------------------------|                  |                  |
-                | 05        | 06        | 07        | 08        |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |-----------|-----------|-----------|-----------|------------------|------------------|
-                | 09        | 10        | 11        | 12        | 15               | 16               |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                ---------------------------------------------------------------------------------------
-
-                """;
     static String tariff = """
                 ——————요금표——————————————————————————\s
                 기본 4시간\s
@@ -248,7 +224,7 @@ public class LockerManager {
 
     private void Pickup(boolean isLogin) {
         //보관함
-        System.out.println(table1);;
+        Locker.print();
 
         String notice2 = """
                 이용하신 보관함의 번호를 입력하세요. (ex: 01)\s
@@ -431,7 +407,7 @@ public class LockerManager {
             System.exit(0);
         }
 
-        System.out.println(table1);
+        Locker.print();
 
         //입력
         int LockerNumber=0;
@@ -621,7 +597,7 @@ public class LockerManager {
 
 
         //보관함 출력
-        System.out.println(table1);
+        Locker.print();
 
         while (true) {
             //요금표 출력
