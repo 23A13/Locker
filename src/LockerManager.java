@@ -17,16 +17,15 @@ public class LockerManager {
 
     //로그인한 사용자 아이디
     String loguser;
-    User memUser = u.memMap.get(loguser);  //유저 아이디로 해당되는 user 찾기
+    User memUser; //유저 아이디로 해당되는 user 찾기
 
     //Constructor
     public LockerManager(){
-        LockerFileInput();
     }
     public LockerManager(String loguser)
     {
-        LockerFileInput();
         this.loguser = loguser;
+        memUser=u.memMap.get(loguser);
     }
 
 
@@ -58,7 +57,7 @@ public class LockerManager {
                 """;
 
     //pwd_prompt1
-    String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
+    String pwd_prompt1 = "사용하실 보관함 비밀번호(PIN) 네자리를 입력하세요.\n";
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(){
@@ -129,6 +128,8 @@ public class LockerManager {
     //회원 메뉴
     public void Menu_Mem(){
 
+        LockerFileInput();
+
         String menu = """
                 ——MENU——\s
                 1. 보관하기\s
@@ -178,6 +179,7 @@ public class LockerManager {
             case 4:
                 break;
             case 5:
+                logout();
                 break;
             case 6:
                 Exit(true);
@@ -187,8 +189,11 @@ public class LockerManager {
         }
 
     }
+
     //비회원메뉴
     public void Menu_Nonmem() {
+
+        LockerFileInput();
 
         String menu = """
                 --MENU--\s
@@ -213,6 +218,7 @@ public class LockerManager {
                 Pickup(false);
                 break;
             case 3:
+                logout();
                 break;
             case 4:
                 Exit(false);
@@ -282,8 +288,8 @@ public class LockerManager {
 
         }
         //test확인용출력-나중에삭제
-        System.out.print("선택한 보관함 번호 : ");
-        System.out.println(LockerNumber);
+//        System.out.print("선택한 보관함 번호 : ");
+//        System.out.println(LockerNumber);
 
 
         //해당 번호(LockerNum)의 보관함 정보 찾기
@@ -307,8 +313,8 @@ public class LockerManager {
                     targetKey = id;
 
                     //test확인용출력-나중에삭제
-                    System.out.println("mem map에서 찾기 성공");
-                    System.out.println(u.memMap.get(id));
+//                    System.out.println("mem map에서 찾기 성공");
+//                    System.out.println(u.memMap.get(id));
                     break;
                 }
             }
@@ -322,8 +328,8 @@ public class LockerManager {
                     targetKey = lnum;
 
                     //test확인용출력-나중에삭제
-                    System.out.println("nonmem map에서 찾기 성공");
-                    System.out.println(u.nonmemMap.get(lnum));
+//                    System.out.println("nonmem map에서 찾기 성공");
+//                    System.out.println(u.nonmemMap.get(lnum));
                     break;
                 }
             }
@@ -331,8 +337,7 @@ public class LockerManager {
 
 
         //보관함 비밀번호 입력
-        String pwd_prompt2 = "비밀번호 4자리를 입력하세요. ";
-        boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
+        boolean pwdCheck2 = pwdCheck(pwd_prompt1, isMemLocker, targetKey, 3);
         if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
@@ -369,7 +374,7 @@ public class LockerManager {
 
         //수거완료
         String pwd_prompt3 = "물품 수거가 가능합니다. \n"+
-                "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 비밀번호 4자리를 입력해주세요.\n"+
+                "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 보관함 비밀번호(PIN) 4자리를 입력해주세요.\n"+
                 "수거완료 처리가 되지 않은 이용 건은 자동 초과 요금이 부과됩니다. \n";
 
         pwdCheck(pwd_prompt3, isMemLocker, targetKey, 0);
@@ -411,6 +416,7 @@ public class LockerManager {
 
         //입력
         int LockerNumber=0;
+        String LockerNum=" ";
 
         //흐름에 따라 flow 값 변경. 보관함 선택 (1) -> 사이즈 별 안내, 결제 확인 (2) -> 결제 (3)
         int flow = 1;
@@ -420,7 +426,7 @@ public class LockerManager {
 
             //입력
             System.out.print(">>");
-            String LockerNum = String.valueOf(sc.next());
+            LockerNum = String.valueOf(sc.next());
 
             try{
                 //Q,q 처리
@@ -529,7 +535,7 @@ public class LockerManager {
                 else lockersize="2";
 
                 for(int i=0; i<LockerList.size(); i++){
-                    if(Integer.parseInt(LockerList.get(i).locknum) == LockerNumber){
+                    if(LockerList.get(i).locknum.equals(LockerNum)){
                         LockerList.get(i).use = "2";
                         LockerList.get(i).locksize = lockersize;
                         LockerList.get(i).date = Main.currentTimeString;
@@ -537,11 +543,9 @@ public class LockerManager {
                 }
 
                 //User 회원 lockernumber 저장
-                u.memMap.get(loguser).locknum = String.valueOf(LockerNumber);
+                u.memMap.get(loguser).locknum = LockerNum;
                 u.memMap.get(loguser).lockPW = LockerPwd;
-                LockerFileWrite();
-                System.exit(0);
-                //ExitWrite();
+                ExitWrite();
             }
             else{
                 Menu_Mem();
@@ -746,9 +750,10 @@ public class LockerManager {
                         System.out.println("보관함 이용 등록이 완료되었습니다.\n");
 
                         //locker 데이터 Locker.txt 파일에 저장
-                        LockerFileWrite();
+                        //LockerFileWrite();
 
-                        break;
+                        //break;
+                        ExitWrite();
                     }
 
                 } catch (IllegalArgumentException e) {
@@ -919,7 +924,7 @@ public class LockerManager {
         while (true) {
             if(chance!=0) {
                 if (th > 3) {
-                    System.out.println("비밀번호를 3회 틀리셨습니다. 메뉴로 돌아갑니다.");
+                    System.out.println("보관함 비밀번호를 3회 틀리셨습니다. 메뉴로 돌아갑니다.");
                     return false;
                     //break;
                 }
@@ -959,7 +964,7 @@ public class LockerManager {
             } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             } catch (IllegalAccessException e) {
-                System.out.println("비밀번호가 올바르지 않습니다.");
+                System.out.println("보관함 비밀번호가 올바르지 않습니다.");
 
 
             }

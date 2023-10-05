@@ -105,19 +105,14 @@ public class Locker {
 
                 if (parts[0].equals("1")) {
                     String lockerNumber = parts[3];
-                    if(!lockerNumber.equals("-")){
-                        if(Integer.parseInt(lockerNumber)<10)
-                            System.out.print(" 0"+lockerNumber);
-                        else System.out.print(" "+lockerNumber);
-                    }
+                    if(!lockerNumber.equals("-"))
+                        System.out.print(" "+lockerNumber);
 
                 }
                 else if (parts[0].equals("0")) {
                     String lockerNumber = parts[1];
-                    if(!lockerNumber.equals("-"))
-                        if(Integer.parseInt(lockerNumber)<10)
-                            System.out.print(" 0"+lockerNumber);
-                        else System.out.print(" "+lockerNumber);
+                    if (!lockerNumber.equals("-"))
+                        System.out.print(" " + lockerNumber);
                 }
             } bufferedReader.close();
 
