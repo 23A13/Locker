@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Locker {
 
     String locknum; //보관함 번호
@@ -63,6 +67,53 @@ public class Locker {
         this.use=use;
         this.date=date;
         this.confirmbook=confirmbook;
+    }
+
+    public void print(){
+        System.out.println("---------------------------------------------------------------------------------------");
+        System.out.println("| 01        | 02        | 03        | 04        | 13               | 14               |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|-----------------------------------------------|                  |                  |");
+        System.out.println("| 05        | 06        | 07        | 08        |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|-----------|-----------|-----------|-----------|------------------|------------------|");
+        System.out.println("| 09        | 10        | 11        | 12        | 15               | 16               |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("|           |           |           |           |                  |                  |");
+        System.out.println("---------------------------------------------------------------------------------------");
+
+        try {
+            String filePath = "user.txt";
+            FileReader fileReader = new FileReader(filePath);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split("<>");
+
+                if (parts[0].equals("1")) {
+                    String lockerNumber = parts[3];
+                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                }
+                else if (parts[0].equals("0")) {
+                    String lockerNumber = parts[1];
+                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                }
+            } bufferedReader.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
