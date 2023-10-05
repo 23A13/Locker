@@ -7,19 +7,22 @@ import java.util.*;
 public class LockerManager {
     static ArrayList<Locker> LockerList=new ArrayList<>(); //Locker정보 저장 구조
 
+    String loguser;
+
     UserManager u=new UserManager();
     //class 선언
     static Scanner sc = new Scanner(System.in);
     static Locker locker = new Locker();
 
+    String time=""; //현재 시각 전달받는 멤버
     
     //Constructor
     public LockerManager() {
-
+        LockerFileInput();
     }
     //수정필요해보임
-    public LockerManager(String userId, String userPassword) {
-
+    public LockerManager(String userId) {
+        this.loguser = userId;
     }
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
@@ -244,10 +247,29 @@ public class LockerManager {
     public void ConfirmBooking(){
         String str;//메뉴 입력(1.예약확정/ Q,q
 
-        int password; //비밀번호 입력받는 변수
-        int u_locknum=0; //임의로 정한 변수(객체 완성되면 수정필요)
-        int u_payment=0; //임의로 정한 변수(객체 완성되면 수정필요)
-        int u_password=0; //임의로 정한 변수(객체 완성되면 수정필요)
+        String password; //비밀번호 입력받는 변수
+
+        String u_locknum=u.mem.get(loguser).locknum; //임의로 정한 변수(객체 완성되면 수정필요)
+        String u_payment="0"; //임의로 정한 변수(객체 완성되면 수정필요)
+        String u_password=u.mem.get(loguser).lockPW; //임의로 정한 변수(객체 완성되면 수정필요)
+        Locker temL=null;
+        int index=0;
+        for(int i=0;i< LockerList.size();i++){//해당 락커 정보 저장
+            if(LockerList.get(i).locknum.equals((u_locknum))){
+                temL=new Locker(u_locknum,LockerList.get(i).locksize,LockerList.get(i).use,LockerList.get(i).date,LockerList.get(i).confirmbook);
+                index=i;
+            }
+        }
+        int payment=0;
+        if(temL.locksize.equals("0")){
+            payment=2000;
+        }else if(temL.locksize.equals("1")){
+            payment=3000;
+        }
+        else{
+            payment=4000;
+        }
+        u_payment=Integer.toString(4*payment);
 
         int flag=0; //flag==0이면 올바르지 않은 입력
         while(flag==0){
@@ -279,13 +301,15 @@ public class LockerManager {
             }
         }
         int flag_=5;//flag_ !=1 이면 올바르지 않은 입력
-        if(flag==2){//예약확정하기
+        if(flag==1){//이전 메뉴로 돌아감
+            Menu();
+        }
+        if(flag==2){//예약확정하기->종료
             while(flag_!=1){
                 try{
                     System.out.print("비밀번호 4자리를 입력하세요.>>");
-                    password=sc.nextInt();
-                    sc.nextLine();
-                    if(password==u_password){
+                    password=sc.nextLine();
+                    if(password.equals(u_password)){
                         flag_=1;//예약확정 성공
                     }else{
                         flag_=2;//비밀번호가 올바르지 않은 경우
@@ -299,9 +323,16 @@ public class LockerManager {
                 }
             }
             System.out.println("예약이 확정되었습니다.");
-        }
-        Menu();// flag==1이거나,(flag==2인 경우에서 작업 마치면) 이전 메뉴로 돌아감.
+            LockerList.set(index,new Locker(temL.locknum, temL.locksize,"2" , temL.date,"1" ));
+            //LockerList의 사용여부-2,예약확정-1로 변경
 
+            /*for(int i=0;i< LockerList.size();i++){//LockerList의 사용여부-2,예약확정-1로 변경
+                if(LockerList.get(i).locknum.equals((u_locknum))){
+                    LockerList.set(i,new Locker(u_locknum,LockerList.get(i).locksize,"2",LockerList.get(i).date,"1"));
+                }
+            }*/
+        }
+        // flag==1이거나,(flag==2인 경우에서 작업 마치면) 이전 메뉴로 돌아감.->  !!변경 flag==2작업마치면 프로그램 종료로
     }
 
     public static String StoragePaymentPrompt(int lockerNum) {
@@ -332,6 +363,41 @@ public class LockerManager {
         return str;
     }
 
+
+    /*public void deleteLockerBeforeDate(String DTrim/*입력받은 현재시각) {
+        //예약확정 2시간 이내에 안한 보관함들 취소처리하도록 하는 함수
+        //입력받은 날짜는 무조건 미래시간을 입력받는다는 전제--->날짜입력에서 애초에 과거시각 입력 못받도록 거름
+
+
+        time=DTrim; //main으로 부터 현재시각 전달받음
+
+        for(int j=0;j< LockerList.size();j++){
+            String ldate = LockerList.get(j).date;
+
+            if(!LockerList.get(j).date.equals("-")){//날짜가 "-"가 아닐 때만
+                //보관함들의 날짜
+                int lyear=Integer.parseInt(ldate.substring(0, 4));
+                int lmonth=Integer.parseInt(ldate.substring(4, 6));
+                int lday=Integer.parseInt(ldate.substring(6, 8));
+                int lhour=Integer.parseInt(ldate.substring(8, 10));
+
+                //현재 날짜
+                int year=Integer.parseInt(DTrim.substring(0, 4));
+                int month=Integer.parseInt(DTrim.substring(4, 6));
+                int day=Integer.parseInt(DTrim.substring(6, 8));
+                int hour=Integer.parseInt(DTrim.substring(8, 10));
+
+                int time=hour-lhour;
+                if(lyear==year && lmonth==month && lday==day && time<=2) {//2시간 이내에 예약확정 시도 시 예약유지
+                    //예약중 유지
+                }else{
+                    //보관함 미사용중 상태로 다시 되돌려놓음->취소처리(use="0" ,  date="-" 로 바꾸면 됨)
+                    LockerList.set(j,new Locker(LockerList.get(j).locknum,LockerList.get(j).locksize,"0","-",LockerList.get(j).confirmbook));
+                }
+            }
+
+        }
+    }*/
 
 
 }
