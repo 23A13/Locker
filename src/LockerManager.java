@@ -58,7 +58,7 @@ public class LockerManager {
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(){
-        String filename="./Locker/Locker.txt";
+        String filename="../Locker/Locker.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
                 String str=scan.nextLine();
@@ -73,7 +73,7 @@ public class LockerManager {
     //프로그램 종료 시 locker 데이터 txt파일에 저장하는 함수
     public void LockerFileWrite(){
         try{
-            File file = new File("./Locker/Locker.txt");
+            File file = new File("../Locker/Locker.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
@@ -91,7 +91,7 @@ public class LockerManager {
 
     //날짜시간 입력 시 무효 예약 내역 수정용
     public void dateLockerFileInput(ArrayList<Locker> List){
-        String filename="./Locker/Locker.txt";
+        String filename="../Locker/Locker.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
                 String str=scan.nextLine();
@@ -106,7 +106,7 @@ public class LockerManager {
     //날짜시간 입력 시 무효 예약 내역 수정용
     public void dateLockerFileWrite(ArrayList<Locker> List){
         try{
-            File file = new File("./Locker/Locker.txt");
+            File file = new File("../Locker/Locker.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
@@ -149,6 +149,7 @@ public class LockerManager {
             try{
                 System.out.print(">>");
                 number = sc.nextInt();
+                sc.nextLine();
 
                 if(number<1||number>6) throw new InputMismatchException();
 
@@ -775,7 +776,7 @@ public class LockerManager {
     // 오늘 날짜 입력 시 Locker 데이터 수정 메소드 (날짜는 지났는데 예약 확정이 안된 이용 내역 삭제)
     public void deleteLockerBeforeDate(Date newDate) {
 
-        String filename = "./Locker/Locker.txt";
+        String filename = "../Locker/Locker.txt";
 
         ArrayList<String> lockersToDelete = new ArrayList<>();
         ArrayList<Locker> tmpLockerList = new ArrayList<>();
@@ -1086,7 +1087,7 @@ public class LockerManager {
                 }
             }
             System.out.println("예약이 확정되었습니다.");
-            LockerList.set(index,new Locker(temL.locknum, temL.locksize,"2" , temL.date,"1" ));
+            LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"1" ));
             //System.out.println(LockerList.get(index).confirmbook);
             //LockerList의 사용여부-2,예약확정-1로 변경
 

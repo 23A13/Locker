@@ -93,12 +93,12 @@ public class Locker {
         System.out.println("|           |           |           |           |                  |                  |");
         System.out.println("---------------------------------------------------------------------------------------");
 
-        String fileName = "./Locker/User.txt";
+        String fileName = "../Locker/User.txt";
 
         try {
 
             //수정
-            String filePath = "./Locker/User.txt";
+            String filePath = "../Locker/User.txt";
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -110,15 +110,15 @@ public class Locker {
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                String[] parts = line.split("<>");
-
+                String[] parts = line.split(" ");
                 if (parts[0].equals("1")) {
                     String lockerNumber = parts[3];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                    if(!lockerNumber.equals("-"))
+                    System.out.print(" " + lockerNumber);
                 }
                 else if (parts[0].equals("0")) {
                     String lockerNumber = parts[1];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                    System.out.print(" " + lockerNumber);
                 }
             } bufferedReader.close();
         } catch (FileNotFoundException e) {
@@ -128,6 +128,7 @@ public class Locker {
         } catch (Exception e) {
             System.err.println("예외가 발생했습니다: " + e.getMessage());
         }
+        System.out.println();
     }
 }
 
