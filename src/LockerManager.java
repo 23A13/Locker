@@ -11,15 +11,16 @@ import static java.lang.System.exit;
 
 public class LockerManager {
 
-    //로그인한 사용자 아이디
-    String loguser;
-
 
     static ArrayList<Locker> LockerList = new ArrayList<>(); //Locker정보 저장 구조
     Map<String, User> mem = new HashMap<>(); //회원 정보 저장 구조
     Map<String, User> nonmem = new HashMap<>(); //비회원 정보 저장 구조
 
     UserManager usermanager = new UserManager();
+
+    //로그인한 사용자 아이디
+    String loguser;
+    User memUser = mem.get(loguser);  //유저 아이디로 해당되는 user 찾기
 
     //constructor
 
@@ -161,19 +162,6 @@ public class LockerManager {
     public void Menu_Mem(){
         LockerFileInput();
         userManager.UserFileInput();
-        /*
-        //arrayList 잘 저장됐나 확인용-나중에 삭제
-        for(int i=0;i<LockerList.size();i++){
-            System.out.println(LockerList.get(i).date);
-        }
-
-        //user정보 저장 잘되나 확인용-나중에 삭제
-        userManager.UserFileInput(mem,nonmem);
-        System.out.println(mem.get("Test0823"));
-        System.out.println(nonmem.get("01"));
-        nonmem.put("01",new User(nonmem.get("01").locknum,"1234"));
-        userManager.UserFileWrite(mem,nonmem);*/
-
 
         String menu = """
                 ——MENU——\s
@@ -213,6 +201,7 @@ public class LockerManager {
 
         switch(number){
             case 1:
+                Storage(true);
                 break;
             case 2:
                 break;
@@ -235,7 +224,7 @@ public class LockerManager {
 
     }
     //비회원메뉴
-    public void menu_nonMem() {
+    public void Menu_Nonmem() {
 
         LockerFileInput();
 
@@ -256,7 +245,7 @@ public class LockerManager {
 
         switch (number) {
             case 1:
-                Storage();
+                Storage(false);
                 break;
             case 2:
                 Pickup();
@@ -433,7 +422,231 @@ public class LockerManager {
     private void Pickup() {
     }
 
-    private void Storage() {
+    private void Storage(boolean isMembership) {
+
+        //전역으로 빠질 애들
+        //보관함
+        //수정
+        String table1 = """
+                ---------------------------------------------------------------------------------------
+                | 01        | 02        | 03        | 04        | 13               | 14               |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |-----------------------------------------------|                  |                  |
+                | 05        | 06        | 07        | 08        |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |-----------|-----------|-----------|-----------|------------------|------------------|
+                | 09        | 10        | 11        | 12        | 15               | 16               |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                |           |           |           |           |                  |                  |
+                ---------------------------------------------------------------------------------------
+
+                """;
+
+        //요금표
+        String tariff = """
+                ——————요금표——————\s
+                기본 4시간\s
+                S : 2000원 / M : 3000원 / L : 4000원\s
+                시간당 추가요금\s
+                S : 500원 / M : 800원 / L : 1000원\s
+                ———————————————\s
+
+                ——물품보관함 사이즈 안내——\s
+                S : 01~08번 보관함 (총 8개)\s
+                M : 09~12번 보관함 (총 4개)\s
+                L : 13~16번 보관함 (총 4개)\s
+                ———————————————\s
+
+                이용하실 보관함의 번호를 입력하세요.\s
+
+                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
+                """;
+        //pwd_prompt1
+        String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
+
+
+        //입력받은 보관함 번호
+        int LockerNumber = 0;   //정수형
+        String LockerNum = null;    //스트링
+        //보관함 비밀번호
+        String LockerPwd = null;
+        //흐름에 따라 flow 값 변경. 보관함 선택 (1) -> 비밀번호 입력 (2) -> 결제 (3)
+        int flow = 1;
+
+
+        //보관함 출력
+        System.out.println(table1);
+
+        while (true) {
+            //요금표 출력
+            System.out.println(tariff);
+
+            //보관함 번호 입력
+            System.out.print(">>");
+            LockerNum = String.valueOf(sc.next());
+            sc.nextLine();
+
+            try {
+                //Q or q 입력 시 menu2.1로 돌아가기
+                if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
+                    //수정
+                    //회원 유무에 따라 돌아갈 메뉴 결정
+                    if(isMembership) {
+                        System.out.println("\n\nmenu2.1로 돌아가기\n");
+                        Menu_Mem();
+                    } else {
+                        System.out.println("\n\nmenu2.2로 돌아가기\n");
+                        Menu_Nonmem();
+                    }
+                    break;
+                }
+
+                //범위 예외 처리(01~16)
+                LockerNumber = Integer.parseInt(LockerNum);
+                if (LockerNumber < 1 || LockerNumber > 16)
+                    throw new IllegalArgumentException();
+
+                //형식 예외 처리 (01, 02 등으로 입력하지 않고 1, 2 등으로 입력함)
+                if (LockerNum.length() != 2)
+                    throw new IllegalArgumentException();
+
+                //이용중인 보관함 선택
+                //수정
+                Iterator<Locker> iterator = LockerList.iterator();
+                while (iterator.hasNext()) {
+                    Locker locker = iterator.next();
+                    //선택한 보관함과 번호가 같은 보관함 찾기
+                    if (locker.getLocknum().equals(LockerNum)) {
+                        //이용중 or 예약중인 보관함이라면 catch
+                        if (!locker.getUse().equals("0"))
+                            throw new IllegalAccessException();
+                    }
+                }
+
+                //아무 문제 없다면 비밀번호 변경 프롬프트로 이동
+                flow = 2;
+                break;
+
+
+            } catch (IllegalArgumentException e) { //나머지 입력 예외 처리
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+            } catch (IllegalAccessException e) {
+                System.out.println("이용 중인 보관함입니다. 다른 보관함을 선택해주세요.\n\n");
+            }
+
+        }
+
+        if (flow == 2) {
+            while (true) {
+                //비밀번호 입력하시오 프롬프트 출력
+                System.out.println(pwd_prompt1);
+
+                //비밀번호 입력
+                System.out.print(">>");
+                LockerPwd = String.valueOf(sc.next());
+                sc.nextLine();
+
+                try {
+                    //숫자 입력이 아닌 경우
+                    if (!isNumeric(LockerPwd))
+                        throw new IllegalArgumentException();
+
+                    //4자리가 아닌 경우
+                    if (LockerPwd.length() != 4)
+                        throw new IllegalArgumentException();
+
+                    //아무 문제 없는 경우 결제 창으로 이동
+                    flow = 3;
+                    break;
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                }
+            }
+        }
+
+        if (flow == 3) {
+            while (true) {
+                //storage_payment_prompt 출력
+                System.out.print(StoragePaymentPrompt(LockerNumber));
+                String yn = String.valueOf(sc.next());
+                sc.nextLine();
+
+                try {
+                    // Y or y or N or n 말고 다른 것을 입력한 경우
+                    if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y") ||
+                          Objects.equals(yn, "N") || Objects.equals(yn, "n")))
+                        throw new IllegalArgumentException();
+
+                    //N or n 입력한 경우
+                    if (Objects.equals(yn, "N") || Objects.equals(yn, "n")) {
+                        System.out.println("결제를 취소하셨습니다.");
+                        flow = 1; //flow 값 초기화
+
+                        //수정
+                        //회원 유무에 따라 돌아갈 메뉴 결정
+                        if(isMembership) {
+                            System.out.println("\n\nmenu2.1로 돌아가기\n");
+                            Menu_Mem();
+                        } else {
+                            System.out.println("\n\nmenu2.2로 돌아가기\n");
+                            Menu_Nonmem();
+                        }
+                        break;
+                    }
+
+                    if (Objects.equals(yn, "Y") || Objects.equals(yn, "y")) {
+
+                        //locker 설정값 변경하고 Storage 종료
+                        Iterator<Locker> iterator = LockerList.iterator();
+                        while (iterator.hasNext()) {
+                            Locker locker = iterator.next();
+                            if (locker.getLocknum().equals(LockerNum)) {
+                                locker.setUse("1");
+                                locker.setDate(Main.currentTimeString);
+                            }
+                        }
+
+                        //수정
+                        //보관함 비밀번호 저장도 해야한다
+                        if(isMembership) {
+                            memUser.setLocknum(LockerNum);
+                            memUser.setLockPW(LockerPwd);
+                            mem.put(loguser, memUser);
+                        }else {
+                            nonmem.put(LockerNum, new User(LockerNum, LockerPwd));
+                        }
+                        //locker.setLockpwd(LockerPwd);
+                        //현재 date UserManager로부터 받아와야 함
+                        //locker.setDate();
+
+                        System.out.println("결제가 완료되었습니다.");
+                        System.out.println("보관함 이용 등록이 완료되었습니다.\n");
+
+                        //locker 데이터 Locker.txt 파일에 저장
+                        LockerFileWrite();
+
+                        break;
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("올바른 입력이 아닙니다.");
+                    System.out.println("다시 한번 입력해주세요.\n");
+                }
+            }
+        }
+
+
     }
 
     public static void logout() {
@@ -546,6 +759,19 @@ public class LockerManager {
         return date;
     }
 
+    //문자열이 숫자인지 확인하는 메서드
+    public boolean isNumeric(String strNum) {
+
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 
 
 }

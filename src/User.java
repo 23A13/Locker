@@ -27,4 +27,43 @@ public class User {
         this.lockPW = lockPW;
     }
 
+    public String getMember() {
+        return member;
+    }
+
+    public void setMember(String member) {
+        this.member = member;
+    }
+
+    public String getMemberID() {
+        return memberID;
+    }
+
+    public void setMemberID(String memberID) {
+        this.memberID = memberID;
+    }
+
+    public String getMemberPW() {
+        return memberPW;
+    }
+
+    public void setMemberPW(String memberPW) {
+        this.memberPW = memberPW;
+    }
+
+    public String getLocknum() {
+        return locknum;
+    }
+
+    public void setLocknum(String locknum) {
+        this.locknum = locknum;
+    }
+
+    public String getLockPW() {
+        return lockPW;
+    }
+
+    public void setLockPW(String lockPW) {
+        this.lockPW = lockPW;
+    }
 }
