@@ -94,6 +94,7 @@ public class Locker {
         for (User user : UserManager.memMap.values()) {
             int locknum = Integer.parseInt(user.locknum);
             if (locknum > 0) {
+                String formattedLocknum = String.format("%02d",locknum);
                 System.out.println("사용 중인 보관함 :" + locknum);
             }
             else {
@@ -104,6 +105,7 @@ public class Locker {
         for (User user : UserManager.nonmemMap.values()) {
             int locknum = Integer.parseInt(user.locknum);
             if (locknum > 0) {
+                String formattedLocknum = String.format("%02d",locknum);
                 System.out.println("사용 중인 보관함 :" + locknum);
             }
             else {
