@@ -1040,7 +1040,7 @@ public class LockerManager {
                 else{
                     payment=4000;
                 }
-                u_payment=Integer.toString(4*payment);
+                u_payment=Integer.toString(payment);
 
                 //예약확정
                 int flag=0; //flag==0이면 올바르지 않은 입력
@@ -1051,7 +1051,7 @@ public class LockerManager {
                         System.out.println("결제 금액: "+u_payment+"원"); //사용자의 사물함 객체 정보 받아야함
                         System.out.println("------------------");
                         System.out.println("1. 예약 확정");
-                        System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
+                        System.out.print("\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
                         //메인메뉴에 nextInt()하고 나서 추가하기@@@@@@@ github 에 push!!
                         str=sc.nextLine();
                         if(str.equals("Q")|| str.equals("q")){
@@ -1081,7 +1081,7 @@ public class LockerManager {
                 if(flag==2){//예약확정하기->종료
                     while(flag_!=1){
                         try{
-                            System.out.print("비밀번호 4자리를 입력하세요.>>");
+                            System.out.print("비밀번호 4자리를 입력하세요. \n>>");
                             password=sc.nextLine();
                             if(password.equals(u_password)){
                                 flag_=1;//예약확정 성공
@@ -1097,7 +1097,7 @@ public class LockerManager {
                         }
                     }
                     System.out.println("예약이 확정되었습니다.");
-                    LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"1" ));
+                    LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"0" ));
                     //System.out.println(LockerList.get(index).confirmbook);
                     //LockerList의 사용여부-2,예약확정-1로 변경
 
