@@ -97,6 +97,7 @@ public class Locker {
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
+            System.out.print("사용중인 보관함 번호:");
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -104,13 +105,23 @@ public class Locker {
 
                 if (parts[0].equals("1")) {
                     String lockerNumber = parts[3];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                    if(!lockerNumber.equals("-")){
+                        if(Integer.parseInt(lockerNumber)<10)
+                            System.out.print(" 0"+lockerNumber);
+                        else System.out.print(" "+lockerNumber);
+                    }
+
                 }
                 else if (parts[0].equals("0")) {
                     String lockerNumber = parts[1];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                    if(!lockerNumber.equals("-"))
+                        if(Integer.parseInt(lockerNumber)<10)
+                            System.out.print(" 0"+lockerNumber);
+                        else System.out.print(" "+lockerNumber);
                 }
             } bufferedReader.close();
+
+            System.out.println();
         }
         catch (IOException e) {
             e.printStackTrace();
