@@ -29,10 +29,6 @@ public class LockerManager {
     }
 
 
-
-
-
-
     //안내문구들
     static String tariff = """
                 ——————요금표——————————————————————————\s
@@ -585,11 +581,7 @@ public class LockerManager {
         return str;
     }
 
-    private void Storage(boolean isMembership) {
-
-
-
-
+    private void Storage(boolean isLogin) {
 
         //입력받은 보관함 번호
         int LockerNumber = 0;   //정수형
@@ -617,7 +609,7 @@ public class LockerManager {
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //수정
                     //회원 유무에 따라 돌아갈 메뉴 결정
-                    if(isMembership) {
+                    if(isLogin) {
                         System.out.println("\n\nmenu2.1로 돌아가기\n");
                         Menu_Mem();
                     } else {
@@ -711,7 +703,7 @@ public class LockerManager {
 
                         //수정
                         //회원 유무에 따라 돌아갈 메뉴 결정
-                        if(isMembership) {
+                        if(isLogin) {
                             System.out.println("\n\nmenu2.1로 돌아가기\n");
                             Menu_Mem();
                         } else {
@@ -735,7 +727,7 @@ public class LockerManager {
 
                         //수정
                         //보관함 비밀번호 저장도 해야한다
-                        if(isMembership) {
+                        if(isLogin) {
                             memUser.setLocknum(LockerNum);
                             memUser.setLockPW(LockerPwd);
                             u.memMap.put(loguser, memUser);
@@ -916,7 +908,6 @@ public class LockerManager {
     chacne : 기회 몇번, 0 : 무한루프로 (맞을때까지-수거완료에서 사용)
      */
 
-
     public boolean pwdCheck(String prompt, boolean ismemLocker, String targetKey, int chance) {
         int th=0;
         String LockerPwd;
@@ -1001,8 +992,5 @@ public class LockerManager {
     public static void logout() {
         return;
     }
-
-
-
 
 }
