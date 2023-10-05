@@ -91,12 +91,14 @@ public class Locker {
         System.out.println("|           |           |           |           |                  |                  |");
         System.out.println("---------------------------------------------------------------------------------------");
 
+        System.out.print("사용 중인 보관함 :");
+
         for (User user : UserManager.memMap.values()) {
             if(!user.locknum.equals("-")) {
                 int locknum = Integer.parseInt(user.locknum);
                 if (locknum > 0) {
                     String formattedLocknum = String.format("%02d", locknum);
-                    System.out.println("사용 중인 보관함 :" + locknum);
+                    System.out.print(" " + formattedLocknum);
                 } else {
                     System.out.println("사용 중인 보관함이 존재하지 않습니다.");
                 }
@@ -108,12 +110,13 @@ public class Locker {
                 int locknum = Integer.parseInt(user.locknum);
                 if (locknum > 0) {
                     String formattedLocknum = String.format("%02d", locknum);
-                    System.out.println("사용 중인 보관함 :" + locknum);
+                    System.out.print(" " + formattedLocknum);
                 } else {
                     System.out.println("사용 중인 보관함이 존재하지 않습니다.");
                 }
             }
         }
+        System.out.println();
     }
 }
 
