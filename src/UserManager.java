@@ -20,6 +20,11 @@ public class UserManager {
         // 처음 시작에
         this.UserFileInput();
     }
+    // 날짜시간 입력 시 예약 내역 수정용
+    public UserManager(boolean flag)
+    {
+
+    }
 
     //프로그램 최초 시작 시 user 데이터 txt파일로부터 불러오는 함수
     public void UserFileInput(){
@@ -63,15 +68,41 @@ public class UserManager {
         }
     }
 
+    // 날짜시간 입력 시 예약 내역 수정용
+    public void dateUserFileInput(Map<String, User> tmpmemMap, Map<String, User> tmpnonmemMap){
+        String filename="User.txt";
+        try(Scanner scan=new Scanner(new File(filename))){
+            while(scan.hasNextLine()) {
+                String str=scan.nextLine();
+                String[] temp=str.split(" ");
+                if(temp[0].trim().equals("1")){
+                    tmpmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 회원 user정보 저장
+                }else if (temp[0].trim().equals("0")){
+                    tmpnonmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim())); //비회원 user정보->보관함 사용중인 비회원만 정보 저장
+                }else
+                {
+                    continue;
+                }
+            }
+        }catch(FileNotFoundException e){
+            System.out.println("파일 입력이 잘못되었습니다.");
+        }
+    }
+
     // 날짜/시간 입력 후에 지난 내역들 파일에서 삭제하는 메소드
-    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete) {
+    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete)
+    {
+        Map<String, User> tmpmemMap = new HashMap<>();
+        Map<String, User> tmpnonmemMap = new HashMap<>();
+        dateUserFileInput(tmpmemMap, tmpnonmemMap);
+
         try{
             File file = new File("User.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
                 FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for (Map.Entry<String, User> entry : mem.entrySet()) {//회원 데이터 저장
+                for (Map.Entry<String, User> entry : tmpmemMap.entrySet()) {//회원 데이터 저장
                     // 지워야 할 이용 내역이 있다면
                     if(lockersToDelete.contains(entry.getValue().locknum))
                     {
@@ -85,7 +116,7 @@ public class UserManager {
                         writer.flush();
                     }
                 }
-                for (Map.Entry<String, User> entry : nonmem.entrySet()) {//비회원 데이터 저장
+                for (Map.Entry<String, User> entry : tmpnonmemMap.entrySet()) {//비회원 데이터 저장
                     // 지워야 할 이용이 아니면
                     if(!(lockersToDelete.contains(entry.getValue().locknum)))
                     {
@@ -99,7 +130,6 @@ public class UserManager {
             e.printStackTrace();
         }
     }
-
     public void menu1() {
         // TODO Auto-generated method stub
 
