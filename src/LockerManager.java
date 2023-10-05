@@ -52,7 +52,7 @@ public class LockerManager {
                 """;
 
     //pwd_prompt1
-    String pwd_prompt1 = "사용하실 보관함 비밀번호(PIN) 네자리를 입력하세요.\n";
+    String pwd_prompt1 = "사용하실 보관함 비밀번호(PIN) 네자리를 입력하세요.";
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput(){
@@ -232,14 +232,14 @@ public class LockerManager {
                 이용하신 보관함의 번호를 입력하세요. (ex: 01)\s
                 \s
                 * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\s
-                ——————————————————————————————————————————————\s
+                ——————————————————————————————————————————————
                 """;
 
         //보관함 번호 입력받기
         int LockerNumber =  0;
         while (true) {
             //notice 2 출력
-            System.out.println(notice2);
+            System.out.print(notice2);
 
             //보관함 번호 입력받기
             System.out.print(">>");
@@ -356,6 +356,7 @@ public class LockerManager {
         if (timeDiff > 4){
             while(true){
                 Print_AddPayPrompt(timeDiff, target);
+                System.out.print(">>");
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
                 try{
@@ -422,7 +423,7 @@ public class LockerManager {
         int flow = 1;
         //보관함 번호 입력
         while(true){
-            System.out.println(tariff);
+            System.out.print(tariff);
 
             //입력
             System.out.print(">>");
@@ -577,8 +578,8 @@ public class LockerManager {
         else
             payment = 4000;
 
-        String str = "<" + strLockerNum + ">번 보관함 선택하셨습니다. \n" +
-                "기본(4시간) 금액 <" + payment + ">원 결제하시겠습니까? (y/n) \n" +
+        String str = "" + strLockerNum + "번 보관함 선택하셨습니다. \n" +
+                "기본(4시간) 금액 " + payment + "원 결제하시겠습니까? (y/n) \n" +
                 "\n" +
                 "* 초과 시간에 따른 요금은 수거 시 추가결제됩니다.\n" +
                 "—————————————————————————— \n" +
@@ -603,7 +604,7 @@ public class LockerManager {
 
         while (true) {
             //요금표 출력
-            System.out.println(tariff);
+            System.out.print(tariff);
 
             //보관함 번호 입력
             System.out.print(">>");
@@ -616,11 +617,11 @@ public class LockerManager {
                     //수정
                     //회원 유무에 따라 돌아갈 메뉴 결정
                     if(isLogin) {
-                        System.out.println("\n\nmenu2.1로 돌아가기\n");
+                        //System.out.println("\n\nmenu2.1로 돌아가기\n");
                         count++;
                         Menu_Mem();
                     } else {
-                        System.out.println("\n\nmenu2.2로 돌아가기\n");
+                        //System.out.println("\n\nmenu2.2로 돌아가기\n");
                         count++;
                         Menu_Nonmem();
                     }
@@ -706,17 +707,17 @@ public class LockerManager {
 
                     //N or n 입력한 경우
                     if (Objects.equals(yn, "N") || Objects.equals(yn, "n")) {
-                        System.out.println("결제를 취소하셨습니다.");
+                        System.out.println("결제를 취소하셨습니다.\n");
                         flow = 1; //flow 값 초기화
 
                         //수정
                         //회원 유무에 따라 돌아갈 메뉴 결정
                         if(isLogin) {
-                            System.out.println("\n\nmenu2.1로 돌아가기\n");
+                            //System.out.println("\n\nmenu2.1로 돌아가기\n");
                             count++;
                             Menu_Mem();
                         } else {
-                            System.out.println("\n\nmenu2.2로 돌아가기\n");
+                            //System.out.println("\n\nmenu2.2로 돌아가기\n");
                             count++;
                             Menu_Nonmem();
                         }
@@ -991,10 +992,10 @@ public class LockerManager {
                 break;
         }
 
-        String str = "초과 시간에 따른 추가 금액 결제를 진행합니다. \n"+
+        String str = "\n초과 시간에 따른 추가 금액 결제를 진행합니다. \n"+
                 (timeDiff-4)*additional + "원 \n"+
                 "결제하시려면 Y 또는 y를 입력해주세요. \n"+
-                "———————————————————————————\n";
+                "———————————————————————————";
 
         System.out.println(str);
 
