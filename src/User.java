@@ -27,6 +27,7 @@ public class User {
         this.lockPW = lockPW;
     }
 
+    //Getter & Setter
     public String getMember() {
         return member;
     }

@@ -209,7 +209,6 @@ public class LockerManager {
             default:
                 break;
         }
-
         LockerFileWrite();
 
     }
@@ -415,25 +414,29 @@ public class LockerManager {
             u.nonmemMap.remove(targetKey);
         }
 
-        LockerFileWrite();
 
 
         System.out.println("물품 수거가 완료되었습니다.");
         System.out.println("이용해주셔서 감사합니다.");
-        System.exit(0);
 
-        //*/
+        ExitWrite();
+
 
     }
 
     //예약 메소드
     public void Booking(){
 
+        //pwd_prompt1
+        String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
+
+
+
         //기존 예약 내역 확인
         if(!u.memMap.get(loguser).locknum.equals("-")){
             System.out.println("이미 예약 내역이 존재합니다.\n\n");
             Menu_Mem();
-            exit(0);
+            System.exit(0);
         }
 
         System.out.println(table1);
@@ -492,7 +495,6 @@ public class LockerManager {
         //사이즈 별 입력
 
         String payment = " ";
-
         //사이즈 별
         if(flow==2){
             while(true){
@@ -523,7 +525,6 @@ public class LockerManager {
                 System.out.println("(물품 보관이 완료 되지 않을 경우 예약 자동 취소 및 환불 불가)");
 
                 System.out.println("");
-                exit(0);
 
 
                 //Locker 사용여부 예약중(2), 보관함 크기 저장
@@ -533,7 +534,7 @@ public class LockerManager {
                 else lockersize="2";
 
                 for(int i=0; i<LockerList.size(); i++){
-                    if(parseInt(LockerList.get(i).locknum) == LockerNumber){
+                    if(Integer.parseInt(LockerList.get(i).locknum) == LockerNumber){
                         LockerList.get(i).use = "2";
                         LockerList.get(i).locksize = lockersize;
                         LockerList.get(i).date = Main.currentTimeString;
@@ -546,7 +547,7 @@ public class LockerManager {
             }
             else{
                 Menu_Mem();
-                exit(0);
+                System.exit(0);
             }
         }
 
@@ -582,59 +583,9 @@ public class LockerManager {
         return str;
     }
 
-
-    private void Pickup() {
-    }
-
     private void Storage(boolean isMembership) {
 
-        //전역으로 빠질 애들
-        //보관함
-        //수정
-        String table1 = """
-                ---------------------------------------------------------------------------------------
-                | 01        | 02        | 03        | 04        | 13               | 14               |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |-----------------------------------------------|                  |                  |
-                | 05        | 06        | 07        | 08        |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |-----------|-----------|-----------|-----------|------------------|------------------|
-                | 09        | 10        | 11        | 12        | 15               | 16               |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                |           |           |           |           |                  |                  |
-                ---------------------------------------------------------------------------------------
 
-                """;
-
-        //요금표
-        String tariff = """
-                ——————요금표——————\s
-                기본 4시간\s
-                S : 2000원 / M : 3000원 / L : 4000원\s
-                시간당 추가요금\s
-                S : 500원 / M : 800원 / L : 1000원\s
-                ———————————————\s
-
-                ——물품보관함 사이즈 안내——\s
-                S : 01~08번 보관함 (총 8개)\s
-                M : 09~12번 보관함 (총 4개)\s
-                L : 13~16번 보관함 (총 4개)\s
-                ———————————————\s
-
-                이용하실 보관함의 번호를 입력하세요.\s
-
-                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
-                """;
         //pwd_prompt1
         String pwd_prompt1 = "사용하실 비밀번호 네자리를 입력하세요.\n";
 
@@ -955,7 +906,7 @@ public class LockerManager {
     public void ExitWrite(){
         u.UserFileWrite();
         LockerFileWrite();
-        exit(0);
+        System.exit(0);
     }
 
     //보관함 비밀번호 입력받기
