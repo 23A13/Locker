@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Locker {
 
@@ -93,40 +91,18 @@ public class Locker {
         System.out.println("|           |           |           |           |                  |                  |");
         System.out.println("---------------------------------------------------------------------------------------");
 
-        String fileName = "./Locker/User.txt";
-
-        try {
-
-            //수정
-            String filePath = "./Locker/User.txt";
-            FileReader fileReader = new FileReader(filePath);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            System.out.print("사용중인 보관함 번호:");
-
-
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] parts = line.split("<>");
-
-                if (parts[0].equals("1")) {
-                    String lockerNumber = parts[3];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
-                }
-                else if (parts[0].equals("0")) {
-                    String lockerNumber = parts[1];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
-                }
-            } bufferedReader.close();
-        } catch (FileNotFoundException e) {
-            System.err.println("파일을 찾을 수 없습니다: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("파일을 읽는 동안 오류가 발생했습니다: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("예외가 발생했습니다: " + e.getMessage());
+        for (User user : memMap.values()) {
+            int locknum = Integer.parseInt(user.locknum);
+            if (locknum > 0) {
+               System.out.println("사용 중인 보관함 :" + locknum);
+            }
+        }
+        
+        for (User user : nonmemMap.values()) {
+            int locknum = Integer.parseInt(user.locknum);
+            if (locknum > 0) {
+                System.out.println("사용 중인 보관함 :" + locknum);
+            }
         }
     }
 }
