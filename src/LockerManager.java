@@ -254,7 +254,7 @@ public class LockerManager {
                     count++;
                     if(isLogin) Menu_Mem();
                     else Menu_Nonmem();
-                    ExitWrite();
+                    break;
                 }
 
                 //형식 예외 처리(00, 01, 02 등으로 입력해야함)
@@ -292,113 +292,111 @@ public class LockerManager {
 
         //해당 번호(LockerNum)의 보관함 정보 찾기
         //LockerList에서 찾기
-        int target=0;
-        for (int i=0; i<LockerList.size(); i++){
-            if(LockerNumber == Integer.parseInt(LockerList.get(i).locknum) ){ //보관함 번호가 맞으면
-                target = i;
-                //test확인용출력-나중에삭제
-                //System.out.println("LockerList에서 찾기 성공 "+LockerList.get(target).locknum);
-            }
-        }
-
-        //mem과 nonmem에서 찾기 (회원<User> 정보 저장구조)
-        String targetKey=null;
-        boolean isMemLocker = false;
-
-        for(String id : u.memMap.keySet()) {
-            if(!u.memMap.get(id).locknum.equals("-")) {
-                if (LockerNumber == Integer.parseInt(u.memMap.get(id).locknum)) {
-                    targetKey = id;
-
+        if(LockerNumber!=0) {
+            int target = 0;
+            for (int i = 0; i < LockerList.size(); i++) {
+                if (LockerNumber == Integer.parseInt(LockerList.get(i).locknum)) { //보관함 번호가 맞으면
+                    target = i;
                     //test확인용출력-나중에삭제
+                    //System.out.println("LockerList에서 찾기 성공 "+LockerList.get(target).locknum);
+                }
+            }
+
+            //mem과 nonmem에서 찾기 (회원<User> 정보 저장구조)
+            String targetKey = null;
+            boolean isMemLocker = false;
+
+            for (String id : u.memMap.keySet()) {
+                if (!u.memMap.get(id).locknum.equals("-")) {
+                    if (LockerNumber == Integer.parseInt(u.memMap.get(id).locknum)) {
+                        targetKey = id;
+
+                        //test확인용출력-나중에삭제
 //                    System.out.println("mem map에서 찾기 성공");
 //                    System.out.println(u.memMap.get(id));
-                    break;
+                        break;
+                    }
                 }
             }
-        }
-        if(targetKey!=null) {
-            isMemLocker = true;
-        }else{
-            isMemLocker = false;
-            for (String lnum : u.nonmemMap.keySet()) {
-                if (Integer.parseInt(u.nonmemMap.get(lnum).locknum) == LockerNumber) {
-                    targetKey = lnum;
+            if (targetKey != null) {
+                isMemLocker = true;
+            } else {
+                isMemLocker = false;
+                for (String lnum : u.nonmemMap.keySet()) {
+                    if (Integer.parseInt(u.nonmemMap.get(lnum).locknum) == LockerNumber) {
+                        targetKey = lnum;
 
-                    //test확인용출력-나중에삭제
+                        //test확인용출력-나중에삭제
 //                    System.out.println("nonmem map에서 찾기 성공");
 //                    System.out.println(u.nonmemMap.get(lnum));
-                    break;
+                        break;
+                    }
                 }
             }
-        }
 
 
-        //보관함 비밀번호 입력
-        String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
-        boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
-        if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
-            count++;
-            if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
-            else Menu_Nonmem();
-            System.exit(0);
-        }
-
-
-
-        //보관함 비밀번호가 올바른 경우
-
-        //시간 차이 구하기
-        Date currentTime = StringToDate(Main.currentTimeString);
-        Date startTime = StringToDate(LockerList.get(target).date);
-        int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
-
-        //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
-        if (timeDiff > 4){
-            while(true){
-                Print_AddPayPrompt(timeDiff, target);
-                System.out.print(">>");
-                String yn = String.valueOf(sc.next());
-                sc.nextLine();
-                try{
-                    // Y or y 말고 다른 것을 입력한 경우
-                    if(!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
-                        throw new IllegalArgumentException();
-                    break;
-                }catch  (IllegalArgumentException e){
-                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-                }
+            //보관함 비밀번호 입력
+            String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
+            boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
+            if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
+                count++;
+                if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
+                else Menu_Nonmem();
+                System.exit(0);
             }
-            System.out.println("결제가 완료되었습니다.");
+
+
+            //보관함 비밀번호가 올바른 경우
+
+            //시간 차이 구하기
+            Date currentTime = StringToDate(Main.currentTimeString);
+            Date startTime = StringToDate(LockerList.get(target).date);
+            int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
+
+            //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
+            if (timeDiff > 4) {
+                while (true) {
+                    Print_AddPayPrompt(timeDiff, target);
+                    System.out.print(">>");
+                    String yn = String.valueOf(sc.next());
+                    sc.nextLine();
+                    try {
+                        // Y or y 말고 다른 것을 입력한 경우
+                        if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
+                            throw new IllegalArgumentException();
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                    }
+                }
+                System.out.println("결제가 완료되었습니다.");
+            }
+
+
+            //수거완료
+            String pwd_prompt3 = "물품 수거가 가능합니다. \n" +
+                    "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 보관함 비밀번호(PIN) 4자리를 입력해주세요.\n" +
+                    "수거완료 처리가 되지 않은 이용 건은 자동 초과 요금이 부과됩니다. \n";
+
+            pwdCheck(pwd_prompt3, isMemLocker, targetKey, 0);
+
+
+            //수거완료한 보관함 정보 삭제 & File Write
+            LockerList.get(target).use = "0";
+            LockerList.get(target).date = "-";
+            if (isMemLocker) {
+                u.memMap.get(targetKey).locknum = "-";
+                u.memMap.get(targetKey).lockPW = "-";
+            } else {
+                u.nonmemMap.remove(targetKey);
+            }
+
+
+            System.out.println("물품 수거가 완료되었습니다.");
+            System.out.println("이용해주셔서 감사합니다.");
+
+            ExitWrite();
         }
-
-
-        //수거완료
-        String pwd_prompt3 = "물품 수거가 가능합니다. \n"+
-                "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 보관함 비밀번호(PIN) 4자리를 입력해주세요.\n"+
-                "수거완료 처리가 되지 않은 이용 건은 자동 초과 요금이 부과됩니다. \n";
-
-        pwdCheck(pwd_prompt3, isMemLocker, targetKey, 0);
-
-
-
-        //수거완료한 보관함 정보 삭제 & File Write
-        LockerList.get(target).use = "0";
-        LockerList.get(target).date = "-";
-        if(isMemLocker){
-            u.memMap.get(targetKey).locknum = "-";
-            u.memMap.get(targetKey).lockPW = "-";
-        }else{
-            u.nonmemMap.remove(targetKey);
-        }
-
-
-
-        System.out.println("물품 수거가 완료되었습니다.");
-        System.out.println("이용해주셔서 감사합니다.");
-
-        ExitWrite();
-
 
     }
 
