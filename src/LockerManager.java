@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 
 import static java.lang.Integer.*;
-import static java.lang.System.exit;
 
 public class LockerManager {
 
@@ -337,13 +336,13 @@ public class LockerManager {
 
             //보관함 비밀번호 입력
             String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
-            boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
-            if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
-                count++;
-                if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
-                else Menu_Nonmem();
-                System.exit(0);
-            }
+            boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 0);
+//            if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
+//                count++;
+//                if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
+//                else Menu_Nonmem();
+//                System.exit(0);
+//            }
 
 
             //보관함 비밀번호가 올바른 경우
@@ -1010,7 +1009,8 @@ public class LockerManager {
         Locker temL=null;
 
         if(u_locknum.equals("-")){//예약한 보관함이 없다면
-            System.out.println("예약내역이 존재하지 않습니다.");// 출력 후 함수 종료
+            System.out.println("예약내역이 존재하지 않습니다.\n");// 출력 후 함수 종료
+            Menu_Mem();
         }else{//예약된 내역이 있다면 함수 계속 진행
             
             //보관함 정보 가져옴
@@ -1094,7 +1094,7 @@ public class LockerManager {
                         }
                     }
                     System.out.println("예약이 확정되었습니다.");
-                    LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"0" ));
+                    LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"1" ));
                     //System.out.println(LockerList.get(index).confirmbook);
                     //LockerList의 사용여부-2,예약확정-1로 변경
 
