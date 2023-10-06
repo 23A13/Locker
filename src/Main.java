@@ -18,7 +18,6 @@ public class Main {
         UserManager user = new UserManager();
         user.menu1();
 
-
     }
 
     // 날짜 체크 함수
@@ -144,7 +143,7 @@ public class Main {
         if(oldDate.before(newDate)){
             flag = true;
         } else if(oldDate.equals(newDate)){
-            flag = false;	// 같은 날일 경우
+            flag = true;	// 같은 날일 경우
         } else {
             flag = false;	// 이외의 모든 경우
         }

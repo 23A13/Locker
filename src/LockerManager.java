@@ -827,9 +827,16 @@ public class LockerManager {
                         Integer.parseInt(dateStrTemp[1])-1, Integer.parseInt(dateStrTemp[2]));
 
                 //예약 내역이라서 2시간을 더한 값으로 날짜 비교를 해야함
-                oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateStrTemp[3])+2);
+                oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateStrTemp[3]));
                 oldCalendar.set(Calendar.MINUTE, 0);
                 oldCalendar.set(Calendar.SECOND, 0);
+                oldCalendar.add(Calendar.HOUR_OF_DAY, 2);
+
+                // 만약 다음 날로 넘어가면 날짜를 1일 증가시킴
+                if (oldCalendar.get(Calendar.HOUR_OF_DAY) < 2) {
+                    oldCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                }
+
                 lockerDate = oldCalendar.getTime();
 
                 // 예약 날짜가 입력 받은 날보다 앞일 경우에만 저장
