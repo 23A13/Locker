@@ -176,7 +176,7 @@ public class LockerManager {
                 break;
             case 4:
                 ConfirmBooking();
-                ExitWrite();
+                //ExitWrite();
                 break;
             case 5:
                 logout();
@@ -387,6 +387,7 @@ public class LockerManager {
         //수거완료한 보관함 정보 삭제 & File Write
         LockerList.get(target).use = "0";
         LockerList.get(target).date = "-";
+        LockerList.get(target).confirmbook = "0";
         if(isMemLocker){
             u.memMap.get(targetKey).locknum = "-";
             u.memMap.get(targetKey).lockPW = "-";
@@ -1015,7 +1016,9 @@ public class LockerManager {
         Locker temL=null;
 
         if(u_locknum.equals("-")){//예약한 보관함이 없다면
-            System.out.println("예약내역이 존재하지 않습니다.");// 출력 후 함수 종료
+            System.out.println("예약내역이 존재하지 않습니다.");// 출력 후 함수 종료-->변경: 이전 메뉴로 돌아가기
+            count++;
+            Menu_Mem();
         }else{//예약된 내역이 있다면 함수 계속 진행
             
             //보관함 정보 가져옴
@@ -1029,6 +1032,9 @@ public class LockerManager {
 
             if(temL.confirmbook.equals("1")){ // 이미 확정된 예약건 처리
                 System.out.println("이미 예약이 확정되었습니다.");  // 출력 후 함수 종료
+                count++;
+                Menu_Mem();
+
             }else{
                 //예외에 해당 사항 없다면 예약확정 처리 시작
                 
@@ -1078,7 +1084,6 @@ public class LockerManager {
                 if(flag==1){//이전 메뉴로 돌아감
                     count++;
                     Menu_Mem();
-                    ExitWrite();
                 }
                 if(flag==2){//예약확정하기->종료
                     while(flag_!=1){
@@ -1103,7 +1108,7 @@ public class LockerManager {
                     //System.out.println(LockerList.get(index).confirmbook);
                     //LockerList의 사용여부-2,예약확정-1로 변경
 
-
+                    ExitWrite();
                 }
                 //flag==2작업마치면 프로그램 종료로
             }
