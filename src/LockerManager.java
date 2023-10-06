@@ -409,152 +409,151 @@ public class LockerManager {
             System.out.println("이미 예약 내역이 존재합니다.\n\n");
             count++;
             Menu_Mem();
-            System.exit(0);
-        }
+//            System.exit(0);
+        }else {
 
-        Locker.print();
-
-        //입력
-        int LockerNumber=0;
-        String LockerNum=" ";
-
-        //흐름에 따라 flow 값 변경. 보관함 선택 (1) -> 사이즈 별 안내, 결제 확인 (2) -> 결제 (3)
-        int flow = 1;
-        //보관함 번호 입력
-        while(true){
-            System.out.print(tariff);
+            Locker.print();
 
             //입력
-            System.out.print(">>");
-            LockerNum = String.valueOf(sc.next());
+            int LockerNumber = 0;
+            String LockerNum = " ";
 
-            try{
-                //Q,q 처리
-                if(Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
-                    count++;
-                    Menu_Mem();
-                    break;
-
-                }
-
-                //형식 예외 처리(00, 01, 02 등으로 입력)
-                if (LockerNum.length() != 2) throw new IllegalArgumentException();
-
-                //범위 예외 처리(01~16)
-                LockerNumber = parseInt(LockerNum);
-                if (LockerNumber<1 || LockerNumber > 16) throw new IllegalArgumentException();
-
-                //예약 확인 처리
-                boolean bookingcheck=false;
-                for(int i=0; i<LockerList.size(); i++){
-                    if(parseInt(LockerList.get(i).locknum) == LockerNumber){
-                        if(parseInt(LockerList.get(i).use) != 0){
-                            throw new IllegalAccessException();
-                        }
-                    }
-                }
-
-                //아무 문제 없다면 비민번호 창으로 이동
-                flow = 2;
-                break;
-
-            }catch(IllegalArgumentException e){ //나머지 입력 예외 처리
-                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-
-            }catch(IllegalAccessException e){
-                System.out.println("이용 중인 보관함입니다.\n");
-            }
-
-        }
-        //비밀번호 입력
-        String LockerPwd =" ";
-        if(flow==2){
+            //흐름에 따라 flow 값 변경. 보관함 선택 (1) -> 사이즈 별 안내, 결제 확인 (2) -> 결제 (3)
+            int flow = 1;
+            //보관함 번호 입력
             while (true) {
-                //비밀번호 입력하시오 프롬프트 출력
-                System.out.println(pwd_prompt1);
+                System.out.print(tariff);
 
-                //비밀번호 입력
+                //입력
                 System.out.print(">>");
-                LockerPwd = String.valueOf(sc.next());
-                sc.nextLine();
+                LockerNum = String.valueOf(sc.next());
 
                 try {
-                    //숫자 입력이 아닌 경우
-                    if (!isNumeric(LockerPwd))
-                        throw new IllegalArgumentException();
+                    //Q,q 처리
+                    if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
+                        count++;
+                        Menu_Mem();
+                        break;
 
-                    //4자리가 아닌 경우
-                    if (LockerPwd.length() != 4)
-                        throw new IllegalArgumentException();
+                    }
 
-                    //아무 문제 없는 경우 결제 확인 창으로 이동
-                    flow = 3;
+                    //형식 예외 처리(00, 01, 02 등으로 입력)
+                    if (LockerNum.length() != 2) throw new IllegalArgumentException();
+
+                    //범위 예외 처리(01~16)
+                    LockerNumber = parseInt(LockerNum);
+                    if (LockerNumber < 1 || LockerNumber > 16) throw new IllegalArgumentException();
+
+                    //예약 확인 처리
+                    boolean bookingcheck = false;
+                    for (int i = 0; i < LockerList.size(); i++) {
+                        if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
+                            if (parseInt(LockerList.get(i).use) != 0) {
+                                throw new IllegalAccessException();
+                            }
+                        }
+                    }
+
+                    //아무 문제 없다면 비민번호 창으로 이동
+                    flow = 2;
                     break;
 
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) { //나머지 입력 예외 처리
                     System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-                }
-            }
-        }
 
-        //결제 확인 입력
-        String payment = "";
-        if(flow==3){
-            while(true){
-                System.out.print(StoragePaymentPrompt(LockerNumber));
-                payment = String.valueOf(sc.next());
-                sc.nextLine();
-
-                try{
-                    if(!(payment.equals("Y")||payment.equals("N")||payment.equals("y")||payment.equals("n")))
-                        throw new IllegalArgumentException();
-
-                    //아무 문제 없다면 결제 알림 창으로 이동
-                    flow = 4;
-                    break;
-                }catch(Exception e){
-                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                } catch (IllegalAccessException e) {
+                    System.out.println("이용 중인 보관함입니다.\n");
                 }
 
             }
+            //비밀번호 입력
+            String LockerPwd = " ";
+            if (flow == 2) {
+                while (true) {
+                    //비밀번호 입력하시오 프롬프트 출력
+                    System.out.println(pwd_prompt1);
 
-        }
-        //마지막
-        if(flow==4){
-            if(payment.equals("Y")||payment.equals("y")){
-                System.out.println("\n보관함 예약이 완료되었습니다. ");
-                System.out.println("* 2시간 내로 물품 보관(예약 확정)을 완료해주시기 바랍니다.");
-                System.out.println("(물품 보관이 완료 되지 않을 경우 예약 자동 취소 및 환불 불가)");
+                    //비밀번호 입력
+                    System.out.print(">>");
+                    LockerPwd = String.valueOf(sc.next());
+                    sc.nextLine();
 
-                System.out.println("");
+                    try {
+                        //숫자 입력이 아닌 경우
+                        if (!isNumeric(LockerPwd))
+                            throw new IllegalArgumentException();
 
+                        //4자리가 아닌 경우
+                        if (LockerPwd.length() != 4)
+                            throw new IllegalArgumentException();
 
-                //Locker 사용여부 예약중(2), 보관함 크기 저장
-                String lockersize;
-                if(LockerNumber <= 8) lockersize="0";
-                else if (LockerNumber <= 12) lockersize="1";
-                else lockersize="2";
+                        //아무 문제 없는 경우 결제 확인 창으로 이동
+                        flow = 3;
+                        break;
 
-                for(int i=0; i<LockerList.size(); i++){
-                    if(LockerList.get(i).locknum.equals(LockerNum)){
-                        LockerList.get(i).use = "2";
-                        LockerList.get(i).locksize = lockersize;
-                        LockerList.get(i).date = Main.currentTimeString;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                     }
                 }
-
-                //User 회원 lockernumber 저장
-                u.memMap.get(loguser).locknum = LockerNum;
-                u.memMap.get(loguser).lockPW = LockerPwd;
-                ExitWrite();
             }
-            else{
-                count++;
-                Menu_Mem();
-                System.exit(0);
+
+            //결제 확인 입력
+            String payment = "";
+            if (flow == 3) {
+                while (true) {
+                    System.out.print(StoragePaymentPrompt(LockerNumber));
+                    payment = String.valueOf(sc.next());
+                    sc.nextLine();
+
+                    try {
+                        if (!(payment.equals("Y") || payment.equals("N") || payment.equals("y") || payment.equals("n")))
+                            throw new IllegalArgumentException();
+
+                        //아무 문제 없다면 결제 알림 창으로 이동
+                        flow = 4;
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                    }
+
+                }
+
+            }
+            //마지막
+            if (flow == 4) {
+                if (payment.equals("Y") || payment.equals("y")) {
+                    System.out.println("\n보관함 예약이 완료되었습니다. ");
+                    System.out.println("* 2시간 내로 물품 보관(예약 확정)을 완료해주시기 바랍니다.");
+                    System.out.println("(물품 보관이 완료 되지 않을 경우 예약 자동 취소 및 환불 불가)");
+
+                    System.out.println("");
+
+
+                    //Locker 사용여부 예약중(2), 보관함 크기 저장
+                    String lockersize;
+                    if (LockerNumber <= 8) lockersize = "0";
+                    else if (LockerNumber <= 12) lockersize = "1";
+                    else lockersize = "2";
+
+                    for (int i = 0; i < LockerList.size(); i++) {
+                        if (LockerList.get(i).locknum.equals(LockerNum)) {
+                            LockerList.get(i).use = "2";
+                            LockerList.get(i).locksize = lockersize;
+                            LockerList.get(i).date = Main.currentTimeString;
+                        }
+                    }
+
+                    //User 회원 lockernumber 저장
+                    u.memMap.get(loguser).locknum = LockerNum;
+                    u.memMap.get(loguser).lockPW = LockerPwd;
+                    ExitWrite();
+                } else {
+                    count++;
+                    Menu_Mem();
+                    System.exit(0);
+                }
             }
         }
-
 
     }
 
