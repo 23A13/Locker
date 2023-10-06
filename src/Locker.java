@@ -94,14 +94,20 @@ public class Locker {
         for (User user : memMap.values()) {
             int locknum = Integer.parseInt(User.locknum);
             if (locknum > 0) {
-               System.out.println("사용 중인 보관함 :" + locknum);
+                System.out.println("사용 중인 보관함 :" + locknum);
             }
+            else {
+                System.out.println("사용 중인 보관함이 존재하지 않습니다.");
+            }    
         }
 
         for (User user : nonmemMap.values()) {
             int locknum = Integer.parseInt(User.locknum);
             if (locknum > 0) {
-              System.out.println("사용 중인 보관함 :" + locknum);
+                System.out.println("사용 중인 보관함 :" + locknum);
+            }
+            else {
+                System.out.println("사용 중인 보관함이 존재하지 않습니다.");
             }
         }
     }
