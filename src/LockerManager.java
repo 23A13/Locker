@@ -550,7 +550,7 @@ public class LockerManager {
                 } else {
                     count++;
                     Menu_Mem();
-                    System.exit(0);
+//                    System.exit(0);
                 }
             }
         }
