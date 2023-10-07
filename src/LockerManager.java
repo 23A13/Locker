@@ -90,20 +90,6 @@ public class LockerManager {
     }
 
     //날짜시간 입력 시 무효 예약 내역 수정용
-    public void dateLockerFileInput(ArrayList<Locker> List){
-        String filename="../Locker/Locker.txt";
-        try(Scanner scan=new Scanner(new File(filename))){
-            while(scan.hasNextLine()) {
-                String str=scan.nextLine();
-                String[] temp=str.split(" ");
-                List.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
-            }
-        }catch(FileNotFoundException e){
-            System.out.println("파일 입력이 잘못되었습니다.");
-        }
-    }
-
-    //날짜시간 입력 시 무효 예약 내역 수정용
     public void dateLockerFileWrite(ArrayList<Locker> List){
         try{
             File file = new File("../Locker/Locker.txt");
