@@ -922,7 +922,7 @@ public class LockerManager {
 
         while (true) {
             if(chance!=0) {
-                if (th > 3) {
+                if (th > chance) {
                     System.out.println("보관함 비밀번호를 3회 틀리셨습니다. 메뉴로 돌아갑니다.");
                     return false;
                     //break;
