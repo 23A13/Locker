@@ -723,6 +723,7 @@ public class LockerManager {
                             if (locker.getLocknum().equals(LockerNum)) {
                                 locker.setUse("1");
                                 locker.setDate(Main.currentTimeString);
+                                locker.setConfirmbook("1");
                             }
                         }
 
