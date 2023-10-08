@@ -1010,7 +1010,7 @@ public class LockerManager {
         Locker temL=null;
 
         if(u_locknum.equals("-")){//예약한 보관함이 없다면
-            System.out.println("예약내역이 존재하지 않습니다.");// 출력 후 함수 종료-->변경: 이전 메뉴로 돌아가기
+            System.out.println("예약 내역이 존재하지 않습니다.");// 출력 후 함수 종료-->변경: 이전 메뉴로 돌아가기
             count++;
             Menu_Mem();
         }else{//예약된 내역이 있다면 함수 계속 진행
@@ -1024,8 +1024,8 @@ public class LockerManager {
                 }
             }
 
-            if(temL.confirmbook.equals("1")){ // 이미 확정된 예약건 처리
-                System.out.println("이미 예약이 확정되었습니다.");  // 출력 후 함수 종료
+            if(temL.confirmbook.equals("1")){ // 이미 확정된 예약건 처리+보관함 이미 이용중
+                System.out.println("이미 예약이 확정되었거나 이용중인 보관함이 존재합니다.");  // 출력 후 함수 종료
                 count++;
                 Menu_Mem();
 
@@ -1042,7 +1042,7 @@ public class LockerManager {
                 else{
                     payment=4000;
                 }
-                u_payment=Integer.toString(4*payment);
+                u_payment=Integer.toString(payment);//이거 4빼야되나????
 
                 //예약확정
                 int flag=0; //flag==0이면 올바르지 않은 입력
@@ -1082,13 +1082,13 @@ public class LockerManager {
                 if(flag==2){//예약확정하기->종료
                     while(flag_!=1){
                         try{
-                            System.out.print("비밀번호 4자리를 입력하세요.>>");
+                            System.out.print("비밀번호(PIN) 4자리를 입력하세요.>>");
                             password=sc.nextLine();
                             if(password.equals(u_password)){
                                 flag_=1;//예약확정 성공
                             }else{
                                 flag_=2;//비밀번호가 올바르지 않은 경우
-                                System.out.println("비밀번호가 올바르지 않습니다.\n");
+                                System.out.println("비밀번호(PIN)가 올바르지 않습니다.\n");
                             }
 
                         }catch(InputMismatchException e){
