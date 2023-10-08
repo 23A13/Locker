@@ -134,6 +134,7 @@ public class LockerManager {
             try{
                 System.out.print(">>");
                 number = sc.nextInt();
+                sc.nextLine();
 
                 if(number<1||number>6) throw new InputMismatchException();
 
