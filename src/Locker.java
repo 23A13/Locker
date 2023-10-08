@@ -138,6 +138,7 @@ public class Locker {
         } catch (Exception e) {
             System.err.println("예외가 발생했습니다: " + e.getMessage());
         }
+        System.out.println();
     }
 }
 
