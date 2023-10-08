@@ -115,18 +115,17 @@ public class LockerManager {
         if(count==0)LockerFileInput();
 
         String menu = """
-                ——MENU——\s
+                --MENU--\s
                 1. 보관하기\s
                 2. 수거하기\s
                 3. 예약하기\s
                 4. 예약 확인 및 예약 확정\s
                 5. 로그아웃\s
                 6. 종료
-                 ———————\s
-                               
+                ---------                             
                 """;
 
-        System.out.println(menu);
+        System.out.print(menu);
 
         int number=0;
 
@@ -187,11 +186,11 @@ public class LockerManager {
                 2. 수거하기\s
                 3. 이전 메뉴로 돌아가기\s
                 4. 종료
-                ---------\s
-
+                ---------
                 """;
 
-        System.out.println(menu);
+        System.out.println();
+        System.out.print(menu);
         System.out.print(">>");
         int number = sc.nextInt();
         sc.nextLine();

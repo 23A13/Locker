@@ -228,7 +228,7 @@ public class UserManager {
         }
 
         if (memMap.get(id) != null) {
-            System.out.println("이미 사용 중인 아이디입니다");
+            System.out.println("이미 사용 중인 아이디입니다\n");
             return false;
         }
 
@@ -244,12 +244,12 @@ public class UserManager {
 
         if(!(pw.length() >= 8&&pw.length() <=25))
         {
-            System.out.println("비밀번호 형식이 올바르지 않습니다.");
+            System.out.println("비밀번호 형식이 올바르지 않습니다.\n");
             return false;
         }
 
         if (!isNumberLetterCheck(pw)) {
-            System.out.println("비밀번호 형식이 올바르지 않습니다.");
+            System.out.println("비밀번호 형식이 올바르지 않습니다. \n");
             return false;
         }
 
@@ -290,7 +290,7 @@ public class UserManager {
         System.out.print("——ID 로그인——\n" +
                 "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
                 "아이디를 입력하세요.\n" +
-                "아이디>>");
+                "\n아이디>>");
 
         String id = scan.nextLine();
 
@@ -299,7 +299,7 @@ public class UserManager {
             return false;
         }
 
-        System.out.print("\n비밀번호 >>");
+        System.out.print("비밀번호 >>");
 
         String pw = scan.nextLine();
 
