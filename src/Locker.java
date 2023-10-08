@@ -117,19 +117,19 @@ public class Locker {
                     if(!parts[3].equals("-"))
                     {
                         String lockerNumber = parts[3];
-                        System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                        System.out.println("이용중인 보관함 번호: " + lockerNumber);
                         found = true;
                     }
                 }
                 else if (parts[0].equals("0")) {
                     String lockerNumber = parts[1];
-                    System.out.println("사용중인 보관함 번호: " + lockerNumber);
+                    System.out.println("이용중인 보관함 번호: " + lockerNumber);
                     found = true;
                 }
             } bufferedReader.close();
 
             if (!found) {
-                System.out.print("사용 중인 보관함이 존재하지 않습니다.")
+                System.out.print("이용 중인 보관함이 존재하지 않습니다.")
             }
         } catch (FileNotFoundException e) {
             System.err.println("파일을 찾을 수 없습니다: " + e.getMessage());
