@@ -102,7 +102,7 @@ public class Locker {
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            System.out.print("이용중인 보관함 번호:");
+//            System.out.print("이용중인 보관함 번호:");
 
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -129,7 +129,7 @@ public class Locker {
             } bufferedReader.close();
 
             if (!found) {
-                System.out.print("이용 중인 보관함이 존재하지 않습니다.")
+                System.out.print("이용 중인 보관함이 존재하지 않습니다.");
             }
         } catch (FileNotFoundException e) {
             System.err.println("파일을 찾을 수 없습니다: " + e.getMessage());
