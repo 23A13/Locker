@@ -325,7 +325,7 @@ public class LockerManager {
 
         //보관함 비밀번호 입력
         String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
-        boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 3);
+        boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 0);
         if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
             count++;
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
