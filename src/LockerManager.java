@@ -894,7 +894,6 @@ public class LockerManager {
         if (Objects.equals(exit, "Y") || Objects.equals(exit, "y")) {
             System.out.println("프로그램을 종료합니다.");
             System.exit(0);
-            Main.date_check();
         } else {
             count++;
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
