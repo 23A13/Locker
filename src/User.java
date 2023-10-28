@@ -4,6 +4,7 @@ public class User {
     String memberPW; //회원 비밀번호
     String locknum; //사용중(예약중)인 보관함 번호
     String lockPW; //보관함 비밀번호
+    String cannotUntil; //회원 예약 패널티 날짜
 
     //constructor
     public User() {

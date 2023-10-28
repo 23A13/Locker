@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 
@@ -218,6 +219,7 @@ public class LockerManager {
         //보관함
         Locker.print();
 
+
         String notice2 = """
                 이용하신 보관함의 번호를 입력하세요. (ex: 01)\s
                 \s
@@ -345,7 +347,15 @@ public class LockerManager {
         //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
         if (timeDiff > 4){
             while(true){
-                Print_AddPayPrompt(timeDiff, target);
+                String timeShowPrompt = "\n기본 이용 시간에서 "+ Integer.toString(timeDiff-4)+"시간이 초과됐습니다.\n";
+                if(isMemLocker){ //"회원"이 사용했던 보관함인경우
+                    timeShowPrompt += "수거 완료시, "+ u.memMap.get(targetKey).memberID +"님은 "+ Integer.toString((timeDiff-4)*2)+"시간 동안 예약이 불가합니다.\n";
+                }else{
+                    timeShowPrompt += "비회원용 추가 금액이 적용됩니다.\n";
+                }
+                System.out.println(timeShowPrompt);
+
+                Print_AddPayPrompt(timeDiff, target, isMemLocker);
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
                 try{
@@ -358,6 +368,14 @@ public class LockerManager {
                 }
             }
             System.out.println("결제가 완료되었습니다.");
+
+
+
+            if(isMemLocker) { //"회원"이 사용했던 보관함인경우 - user객체에 cannotUntil 날짜 저장
+                Date limitDate = new Date (currentTime.getTime()+2*(timeDiff-4)*3600000);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH");
+                u.memMap.get(targetKey).cannotUntil = sdf.format(limitDate);
+            }
         }
 
 
@@ -972,7 +990,7 @@ public class LockerManager {
     }
 
 
-    private void Print_AddPayPrompt(int timeDiff, int target){
+    private void Print_AddPayPrompt(int timeDiff, int target, boolean isMemLocker){
         /*
         addtional_payment_prompt를 출력하는 메서드
          */
@@ -988,6 +1006,9 @@ public class LockerManager {
                 additional = 1000;
                 break;
         }
+        if(!isMemLocker) //비회원일 경우 시간당 요금이 2배
+            additional = additional*2;
+
 
         String str = "초과 시간에 따른 추가 금액 결제를 진행합니다. \n"+
                 (timeDiff-4)*additional + "원 \n"+
