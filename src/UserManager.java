@@ -35,7 +35,7 @@ public class UserManager {
                 String str=scan.nextLine();
                 String[] temp=str.split(" ");
                 if(temp[0].trim().equals("1")){
-                    memMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 회원 user정보 저장
+                    memMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim(),temp[5].trim()));//최초로 저장구조에 회원 user정보 저장
                 }else if (temp[0].trim().equals("0")){
                     nonmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim())); //비회원 user정보->보관함 사용중인 비회원만 정보 저장
                 }else
@@ -79,7 +79,7 @@ public class UserManager {
                 String str=scan.nextLine();
                 String[] temp=str.split(" ");
                 if(temp[0].trim().equals("1")){
-                    tmpmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 회원 user정보 저장
+                    tmpmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim(),temp[5].trim()));//최초로 저장구조에 회원 user정보 저장
                 }else if (temp[0].trim().equals("0")){
                     tmpnonmemMap.put(temp[1].trim(),new User(temp[1].trim(),temp[2].trim())); //비회원 user정보->보관함 사용중인 비회원만 정보 저장
                 }else
@@ -93,11 +93,14 @@ public class UserManager {
     }
 
     // 날짜/시간 입력 후에 지난 내역들 파일에서 삭제하는 메소드
-    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete)
+    public void deleteUserBeforeDate(ArrayList<String> lockersToDelete, Date newDate)
     {
         Map<String, User> tmpmemMap = new HashMap<>();
         Map<String, User> tmpnonmemMap = new HashMap<>();
         dateUserFileInput(tmpmemMap, tmpnonmemMap);
+
+        // cannotUntil 수정 메소드 추가
+        this.beforeCannotUntilRemove(tmpmemMap, newDate);
 
         try{
             File file = new File("../Locker/User.txt");
@@ -131,6 +134,51 @@ public class UserManager {
             }
         }catch(IOException e){
             e.printStackTrace();
+        }
+    }
+
+    public void beforeCannotUntilRemove(Map<String, User> tmpmemMap, Date newDate)
+    {
+        for (Map.Entry<String, User> entry : tmpmemMap.entrySet()) {//회원 데이터 저장
+
+            // cannotUntil 값이 1 이하 ("-") 라면 통과
+            if (entry.getValue().cannotUntil.length() <= 1)
+            {
+                continue;
+            }
+
+            // 각 회원별 cannotUntil 정보를 String에서 Date로 변환
+            String[] temp = new String[4];
+            String oldD = entry.getValue().cannotUntil;
+            int num = 0;
+
+            // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
+            for(int i=0; i<4; i++) {
+                if(i==0)
+                {
+                    temp[i] = oldD.substring(num, num+4);
+                    num += 4;
+                }
+                else
+                {
+                    temp[i] = oldD.substring(num, num+2);
+                    num += 2;
+                }
+            }
+
+            // 배열에 저장한 숫자 이용해서 날짜 객체 생성
+            Calendar oldCalendar = new GregorianCalendar(Integer.parseInt(temp[0]),
+                    Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
+            oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
+            oldCalendar.set(Calendar.MINUTE, 0);
+            oldCalendar.set(Calendar.SECOND, 0);
+            oldCalendar.set(Calendar.MILLISECOND, 0);
+            Date oldDate = oldCalendar.getTime();
+
+            // 기존 날짜가 입력 받은 날보다 이전일 경우 (날짜가 지났을 경우) cannotUntil 정보 수정
+            if((oldDate.before(newDate))){
+                entry.getValue().cannotUntil = "-";
+            }
         }
     }
 

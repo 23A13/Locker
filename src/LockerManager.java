@@ -888,7 +888,7 @@ public class LockerManager {
         }
 
         UserManager tmpUserManager = new UserManager(true);
-        tmpUserManager.deleteUserBeforeDate(lockersToDelete);
+        tmpUserManager.deleteUserBeforeDate(lockersToDelete, newDate);
         dateLockerFileWrite(tmpLockerList);
     }
 
