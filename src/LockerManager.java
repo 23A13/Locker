@@ -37,7 +37,9 @@ public class LockerManager {
                 기본 4시간\s
                 S : 2000원 / M : 3000원 / L : 4000원\s
                 시간당 추가요금\s
-                S : 500원 / M : 800원 / L : 1000원\s
+                회원 - S : 500원 / M : 800원 / L : 1000원\s
+                비회원 - S : 1000원 / M : 1600원 / L : 2000원\s
+                            
                 —————————————————————————————————————\s
                                 
                 ——물품보관함 사이즈 안내————————\s
@@ -45,6 +47,18 @@ public class LockerManager {
                 M : 09~12번 보관함 (총 4개)\s
                 L : 13~16번 보관함 (총 4개)\s
                 ————————————————————————————\s
+                
+                ———————————예약 서비스 이용 시 주의사항————————————
+                * 예약 시 4시간 선결제 후 보관함에 도착하여 물품을 보관해주세요.\s
+                * 예약 후 2시간 내로 물품 보관이 완료되지 않을 경우, 예약이 자동 취소됩니다. (환불 불가)
+                * 기본 4시간 초과 시 수거하는 시점까지 자동으로 시간 당 추가 요금이 부과됩니다. (추가요금은 요금표 참고)
+                * 추가 요금은 보관함 수거 시 부과됩니다.\s
+                * 결제 수단은 카드만 사용 가능합니다.\s
+                * 이용 중인 보관함은 예약이 불가합니다.\s
+                * 예약은 보관함 한 개만 가능합니다.\s
+                * 이미 보관함을 이용 중이라면 예약이 불가합니다.\s
+                * 이전 이용에서 회원이 기본 4시간 초과 후 수거를 했다면, 초과된 시간의 2배 동안 예약이 불가합니다.\s
+                ————————————————————————————————————\s
                                 
                 이용하실 보관함의 번호를 입력하세요.\s
                                 
@@ -420,6 +434,20 @@ public class LockerManager {
             Menu_Mem();
             System.exit(0);
         }
+
+        //이전 이용 기본 4시간 이산 초과했을 경우 확인
+        if(!(u.memMap.get(loguser).cannotUntil).equals("-")){
+            int cannotUntil = Integer.parseInt(u.memMap.get(loguser).cannotUntil);
+            String cantUntil = u.memMap.get(loguser).cannotUntil;
+            int currentTime = Integer.parseInt(Main.currentTimeString);
+            if( cannotUntil >= currentTime){
+                System.out.println("지난 예약 건 초과 보관으로 "+u.memMap.get(loguser).cannotUntil+"까지 보관함 이용이 불가합니다.\n\n");
+                Menu_Mem();
+                System.exit(0);
+            }
+
+        }
+
 
         Locker.print();
 
