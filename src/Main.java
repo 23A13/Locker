@@ -24,13 +24,13 @@ public class Main {
     public static void date_check(){
         System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) : ");
 
-        String today = scan.next();
+        String today = scan.nextLine();
 
         boolean flag = todayCheck(today);
 
         while(!flag) {
             System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) : ");
-            today = scan.next();
+            today = scan.nextLine();
             flag =	todayCheck(today);
             if(flag) {
                 break;
