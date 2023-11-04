@@ -37,7 +37,7 @@ public class Main {
             }
         }
 
-        scan.nextLine();
+        //scan.nextLine();
 
     }
 
