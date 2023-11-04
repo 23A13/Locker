@@ -195,7 +195,13 @@ public class UserManager {
             try {
                 while(!menuEndFlag)
                 {
-                    System.out.println("1.회원가입\n2.회원\n3.비회원\n4.종료");
+                    System.out.print("——MENU—— \n" +
+                                       "1. 회원가입 \n" +
+                                       "2. 회원 \n" +
+                                       "3. 비회원 \n" +
+                                       "4. 종료 \n" +
+                                       "———————\n" +
+                                       ">> ");
 
                     choice = scan.nextLine().trim();
 

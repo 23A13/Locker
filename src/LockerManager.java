@@ -259,7 +259,8 @@ public class LockerManager {
                     count++;
                     if(isLogin) Menu_Mem();
                     else Menu_Nonmem();
-                    ExitWrite();
+                    //ExitWrite();
+                    return;
                 }
 
                 //형식 예외 처리(00, 01, 02 등으로 입력해야함)
@@ -346,7 +347,7 @@ public class LockerManager {
             count++;
             if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
-            System.exit(0);
+            //System.exit(0);
         }
 
 
@@ -418,6 +419,7 @@ public class LockerManager {
         System.out.println("물품 수거가 완료되었습니다.");
         System.out.println("이용해주셔서 감사합니다.");
 
+
         ExitWrite();
 
 
@@ -432,7 +434,7 @@ public class LockerManager {
             System.out.println("이미 예약 내역이 존재합니다.\n\n");
             count++;
             Menu_Mem();
-            System.exit(0);
+            //System.exit(0);
         }
 
         //이전 이용 기본 4시간 이산 초과했을 경우 확인
@@ -443,7 +445,7 @@ public class LockerManager {
             if( cannotUntil >= currentTime){
                 System.out.println("지난 예약 건 초과 보관으로 "+u.memMap.get(loguser).cannotUntil+"까지 보관함 이용이 불가합니다.\n\n");
                 Menu_Mem();
-                System.exit(0);
+                return;
             }
 
         }
@@ -588,7 +590,7 @@ public class LockerManager {
             else{
                 count++;
                 Menu_Mem();
-                System.exit(0);
+                //System.exit(0);
             }
         }
 
