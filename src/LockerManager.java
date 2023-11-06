@@ -205,11 +205,30 @@ public class LockerManager {
                 ---------
                 """;
 
-        System.out.println();
         System.out.print(menu);
-        System.out.print(">>");
-        int number = sc.nextInt();
-        sc.nextLine();
+
+        int number=0;
+
+        while(true){
+
+            try{
+                System.out.print(">>");
+                number = sc.nextInt();
+                sc.nextLine();
+
+                if(number<1||number>4) throw new InputMismatchException();
+
+                //올바른 입력시
+                break;
+
+            }catch(InputMismatchException e){
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                sc.nextLine();
+            }
+
+        }
+
+
 
         switch (number) {
             case 1:
