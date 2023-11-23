@@ -921,7 +921,7 @@ public class LockerManager {
         // 년, 월, 일, 시간, 분 5구간으로 잘라서 배열에 저장
         String[] temp = new String[5];
         int num = 0;
-        for(int i=0; i<4; i++) {
+        for(int i=0; i<5; i++) {
             if(i==0) //yyyy
             {
                 temp[i] = str.substring(num, num+4);
