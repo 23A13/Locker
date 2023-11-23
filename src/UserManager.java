@@ -199,7 +199,8 @@ public class UserManager {
                                        "1. 회원가입 \n" +
                                        "2. 회원 \n" +
                                        "3. 비회원 \n" +
-                                       "4. 종료 \n" +
+                                       "4. 관리자 모드\n"+
+                                       "5. 종료 \n" +
                                        "———————\n" +
                                        ">> ");
 
@@ -230,8 +231,19 @@ public class UserManager {
                         LockerManager nonMemLockerManager = new LockerManager();
                         nonMemLockerManager.Menu_Nonmem(); // 비회원 메뉴 출력
 
-                    }
-                    else if(choice.equals("4"))
+                    } else if (choice.equals("4"))
+                    {
+                        menuEndFlag = adminLogin();
+                        System.out.println();
+
+                        if(menuEndFlag)
+                        {
+                            AdminManager adminManager = new AdminManager();
+                            adminManager.menu();
+                        }
+                        menuEndFlag = false;
+
+                    } else if(choice.equals("5"))
                     {
                         // 프로그램 종료 메소드
                         menuEndFlag = programEnd();
@@ -249,6 +261,23 @@ public class UserManager {
                 scan.nextLine();
             }
         }
+    }
+
+    private boolean adminLogin() {
+
+        System.out.print("비밀번호를 입력해주세요 >>");
+
+        String pw = scan.nextLine();
+
+        // 일단 임시로 관리자 비밀번호 지정
+        if(pw.trim().equals("admin1234")) {
+            return true;
+        }
+        else {
+            System.out.println("비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+
     }
 
     private boolean programEnd() {
