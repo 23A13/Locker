@@ -376,20 +376,23 @@ public class LockerManager {
         //시간 차이 구하기
         Date currentTime = StringToDate(Main.currentTimeString);
         Date startTime = StringToDate(LockerList.get(target).date);
+        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+        int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
         int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
 
         //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
-        if (timeDiff > 4){
+        if (timeDiffMinutes > 4*60 ){
             while(true){
-                String timeShowPrompt = "\n기본 이용 시간에서 "+ Integer.toString(timeDiff-4)+"시간이 초과됐습니다.\n";
+                String timeShowPrompt = "\n기본 이용 시간에서 "+ Integer.toString(timeDiffHours-4)+"시간이 초과됐습니다.\n";
                 if(isMemLocker){ //"회원"이 사용했던 보관함인경우
-                    timeShowPrompt += "수거 완료시, "+ u.memMap.get(targetKey).memberID +"님은 "+ Integer.toString((timeDiff-4)*2)+"시간 동안 예약이 불가합니다.\n";
+                    timeShowPrompt += "수거 완료시, "+ u.memMap.get(targetKey).memberID +"님은 "+ Integer.toString((timeDiffHours-4)*2)+"시간 동안 예약이 불가합니다.\n";
                 }else{
                     timeShowPrompt += "비회원용 추가 금액이 적용됩니다.\n";
                 }
                 System.out.println(timeShowPrompt);
 
-                Print_AddPayPrompt(timeDiff, target, isMemLocker);
+                Print_AddPayPrompt(timeDiffHours, target, isMemLocker);
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
                 try{
@@ -406,8 +409,8 @@ public class LockerManager {
 
 
             if(isMemLocker) { //"회원"이 사용했던 보관함인경우 - user객체에 cannotUntil 날짜 저장
-                Date limitDate = new Date (currentTime.getTime()+2*(timeDiff-4)*3600000);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH");
+                Date limitDate = new Date (currentTime.getTime()+2*(timeDiffHours-4)*3600000);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
                 u.memMap.get(targetKey).cannotUntil = sdf.format(limitDate);
             }
         }
@@ -858,11 +861,11 @@ public class LockerManager {
                 // 날짜만 가져와 비교
                 Date lockerDate;
                 String dateStr = temp[3];
-                String[] dateStrTemp = new String[4];
+                String[] dateStrTemp = new String[5];
                 int num = 0;
 
                 // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
-                for(int i=0; i<4; i++) {
+                for(int i=0; i<5; i++) {
                     if(i==0)
                     {
                         dateStrTemp[i] = dateStr.substring(num, num+4);
@@ -881,7 +884,7 @@ public class LockerManager {
 
                 //예약 내역이라서 2시간을 더한 값으로 날짜 비교를 해야함
                 oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateStrTemp[3]));
-                oldCalendar.set(Calendar.MINUTE, 0);
+                oldCalendar.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
                 oldCalendar.set(Calendar.SECOND, 0);
                 oldCalendar.set(Calendar.MILLISECOND, 0);
                 oldCalendar.add(Calendar.HOUR_OF_DAY, 2);
@@ -915,8 +918,8 @@ public class LockerManager {
 
     public static Date StringToDate(String str){
 
-        // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
-        String[] temp = new String[4];
+        // 년, 월, 일, 시간, 분 5구간으로 잘라서 배열에 저장
+        String[] temp = new String[5];
         int num = 0;
         for(int i=0; i<4; i++) {
             if(i==0) //yyyy
@@ -924,7 +927,7 @@ public class LockerManager {
                 temp[i] = str.substring(num, num+4);
                 num += 4;
             }
-            else //mm, dd, tt
+            else //mm, dd, hh, mm
             {
                 temp[i] = str.substring(num, num+2);
                 num += 2;
@@ -934,7 +937,7 @@ public class LockerManager {
         Calendar cal = new GregorianCalendar(Integer.parseInt(temp[0]),
                 Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
-        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
         cal.set(Calendar.SECOND, 0);
         Date date = cal.getTime();
         return date;
