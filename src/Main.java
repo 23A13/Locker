@@ -59,6 +59,14 @@ public class Main {
             return flag;
         }
 
+        // 2050년 이상인지 아닌지 확인
+        int testYear = Integer.parseInt(dTrim.substring(0,4));
+        if(testYear > 2050) {
+            System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
+            System.out.println();
+            return flag;
+        }
+
         //기존 날짜 불러오기
         try(Scanner scan = new Scanner(timeFile))
         {
