@@ -148,12 +148,12 @@ public class UserManager {
             }
 
             // 각 회원별 cannotUntil 정보를 String에서 Date로 변환
-            String[] temp = new String[4];
+            String[] temp = new String[5];
             String oldD = entry.getValue().cannotUntil;
             int num = 0;
 
             // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
-            for(int i=0; i<4; i++) {
+            for(int i=0; i<5; i++) {
                 if(i==0)
                 {
                     temp[i] = oldD.substring(num, num+4);
@@ -170,7 +170,7 @@ public class UserManager {
             Calendar oldCalendar = new GregorianCalendar(Integer.parseInt(temp[0]),
                     Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
             oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
-            oldCalendar.set(Calendar.MINUTE, 0);
+            oldCalendar.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
             oldCalendar.set(Calendar.SECOND, 0);
             oldCalendar.set(Calendar.MILLISECOND, 0);
             Date oldDate = oldCalendar.getTime();

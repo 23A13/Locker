@@ -22,14 +22,14 @@ public class Main {
 
     // 날짜 체크 함수
     public static void date_check(){
-        System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) : ");
+        System.out.print("현재 날짜와 시각(00:00~23:59)을 12자리의 수로 공백 없이 입력해주세요. (ex.202309151730) : ");
 
         String today = scan.nextLine();
 
         boolean flag = todayCheck(today);
 
         while(!flag) {
-            System.out.print("현재 날짜와 시각(0~23시)을 10자리의 수로 공백 없이 입력해주세요. (ex.2023091517) : ");
+            System.out.print("현재 날짜와 시각(00:00~23:59)을 12자리의 수로 공백 없이 입력해주세요. (ex.202309151730) : ");
             today = scan.nextLine();
             flag =	todayCheck(today);
             if(flag) {
@@ -52,8 +52,8 @@ public class Main {
 
         File timeFile = new File("../Locker/Date.txt");
 
-        // 글자 수가 10이 아닐 경우 false 반환
-        if(dTrim.length() != 10) {
+        // 글자 수가 12가 아닐 경우 false 반환
+        if(dTrim.length() != 12) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
@@ -63,7 +63,7 @@ public class Main {
         try(Scanner scan = new Scanner(timeFile))
         {
             String str = null;
-            String[] temp = new String[4];
+            String[] temp = new String[5];
 
             while(scan.hasNextLine())
             {
@@ -71,8 +71,8 @@ public class Main {
                 oldD = str;
                 int num = 0;
 
-                // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
-                for(int i=0; i<4; i++) {
+                // 년, 월, 일, 시간, 분 5구간으로 잘라서 배열에 저장
+                for(int i=0; i<5; i++) {
                     if(i==0)
                     {
                         temp[i] = str.substring(num, num+4);
@@ -86,6 +86,9 @@ public class Main {
                 }
             }
 
+
+
+
             // 파일이 비었을 경우는 고려 안함
             // 처음부터 파일에 일단 날짜 하나 입력 해놓고 배포하는 방식
 
@@ -93,7 +96,9 @@ public class Main {
             Calendar oldCalendar = new GregorianCalendar(Integer.parseInt(temp[0]),
                     Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
             oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
-            oldCalendar.set(Calendar.MINUTE, 0);
+            //00~09는 한 자리 수로 바꾸기
+            oldCalendar.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
+
             oldCalendar.set(Calendar.SECOND, 0);
             oldCalendar.set(Calendar.MILLISECOND, 0);
             oldDate = oldCalendar.getTime();
@@ -107,9 +112,9 @@ public class Main {
         // 위와 같은 방식으로 새로 입력한 날짜 확인
         try {
             int num = 0;
-            String[] temp = new String[4];
+            String[] temp = new String[5];
 
-            for(int i=0; i<4; i++) {
+            for(int i=0; i<5; i++) {
                 if(i==0)
                 {
                     temp[i] = dTrim.substring(num, num+4);
@@ -130,7 +135,7 @@ public class Main {
             newCalendar.set(Calendar.MONTH, Integer.parseInt(temp[1]) - 1); // subtract 1 from month because Calendar class starts at 0
             newCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(temp[2]));
             newCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
-            newCalendar.set(Calendar.MINUTE, 0);
+            newCalendar.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
             newCalendar.set(Calendar.SECOND, 0);
             newCalendar.set(Calendar.MILLISECOND, 0);
             newDate = newCalendar.getTime();
