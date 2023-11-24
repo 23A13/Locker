@@ -108,10 +108,7 @@ public class AdminManager {
 
         //1. 임시 폐쇄 기간 입력
         if(flow == 1){
-
-
             while(true){
-
                 System.out.print(temporary_closure_prompt);
                 System.out.print(">>");
 
@@ -286,7 +283,7 @@ public class AdminManager {
         // flag를 이용해 반복 조절
         return flag;
         */
-
+        return true;
     }
 
 
