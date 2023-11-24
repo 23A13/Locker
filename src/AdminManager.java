@@ -90,7 +90,8 @@ public class AdminManager {
     public void temporary_closure(){
         /*
         해야하는거
-        3. locker에 임시 폐쇄 시작/끝나는 시간 정보 저장
+        3. locker에 임시 폐쇄 시작/끝나는 시간 정보 저장(지은이)
+        4. 보관함 print 함수 확인(윤빈이)
          */
 
         //임시폐쇄 함수에서 필요한 프롬포트들
