@@ -120,11 +120,11 @@ public class AdminManager {
         int closureLockerNum = 0; //임시 폐쇄 보관함
         String strclosureLockerNum;
 
-        int flow = 1; //흐름에 따라 값 변경 1. 임시 폐쇄 기간 입력 2. 임시 폐쇠 보관함 선택 3. 보관함 번호 재확인 4. 완료
+        int flow = 11; //흐름에 따라 값 변경 11. 임시 폐쇄 시작 날짜 입력 12. 임시 폐쇄 끝나는 날짜 입력2. 임시 폐쇠 보관함 선택 3. 보관함 번호 재확인 4. 완료
 
 
         //1. 임시 폐쇄 기간 입력
-        if(flow == 1){
+        if(flow == 11){
             while(true){
                 System.out.print(temporary_closure_prompt);
                 System.out.print(">>");
@@ -186,9 +186,10 @@ public class AdminManager {
                                 int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
                                 int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
                                 int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
-
-                                if(timeDiffMinutes > 6*60) //예약시간 + 6시간 초과했는지 확인
+                                
+                                if(timeDiffMinutes <= 6*60) //예약시간 + 6시간 초과했는지 확인
                                     throw new IllegalAccessException();
+                                
                             }
                         }
                     }
