@@ -69,9 +69,11 @@ public class AdminManager {
                 break;
             case 3:
                 // 보관함 삭제 메소드
+                DeleteLocker();
                 break;
             case 4:
                 // 보관함 추가 메소드
+                AddLocker();
                 break;
             case 5:
                 // 보관함 수정 메소드
@@ -112,11 +114,120 @@ public class AdminManager {
             }
 
             System.out.println(lc.locknum+"번 / "+size+" / "+lc.date+" / "+iscanforce);
+            System.out.println("--------------------------------------------------------------");
         }
     }
+
     public void ExitWrite(){
         u.UserFileWrite();
         l.LockerFileWrite();
         System.exit(0);
+    }
+
+    private void DeleteLocker() {
+
+        //입력받은 보관함 번호
+        int LockerNumber = 0;   //정수형
+        String LockerNum = null;    //스트링
+        //보관함 비밀번호
+        String LockerPwd = null;
+
+        //수정
+        int flow = 0;
+
+        while (true) {
+            printAdminLocker();
+            System.out.print("삭제할 보관함의 번호를 입력해주세요.\n" +
+                             "\n" +
+                             "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
+                             "--------------------------------------------------------------" +
+                             ">> ");
+            LockerNum = String.valueOf(sc.next());
+            sc.nextLine();
+
+
+            try{
+                //Q 입력
+                if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
+                    //menu3으로 복귀
+                    menu();
+                    break;
+                }
+
+                //잘못됩 입력 (0~99 입력 안함)
+                LockerNumber = Integer.parseInt(LockerNum);
+                if (LockerNumber < 1 || LockerNumber > 16)
+                    throw new IllegalArgumentException();
+
+                //형식 예외 처리 (01, 02 등으로 입력하지 않고 1, 2 등으로 입력함)
+                if (LockerNum.length() != 2)
+                    throw new IllegalArgumentException();
+
+                //존재하지 않는 보관함인 경우
+                //수정 -> lockerlist 호출을 어케하지?
+                Iterator<Locker> iterator = LockerManager.LockerList.iterator();
+                while (iterator.hasNext()) {
+                    Locker locker = iterator.next();
+                    if (locker.getLocknum().equals(LockerNum)) {
+                        //삭제 불가인 경우 (10시간 보관 안지남)
+                        //수정
+                        /*if(){
+                            System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
+                            throw new IllegalAccessException();
+                        }*/
+                        //삭제 불가인 경우 (예약중인 보관함)
+                        if (locker.getUse().equals("2")) {
+                            System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
+                            throw new IllegalAccessException();
+                        }
+                        flow = 2;   //삭제 가능이므로 flow값 2
+                        break;
+                    }
+                }
+                //iterator를 다 돌고 나옴
+                //존재하지 않는 보관함인 경우
+                if(flow != 2) {
+                    System.out.println("존재하지 않는 보관함 번호입니다.\n");
+                    throw new IllegalAccessException();
+                }
+
+            }catch (IllegalArgumentException e){
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+            }catch (IllegalAccessException e){}
+
+            //삭제 가능인 경우
+            if(flow == 2){
+                System.out.print("삭제하려는 보관함은\n" +
+                                 "------------------------------------------\n" +
+                                 "보관함 번호: " + LockerNum + "\n" +
+                                 "------------------------------------------\n" +
+                                 "가(이) 맞습니까?\n" +
+                                 "\n" +
+                                 "*맞다면 Y또는 y를 입력해주세요.\n" +
+                                 "------------------------------------------\n" +
+                                 ">> ");
+                String yn = String.valueOf(sc.next());
+                sc.nextLine();
+
+                try {
+                    // Y or y 말고 다른 것을 입력한 경우
+                    if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
+                        throw new IllegalArgumentException();
+                    // Y or y 입력
+                    else {
+                        //수정!!
+                        //저장구조 변경어케함
+                    }
+                }catch (IllegalArgumentException e) {
+                    System.out.println("올바른 입력이 아닙니다.\n");
+                }
+
+            }
+        }
+
+    }
+
+    private void AddLocker() {
+
     }
 }
