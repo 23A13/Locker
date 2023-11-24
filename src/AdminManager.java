@@ -89,7 +89,7 @@ public class AdminManager {
 
     public void temporary_closure(){
 
-
+        //임시폐쇄 함수에서 필요한 프롬포트들
         String temporary_closure_prompt = """
                 --------------------------------------------------------------
                 물품을 임시폐쇄할 날짜와 시각을 12자리의 수로 공백 없이 입력해주세요. (ex. 202309151730)
@@ -118,16 +118,48 @@ public class AdminManager {
                 //예외1. 과거 예외2. 형식 처리
                 if(closure_DateCheck(strclosuredate)){
                     closuredate = Integer.parseInt(strclosuredate);
+                    flow = 2;
                     break;
-
                 }
-
-
-
-
-
             }
         }
+
+        //2. 임시 폐쇠 보관함 선택
+        if(flow == 2){
+            while(true){
+
+                printAdminLocker();
+                System.out.print(">>");
+
+                closureLockerNum = sc.nextInt();
+                //sc.nextLine();
+
+                /*
+                //예외1. 과거 예외2. 형식 처리
+                try {
+                    //숫자 입력이 아닌 경우
+                    if (!isNumeric(LockerPwd))
+                        throw new IllegalArgumentException();
+
+                    //4자리가 아닌 경우
+                    if (LockerPwd.length() != 4)
+                        throw new IllegalArgumentException();
+
+                    //아무 문제 없는 경우 결제 확인 창으로 이동
+                    flow = 3;
+                    break;
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                }
+
+                 */
+            }
+
+
+        }
+
+
 
 
 
@@ -286,6 +318,34 @@ public class AdminManager {
         return true;
     }
 
+    public void printAdminLocker(){
+        System.out.println("---------------------- 보관함 목록 ----------------------");
+        String size=null;
+        int timeDiff = 0;
+        String iscanforce = "강제수거 불가능";
+        for(Locker lc : l.LockerList){
+            if(lc.locksize=="0")
+                size = "S";
+            else if(lc.locksize == "1")
+                size = "M";
+            else if(lc.locksize == "2")
+                size = "L";
+
+            Date currentTime = l.StringToDate(Main.currentTimeString);
+            Date startTime = l.StringToDate(lc.date);
+            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+            int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+            timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+
+            if (timeDiff > 10) {
+                iscanforce = "강제수거 가능";
+                lc.iscanFp = true;
+            }
+
+            System.out.println(lc.locknum+"번 / "+size+" / "+lc.date+" / "+iscanforce);
+        }
+    }
 
     public void ExitWrite(){
         u.UserFileWrite();
