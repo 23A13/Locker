@@ -88,6 +88,13 @@ public class AdminManager {
     }
 
     public void temporary_closure(){
+        /*
+        해야하는거
+        0. 기간 입력 두 번 받기
+        1. flow1 날짜 예외처리
+        2. flow2 기본 6시간 지나는거 확인
+        3. locker에 정보 저장
+         */
 
         //임시폐쇄 함수에서 필요한 프롬포트들
         String temporary_closure_prompt = """
@@ -97,11 +104,21 @@ public class AdminManager {
                 * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
                 --------------------------------------------------------------
                """;
+        String temporary_closure_select_prompt = """
+                --------------------------------------------------------------
+                임시폐쇄할 보관함 번호를 입력해주세요.
+                --------------------------------------------------------------
+                """;
+        String temporary_clousure_check_prompt = """
+                삭제하려는 보관함은
+                ------------------------------------------
+                보관함 번호: <""";
 
         //임시폐쇄 함수에서 필요한 변수들
 
         int closuredate = 0; //임시 폐쇄 기간
         int closureLockerNum = 0; //임시 폐쇄 보관함
+        String strclosureLockerNum;
 
         int flow = 1; //흐름에 따라 값 변경 1. 임시 폐쇄 기간 입력 2. 임시 폐쇠 보관함 선택 3. 보관함 번호 재확인 4. 완료
 
@@ -117,7 +134,7 @@ public class AdminManager {
 
                 //예외1. 과거 예외2. 형식 처리
                 if(closure_DateCheck(strclosuredate)){
-                    closuredate = Integer.parseInt(strclosuredate);
+                    //closuredate = Integer.parseInt(strclosuredate);
                     flow = 2;
                     break;
                 }
@@ -128,32 +145,115 @@ public class AdminManager {
         if(flow == 2){
             while(true){
 
-                printAdminLocker();
+                //(상의)보관함 프린트 오류 확인 해야함
+                //printAdminLocker();
+                System.out.print(temporary_closure_select_prompt);
                 System.out.print(">>");
 
-                closureLockerNum = sc.nextInt();
+                strclosureLockerNum = sc.nextLine();
                 //sc.nextLine();
 
-                /*
-                //예외1. 과거 예외2. 형식 처리
-                try {
-                    //숫자 입력이 아닌 경우
-                    if (!isNumeric(LockerPwd))
-                        throw new IllegalArgumentException();
+                //예외처리
+                try{
+                    //형식예외
+                    if (strclosureLockerNum.length() != 2) throw new IllegalArgumentException();
 
-                    //4자리가 아닌 경우
-                    if (LockerPwd.length() != 4)
-                        throw new IllegalArgumentException();
+                    //범위 예외 처리(01~16)
+                    
+                    closureLockerNum = parseInt(strclosureLockerNum);
+                    if (closureLockerNum<1 || closureLockerNum > 99) throw new IllegalArgumentException();
 
-                    //아무 문제 없는 경우 결제 확인 창으로 이동
+                    //예외1. 존재하지 않는 보관함일 경우
+                    boolean isexist = false;
+                    for(int i=0; i<l.LockerList.size(); i++){
+                        if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
+                            isexist = true;
+                        }
+                    }
+                    if(!isexist)
+                        throw new IllegalStateException();
+
+                    //예외2. 임시폐쇄를 할 수 없는 보관함일 경우
+                    //보관함의 보관내역이 존재하며 보관 시작 시간으로부터 기본 보관 시간 + 6시간이 지나지 않는 보관함
+                    for(int i=0; i<l.LockerList.size(); i++){
+                        if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
+                            if(parseInt(l.LockerList.get(i).use) == 1){ //사용중일때
+
+                                //시간 차이 구하기
+                                Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                                Date startTime = LockerManager.StringToDate(l.LockerList.get(i).date);
+                                long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                                int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+                                int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+                                int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+
+                                if(timeDiffMinutes > 6*60) //예약시간 + 6시간 초과했는지 확인
+                                    throw new IllegalAccessException();
+                            }
+                        }
+                    }
+
+                    //예약 중, 임시 패쇄 중, 임시 폐쇄 예정인 보관함일 경우
+                    for(int i=0; i<l.LockerList.size(); i++){
+                        if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
+                            if(parseInt(l.LockerList.get(i).use) == 2 || parseInt(l.LockerList.get(i).use) == 3 ||
+                                    parseInt(l.LockerList.get(i).use) == 4){
+                                throw new IllegalAccessException();
+                            }
+                        }
+                    }
+
+                    //아무 문제 없다면 폐쇄 기간 저장한 후 3. 보관함 번호 재확인으로 이동
+
+                    //(상의) 폐쇄 기간 설정
                     flow = 3;
                     break;
 
-                } catch (IllegalArgumentException e) {
-                    System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+                }catch(IllegalArgumentException e){ //형식 예외
+                    System.out.println("올바른 입력이 아닙니다.");
+                }catch(IllegalAccessException e) { //예외2. 임시폐쇄 할 수 없는 보관함.
+                    System.out.println("임시폐쇄할 수 없는 보관함 번호입니다.\n");
+                }catch(IllegalStateException e){ //예외1. 존재하지 않는 보관함
+                    System.out.println("존재하지 않는 보관함 번호입니다.\n");
                 }
+            }
 
-                 */
+            if(flow ==3){
+                temporary_clousure_check_prompt += strclosureLockerNum+">\n";
+                temporary_clousure_check_prompt += """
+                        ------------------------------------------
+                        가(이) 맞습니까?
+                                                
+                        *맞다면 Y또는 y를 입력해주세요.
+                        ------------------------------------------
+                        """;
+                while(true){
+
+                    System.out.println();
+                    System.out.print(temporary_clousure_check_prompt);
+                    System.out.print(">>");
+
+                    String checking;
+                    checking = String.valueOf(sc.next());
+                    sc.nextLine();
+
+                    try{
+                        if(!(checking.equals("Y")||checking.equals("y")))
+                            throw new IllegalArgumentException();
+
+                        //아무 문제 없다면 결제 알림 창으로 이동
+                        flow = 4;
+                        break;
+                    }catch(Exception e){
+                        System.out.println("올바른 입력이 아닙니다.\n");
+                    }
+
+                }
+            }
+
+            if(flow ==4){
+                System.out.println("임시 폐쇄 기간이 설정되었습니다.");
+                System.out.println();
             }
 
 
