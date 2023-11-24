@@ -7,9 +7,11 @@ public class Locker {
 
     String locknum; //보관함 번호
     String locksize; //보관함 크기(0/1/2-S/M/L)
-    String use; //사용여부(0/1/2-미사용/사용중/예약중)
+    String use; //사용여부(0/1/2/3/4-미사용/사용중/예약중)
     String date; //날짜시각
     String confirmbook; //예약확정 여부(0/1-미확/확정)
+    String start_closure;
+    String end_closure;
     boolean iscanFp = false;
 
     //constructor

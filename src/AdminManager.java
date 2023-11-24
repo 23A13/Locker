@@ -90,7 +90,7 @@ public class AdminManager {
     public void temporary_closure(){
         /*
         해야하는거
-        3. locker에 정보 저장
+        3. locker에 임시 폐쇄 시작/끝나는 시간 정보 저장
          */
 
         //임시폐쇄 함수에서 필요한 프롬포트들
@@ -120,7 +120,7 @@ public class AdminManager {
 
         //임시폐쇄 함수에서 필요한 변수들
         long closurestartdate = 0L; //임시 폐쇄 시작 날짜시간
-        long closureenddate; //임시 폐쇄 종료 날짜시간
+        long closureenddate = 0L; //임시 폐쇄 종료 날짜시간
         int closureLockerNum = 0; //임시 폐쇄 보관함
         String strclosureLockerNum; //임시 폐쇄 보관함 string
 
@@ -158,7 +158,7 @@ public class AdminManager {
 
                 //과거, 형식 예외처리
                 if(closure_DateCheck(closurestartdate, strclosuresenddate)){
-                    closurestartdate = Long.parseLong(strclosuresenddate);
+                    closureenddate = Long.parseLong(strclosuresenddate);
                     flow = 2;
                     break;
                 }
@@ -231,8 +231,6 @@ public class AdminManager {
                     }
 
                     //아무 문제 없다면 폐쇄 기간 저장한 후 3. 보관함 번호 재확인으로 이동
-
-                    //(상의) 폐쇄 기간 설정
                     flow = 3;
                     break;
 
@@ -279,6 +277,17 @@ public class AdminManager {
             }
 
             if(flow ==4){
+                //Locker 설정
+                for(int i=0; i<l.LockerList.size(); i++){
+                    if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
+                        l.LockerList.get(i).use = "3";
+                        //(상의)Locker 객체 만들어지면 임시폐쇄 시작, 종료 저장
+                        l.LockerList.get(i).start_closure = String.valueOf(closurestartdate);
+                        l.LockerList.get(i).start_closure = String.valueOf(closureenddate);
+                    }
+                }
+
+                ExitWrite();
                 System.out.println("임시 폐쇄 기간이 설정되었습니다.");
                 System.out.println();
             }
