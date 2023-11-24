@@ -2,9 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 
 public class AdminManager {
@@ -18,6 +16,7 @@ public class AdminManager {
 
     UserManager u = new UserManager();
     LockerManager l = new LockerManager();
+
 
 
     public void menu()
@@ -87,6 +86,34 @@ public class AdminManager {
 
     }
 
+    public void printAdminLocker(){
+        System.out.println("---------------------- 보관함 목록 ----------------------");
+        String size=null;
+        int timeDiff = 0;
+        String iscanforce = "강제수거 불가능";
+        for(Locker lc : l.LockerList){
+            if(lc.locksize=="0")
+                size = "S";
+            else if(lc.locksize == "1")
+                size = "M";
+            else if(lc.locksize == "2")
+                size = "L";
+
+            Date currentTime = l.StringToDate(Main.currentTimeString);
+            Date startTime = l.StringToDate(lc.date);
+            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+            int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+            timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+
+            if (timeDiff > 10) {
+                iscanforce = "강제수거 가능";
+                lc.iscanFp = true;
+            }
+
+            System.out.println(lc.locknum+"번 / "+size+" / "+lc.date+" / "+iscanforce);
+        }
+    }
     public void ExitWrite(){
         u.UserFileWrite();
         l.LockerFileWrite();
