@@ -379,7 +379,7 @@ public class LockerManager {
         long timeDiffMillis = currentTime.getTime() - startTime.getTime();
         int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
         int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-        int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime())/3600000);
 
         //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
         if (timeDiffMinutes > 4*60 ){
@@ -922,12 +922,12 @@ public class LockerManager {
         String[] temp = new String[5];
         int num = 0;
         for(int i=0; i<5; i++) {
-            if(i==0) //yyyy
+            if(i==0)
             {
                 temp[i] = str.substring(num, num+4);
                 num += 4;
             }
-            else //mm, dd, hh, mm
+            else
             {
                 temp[i] = str.substring(num, num+2);
                 num += 2;
