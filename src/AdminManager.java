@@ -226,6 +226,7 @@ public class AdminManager {
                     else {
                         //수정!!
                         //저장구조 변경어케함
+                        break;
                     }
                 }catch (IllegalArgumentException e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
@@ -236,5 +237,139 @@ public class AdminManager {
 
     private void AddLocker() {
 
+        //입력받은 보관함 번호
+        int LockerNumber = 0;   //정수형
+        String LockerNum = null;    //스트링
+        //보관함 사이즈
+        String sizevalue = null;
+        //현재 보관함 총 용량
+        int totalsize = 0;
+
+        Iterator<Locker> iterator = LockerManager.LockerList.iterator();
+        while (iterator.hasNext()) {
+            Locker locker = iterator.next();
+            if(locker.getLocksize().equals("0")) {
+                totalsize += 2;
+            } else if(locker.getLocksize().equals("1")) {
+                totalsize += 3;
+            } else {
+                totalsize += 4;
+            }
+        }
+
+        //수정
+        int flow = 1; // 보관함 번호 입력 (1) -> 보관함 크기 입력 (2) -> 보관함 번호 크기 재확인(3)
+
+        while (true) {
+            printAdminLocker();
+            //수정
+            System.out.print("(현재 보관함 총 용량: " + totalsize + "/50)\n\n" +
+                             "추가할 보관함의 번호를 입력해주세요.\n\n" +
+                             "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
+                             "--------------------------------------------------------------\n" +
+                             ">> ");
+
+            LockerNum = String.valueOf(sc.next());
+            sc.nextLine();
+
+            try {
+                //Q 입력
+                if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
+                    //menu3으로 복귀
+                    menu();
+                    break;
+                }
+
+                //잘못됩 입력 (0~99 입력 안함)
+                LockerNumber = Integer.parseInt(LockerNum);
+                if (LockerNumber < 1 || LockerNumber > 16)
+                    throw new IllegalArgumentException();
+
+                //형식 예외 처리 (01, 02 등으로 입력하지 않고 1, 2 등으로 입력함)
+                if (LockerNum.length() != 2)
+                    throw new IllegalArgumentException();
+
+                //이미 존재하는 보관함 번호를 입력한 경우
+                Iterator<Locker> it = LockerManager.LockerList.iterator();
+                while (it.hasNext()) {
+                    Locker locker = it.next();
+                    //이미 존재하는 보관함 번호를 입력한 경우
+                    if (locker.getLocknum().equals(LockerNum)) {
+                        System.out.println("이미 존재하는 보관함 번호입니다.\n");
+                        throw new IllegalAccessException();
+                    }
+                }
+
+                flow = 2; // 보관함 크기 입력 프롬프트로 넘어가기
+                break;
+
+            }catch (IllegalArgumentException e){
+                System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
+            }catch (IllegalAccessException e){}
+        }
+
+        if(flow == 2) {
+            while(true) {
+                System.out.print("""
+                        추가할 보관함의 크기를 입력해주세요.
+                        >>\s
+                        """);
+
+                sizevalue = String.valueOf(sc.next());
+                sc.nextLine();
+
+                try{
+                    // S or s or M or m or L or l 말고 다른 것을 입력한 경우
+                    if (!(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s") ||
+                          Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m") ||
+                          Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l"))) {
+                        System.out.println("올바른 입력이 아닙니다.");
+                        System.out.println("다시 한번 입력해주세요.\n");
+                        throw new IllegalArgumentException();
+                    }
+
+                    if(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) if (totalsize > 48) {
+                        System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
+                        throw new IllegalArgumentException();
+                    }
+                    else if(Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) if (totalsize > 47) {
+                        System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
+                        throw new IllegalArgumentException();
+                    }
+                    else if(Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l")) if (totalsize > 46) {
+                        System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
+                        throw new IllegalArgumentException();
+                    }
+
+                    flow = 3; //보관함 번호 크기 재확인 프롬프트로 이동
+                    break;
+                } catch (IllegalArgumentException e) {}
+            }
+        }
+
+        if(flow == 3) {
+            System.out.println("추가하려는 보관함은\n" +
+                               "------------------------------------------\n" +
+                               "보관함 번호: " + LockerNum + "\n" +
+                               "보관함 크기: "+ sizevalue +"\n" +
+                               "------------------------------------------\n" +
+                               "가(이) 맞습니까?\n" +
+                               "\n" +
+                               "*맞다면 Y또는 y를 입력해주세요.\n" +
+                               "------------------------------------------\n" +
+                               ">>\n");
+            String yn = String.valueOf(sc.next());
+            sc.nextLine();
+
+            if (Objects.equals(yn, "Y") || Objects.equals(yn, "y")) {
+                System.out.println("보관함이 추가됐습니다.\n");
+                //수정
+                //파일처리
+            } else {
+                flow = 1;
+                //수정
+                AddLocker();
+            }
+        }
     }
 }
