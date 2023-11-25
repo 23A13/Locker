@@ -10,6 +10,8 @@ import java.util.concurrent.locks.Lock;
 public class AdminManager {
     static Scanner sc = new Scanner(System.in);
 
+    private String pw = "admin1234";
+
     public AdminManager()
     {
     }
@@ -91,5 +93,9 @@ public class AdminManager {
         u.UserFileWrite();
         l.LockerFileWrite();
         System.exit(0);
+    }
+
+    public String getPW(){
+        return pw;
     }
 }
