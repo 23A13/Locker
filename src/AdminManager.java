@@ -10,20 +10,17 @@ public class AdminManager {
 
     private String pw = "admin1234";
 
-    public AdminManager()
-    {
+    public AdminManager() {
     }
 
-    static int count=0;
+    static int count = 0;
 
     UserManager u = new UserManager();
     LockerManager l = new LockerManager();
 
 
-
-    public void menu()
-    {
-        if(count==0)
+    public void menu() {
+        if (count == 0)
             l.LockerFileInput();
 
         String menu = """
@@ -41,19 +38,19 @@ public class AdminManager {
 
         int number = 0;
 
-        while(true){
+        while (true) {
 
-            try{
+            try {
                 System.out.print(">>");
                 number = sc.nextInt();
                 sc.nextLine();
 
-                if(number<1||number>6) throw new InputMismatchException();
+                if (number < 1 || number > 6) throw new InputMismatchException();
 
                 //올바른 입력시
                 break;
 
-            }catch(InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                 sc.nextLine();
             }
@@ -62,7 +59,7 @@ public class AdminManager {
 
         System.out.println();
 
-        switch(number){
+        switch (number) {
             case 1:
                 // 강제수거 메소드
                 break;
@@ -90,44 +87,52 @@ public class AdminManager {
 
     }
 
-    public void printAdminLocker(){
+    public void printAdminLocker() {
         System.out.println("---------------------- 보관함 목록 ----------------------");
-        String size=null;
         int timeDiff = 0;
         String iscanforce = "강제수거 불가능";
-        for(Locker lc : l.LockerList){
-            if(lc.locksize=="0")
+        for (Locker lc : l.LockerList) {
+            String size = "";
+            iscanforce = "강제수거 불가능";
+            if (lc.locksize.equals("0"))
                 size = "S";
-            else if(lc.locksize == "1")
+            else if (lc.locksize.equals("1"))
                 size = "M";
-            else if(lc.locksize == "2")
+            else if (lc.locksize.equals("2"))
                 size = "L";
 
-            Date currentTime = l.StringToDate(Main.currentTimeString);
-            Date startTime = l.StringToDate(lc.date);
-            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-            int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-            timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+            if (!lc.use.equals("0")) {
+                Date currentTime = l.StringToDate(Main.currentTimeString);
+                Date startTime = l.StringToDate(lc.date);
 
-            if (timeDiff > 10) {
-                iscanforce = "강제수거 가능";
-                lc.iscanFp = true;
+                long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+                int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+                timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
+
+                lc.timediff = timeDiff;
+
+                if (timeDiff > 10) {
+                    iscanforce = "강제수거 가능";
+                    lc.iscanFp = true;
+                }
+                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " + Math.abs(timeDiffHours) + "시간"
+                        + Integer.toString(Math.abs(timeDiffMinutes) % 60) + "분째 사용중 / " + iscanforce);
+            } else {
+                System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
+
             }
-
-            System.out.println(lc.locknum+"번 / "+size+" / "+lc.date+" / "+iscanforce);
-            System.out.println("--------------------------------------------------------------");
         }
     }
 
-    public void ExitWrite(){
+    public void ExitWrite() {
         u.UserFileWrite();
         l.LockerFileWrite();
         System.exit(0);
     }
 
 
-    public String getPW(){
+    public String getPW() {
         return pw;
     }
 
@@ -153,7 +158,7 @@ public class AdminManager {
             sc.nextLine();
 
 
-            try{
+            try {
                 //Q 입력
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //menu3으로 복귀
@@ -182,11 +187,11 @@ public class AdminManager {
                         Date startTime = LockerManager.StringToDate(locker.date);
                         long timeDiffMillis = currentTime.getTime() - startTime.getTime();
                         int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-                        int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-                        int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+                        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+                        int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
 
                         //수정
-                        if(timeDiffMinutes <= 6*60){ //예약시간 + 6시간 초과했는지 확인
+                        if (timeDiffMinutes <= 6 * 60) { //예약시간 + 6시간 초과했는지 확인
                             System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
                             throw new IllegalAccessException();
                         }
@@ -202,26 +207,27 @@ public class AdminManager {
                 }
                 //iterator를 다 돌고 나옴
                 //존재하지 않는 보관함인 경우
-                if(flow != 2) {
+                if (flow != 2) {
                     System.out.println("존재하지 않는 보관함 번호입니다.\n");
                     throw new IllegalAccessException();
                 }
 
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-            }catch (IllegalAccessException e){}
+            } catch (IllegalAccessException e) {
+            }
 
             //삭제 가능인 경우
-            if(flow == 2){
+            if (flow == 2) {
                 System.out.print("삭제하려는 보관함은\n" +
-                                 "------------------------------------------\n" +
-                                 "보관함 번호: <" + LockerNum + ">\n" +
-                                 "------------------------------------------\n" +
-                                 "가(이) 맞습니까?\n" +
-                                 "\n" +
-                                 "*맞다면 Y또는 y를 입력해주세요.\n" +
-                                 "------------------------------------------\n" +
-                                 ">> ");
+                        "------------------------------------------\n" +
+                        "보관함 번호: <" + LockerNum + ">\n" +
+                        "------------------------------------------\n" +
+                        "가(이) 맞습니까?\n" +
+                        "\n" +
+                        "*맞다면 Y또는 y를 입력해주세요.\n" +
+                        "------------------------------------------\n" +
+                        ">> ");
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
 
@@ -229,13 +235,13 @@ public class AdminManager {
                     // Y or y 말고 다른 것을 입력한 경우
                     if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
                         throw new IllegalArgumentException();
-                    // Y or y 입력
+                        // Y or y 입력
                     else {
                         //수정!!
                         //저장구조 변경어케함
                         break;
                     }
-                }catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
                 }
             }
@@ -255,9 +261,9 @@ public class AdminManager {
         Iterator<Locker> iterator = LockerManager.LockerList.iterator();
         while (iterator.hasNext()) {
             Locker locker = iterator.next();
-            if(locker.getLocksize().equals("0")) {
+            if (locker.getLocksize().equals("0")) {
                 totalsize += 2;
-            } else if(locker.getLocksize().equals("1")) {
+            } else if (locker.getLocksize().equals("1")) {
                 totalsize += 3;
             } else {
                 totalsize += 4;
@@ -271,10 +277,10 @@ public class AdminManager {
             printAdminLocker();
             //수정
             System.out.print("(현재 보관함 총 용량: " + totalsize + "/50)\n\n" +
-                             "추가할 보관함의 번호를 입력해주세요.\n\n" +
-                             "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
-                             "--------------------------------------------------------------\n" +
-                             ">> ");
+                    "추가할 보관함의 번호를 입력해주세요.\n\n" +
+                    "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
+                    "--------------------------------------------------------------\n" +
+                    ">> ");
 
             LockerNum = String.valueOf(sc.next());
             sc.nextLine();
@@ -310,13 +316,14 @@ public class AdminManager {
                 flow = 2; // 보관함 크기 입력 프롬프트로 넘어가기
                 break;
 
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-            }catch (IllegalAccessException e){}
+            } catch (IllegalAccessException e) {
+            }
         }
 
-        if(flow == 2) {
-            while(true) {
+        if (flow == 2) {
+            while (true) {
                 System.out.print("""
                         추가할 보관함의 크기를 입력해주세요.
                         >>\s
@@ -325,46 +332,45 @@ public class AdminManager {
                 sizevalue = String.valueOf(sc.next());
                 sc.nextLine();
 
-                try{
+                try {
                     // S or s or M or m or L or l 말고 다른 것을 입력한 경우
                     if (!(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s") ||
-                          Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m") ||
-                          Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l"))) {
+                            Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m") ||
+                            Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l"))) {
                         System.out.println("올바른 입력이 아닙니다.");
                         System.out.println("다시 한번 입력해주세요.\n");
                         throw new IllegalArgumentException();
                     }
 
-                    if(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) if (totalsize > 48) {
+                    if (Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) if (totalsize > 48) {
                         System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
                         throw new IllegalArgumentException();
-                    }
-                    else if(Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) if (totalsize > 47) {
+                    } else if (Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) if (totalsize > 47) {
                         System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
                         throw new IllegalArgumentException();
-                    }
-                    else if(Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l")) if (totalsize > 46) {
+                    } else if (Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l")) if (totalsize > 46) {
                         System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
                         throw new IllegalArgumentException();
                     }
 
                     flow = 3; //보관함 번호 크기 재확인 프롬프트로 이동
                     break;
-                } catch (IllegalArgumentException e) {}
+                } catch (IllegalArgumentException e) {
+                }
             }
         }
 
-        if(flow == 3) {
+        if (flow == 3) {
             System.out.println("추가하려는 보관함은\n" +
-                               "------------------------------------------\n" +
-                               "보관함 번호: " + LockerNum + "\n" +
-                               "보관함 크기: "+ sizevalue +"\n" +
-                               "------------------------------------------\n" +
-                               "가(이) 맞습니까?\n" +
-                               "\n" +
-                               "*맞다면 Y또는 y를 입력해주세요.\n" +
-                               "------------------------------------------\n" +
-                               ">>\n");
+                    "------------------------------------------\n" +
+                    "보관함 번호: " + LockerNum + "\n" +
+                    "보관함 크기: " + sizevalue + "\n" +
+                    "------------------------------------------\n" +
+                    "가(이) 맞습니까?\n" +
+                    "\n" +
+                    "*맞다면 Y또는 y를 입력해주세요.\n" +
+                    "------------------------------------------\n" +
+                    ">>\n");
             String yn = String.valueOf(sc.next());
             sc.nextLine();
 
@@ -378,4 +384,5 @@ public class AdminManager {
                 AddLocker();
             }
         }
+    }
 }
