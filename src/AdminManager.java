@@ -252,6 +252,7 @@ public class AdminManager {
         String iscanforce = "강제수거 불가능";
         for (Locker lc : l.LockerList) {
             String size = "";
+            iscanforce = "강제수거 불가능";
             if (lc.locksize.equals("0"))
                 size = "S";
             else if (lc.locksize.equals("1"))
@@ -274,7 +275,8 @@ public class AdminManager {
                     iscanforce = "강제수거 가능";
                     lc.iscanFp = true;
                 }
-                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " + iscanforce);
+                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " +Math.abs(timeDiffHours)+ "시간"
+                        +Integer.toString(Math.abs(timeDiffMinutes)%60)+"분째 사용중 / "+ iscanforce);
             } else{
                 System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
 
