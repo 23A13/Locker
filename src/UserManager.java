@@ -269,8 +269,9 @@ public class UserManager {
 
         String pw = scan.nextLine();
 
+        AdminManager tmpAdmin = new AdminManager();
         // 일단 임시로 관리자 비밀번호 지정
-        if(pw.trim().equals("admin1234")) {
+        if(pw.trim().equals(tmpAdmin.getPW())) {
             return true;
         }
         else {
