@@ -22,6 +22,7 @@ public class AdminManager {
     public void menu() {
         if (count == 0)
             l.LockerFileInput();
+        count++; //이렇게하는게맞나?;;
 
         String menu = """
                 ——MENU——\s
@@ -88,11 +89,11 @@ public class AdminManager {
 
     public void force_pickup() {
         String noticeFp = """
-                --------------------------------------------------------------\n
-                물품을 강제 수거할 보관함 번호를 입력해주세요.\n\n
+                --------------------------------------------------------------
+                물품을 강제 수거할 보관함 번호를 입력해주세요.
                                 
-                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n
-                --------------------------------------------------------------\n
+                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
+                --------------------------------------------------------------
                 """;
 
         int LockerNumber = 0;
@@ -101,7 +102,7 @@ public class AdminManager {
         while (true) {
             //noticeFp("강제수거 프롬프트") 출력
             printAdminLocker();
-            System.out.println(noticeFp);
+            System.out.print(noticeFp);
 
             //보관함 번호 입력받기
             System.out.print(">>");
@@ -140,13 +141,13 @@ public class AdminManager {
 
                 }
                 if (targetLocker == null) {
-                    System.out.println("해당 번호의 보관함이 존재하지 않습니다.");
+                    System.out.println("해당 번호의 보관함이 존재하지 않습니다.\n");
                     throw new IllegalAccessException();
                 }
 
                 //사용 중이지 않은 보관함의 번호를 입력한 경우
                 if (targetLocker.use == "0") {
-                    System.out.println("보관 중인 물품이 없습니다.");
+                    System.out.println("보관 중인 물품이 없습니다. \n");
                     throw new IllegalAccessException();
                 }
 
@@ -154,7 +155,7 @@ public class AdminManager {
                 for (Locker lc : l.LockerList) {
                     if (Integer.parseInt(lc.locknum) == LockerNumber) {
                         if (lc.iscanFp == false) {
-                            System.out.println("강제수거를 할 수 없는 보관함입니다. 강제수거 가능여부를 확인해주세요.");
+                            System.out.println("강제수거를 할 수 없는 보관함입니다. 강제수거 가능여부를 확인해주세요.\n");
                             throw new IllegalAccessException();
                         }
                     }
@@ -170,15 +171,16 @@ public class AdminManager {
         }
 
         //정상 결과
-        String FpCheckNotice = Integer.toString(LockerNumber) + "번 보관함을 선택하셨습니다.\n";
+        System.out.println();
+        String FpCheckNotice = targetLocker.locknum + "번 보관함을 선택하셨습니다.\n";
         FpCheckNotice += targetLocker.locknum + "번 / " + targetLocker.date + " / " + targetLocker.timediff + "시간 / ";
         if (targetLocker.iscanFp == true)
             FpCheckNotice += "강제수거 가능";
         else
             FpCheckNotice += "강제수거 불가능";
         FpCheckNotice += """
-                강제수거 하시려면 Y또는 y를 입력해주세요.\n
-                ------------------------------------------\n              
+                \n\n강제수거 하시려면 Y또는 y를 입력해주세요.
+                ------------------------------------------             
                 >>                                        
                 """;
 
@@ -223,7 +225,7 @@ public class AdminManager {
                 }
             }
 
-            //강제수거 완료한 보관함 정보 삭제 & File Write
+            //강제수거 완료한 보관함 정보 삭제 & File Write @뭔가오류가잇음.. 1번을 지웠는데 2번이 지워짐 뭐님
             l.LockerList.get(target).use = "0";
             l.LockerList.get(target).date = "-";
             l.LockerList.get(target).confirmbook = "0";
