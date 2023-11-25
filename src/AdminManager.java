@@ -133,15 +133,15 @@ public class AdminManager {
         String LockerPwd = null;
 
         //수정
-        int flow = 0;
+        int flow = 1;
 
         while (true) {
             printAdminLocker();
-            System.out.print("삭제할 보관함의 번호를 입력해주세요.\n" +
-                             "\n" +
-                             "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
-                             "--------------------------------------------------------------" +
-                             ">> ");
+            System.out.print("""
+                    삭제할 보관함의 번호를 입력해주세요.
+
+                    * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
+                    -------------------------------------------------------------->>\s""");
             LockerNum = String.valueOf(sc.next());
             sc.nextLine();
 
@@ -170,11 +170,20 @@ public class AdminManager {
                     Locker locker = iterator.next();
                     if (locker.getLocknum().equals(LockerNum)) {
                         //삭제 불가인 경우 (10시간 보관 안지남)
+                        //시간 차이 구하기
+                        Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                        Date startTime = LockerManager.StringToDate(locker.date);
+                        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+                        int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+                        int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+
                         //수정
-                        /*if(){
+                        if(timeDiffMinutes <= 6*60){ //예약시간 + 6시간 초과했는지 확인
                             System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
                             throw new IllegalAccessException();
-                        }*/
+                        }
+
                         //삭제 불가인 경우 (예약중인 보관함)
                         if (locker.getUse().equals("2")) {
                             System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
@@ -199,7 +208,7 @@ public class AdminManager {
             if(flow == 2){
                 System.out.print("삭제하려는 보관함은\n" +
                                  "------------------------------------------\n" +
-                                 "보관함 번호: " + LockerNum + "\n" +
+                                 "보관함 번호: <" + LockerNum + ">\n" +
                                  "------------------------------------------\n" +
                                  "가(이) 맞습니까?\n" +
                                  "\n" +
@@ -221,10 +230,8 @@ public class AdminManager {
                 }catch (IllegalArgumentException e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
                 }
-
             }
         }
-
     }
 
     private void AddLocker() {
