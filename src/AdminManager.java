@@ -851,7 +851,15 @@ public class AdminManager {
             if (Objects.equals(yn, "Y") || Objects.equals(yn, "y")) {
                 //수정
                 //파일처리
+                //보관함 크기(0/1/2-S/M/L)
+                String sizenum = null;
+                if(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) sizenum = "0";
+                else if(Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) sizenum = "1";
+                else sizenum = "2";
 
+                Locker lc = new Locker(LockerNum, sizenum, "-");
+                LockerManager.LockerList.add(lc);
+                Collections.sort(LockerManager.LockerList, new LockerSortComparator());
                 System.out.println("보관함이 추가됐습니다.\n");
                 ExitWrite();
             } else {
@@ -860,5 +868,14 @@ public class AdminManager {
                 AddLocker();
             }
         }
+    }
+}
+
+class LockerSortComparator implements Comparator<Locker> {
+    @Override
+    public int compare(Locker o1, Locker o2) {
+        if (Integer.parseInt(o1.locknum) > Integer.parseInt(o2.locknum)) return 1;
+        else if (Integer.parseInt(o1.locknum) < Integer.parseInt(o2.locknum)) return -1;
+        return 0;
     }
 }
