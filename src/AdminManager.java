@@ -62,6 +62,7 @@ public class AdminManager {
         switch (number) {
             case 1:
                 // 강제수거 메소드
+                force_pickup();
                 break;
             case 2:
                 // 임시폐쇄 메소드
