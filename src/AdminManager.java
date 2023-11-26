@@ -437,8 +437,8 @@ public class AdminManager {
                     if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
                         l.LockerList.get(i).use = "3";
                         //(상의)Locker 객체 만들어지면 임시폐쇄 시작, 종료 저장
-                        l.LockerList.get(i).start_closure = String.valueOf(closurestartdate);
-                        l.LockerList.get(i).start_closure = String.valueOf(closureenddate);
+                        l.LockerList.get(i).closeddatestart = String.valueOf(closurestartdate);
+                        l.LockerList.get(i).closeddatefinish= String.valueOf(closureenddate);
                     }
                 }
 

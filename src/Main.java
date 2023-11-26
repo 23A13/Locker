@@ -50,7 +50,7 @@ public class Main {
         String oldD = null; 	// 기존 날짜 데이터 저장용
         String dTrim = today.trim();	//입력 받은 string의 공백 제거
 
-        File timeFile = new File("../Locker/Date.txt");
+        File timeFile = new File("./Locker/Date.txt");
 
         // 글자 수가 12가 아닐 경우 false 반환
         if(dTrim.length() != 12) {
@@ -200,7 +200,7 @@ public class Main {
     private static void beforeDateRemove(String dTrim, String oldD) {
         try {
             // txt 파일 읽어오기
-            BufferedReader reader = new BufferedReader(new FileReader("../Locker/Date.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("./Locker/Date.txt"));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -212,7 +212,7 @@ public class Main {
             String updatedContent = content.toString().replace(oldD, dTrim);
 
             // 새로 쓰인 내용을 txt 파일에 입력하기
-            BufferedWriter writer = new BufferedWriter(new FileWriter("../Locker/Date.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./Locker/Date.txt"));
             writer.write(updatedContent);
             writer.close();
 

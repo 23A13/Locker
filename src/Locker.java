@@ -7,11 +7,18 @@ public class Locker {
 
     String locknum; //보관함 번호
     String locksize; //보관함 크기(0/1/2-S/M/L)
-    String use; //사용여부(0/1/2-미사용/사용중/예약중)
+    String use; //사용여부(0/1/2/3/4-미사용/사용중/예약중/임시폐쇄예정/임시폐쇄중)
     String date; //날짜시각
     String confirmbook; //예약확정 여부(0/1-미확/확정)
-    String start_closure; //임시폐쇄 시작 날짜/시간
-    String end_closure; //임시폐쇄 종료 날짜/시간
+
+    //2차때 추가된 변수들
+    String closeddatestart="-";//폐쇄시작 시각
+    String closeddatefinish="-";//폐쇄종료 시각
+    //
+
+
+    //String start_closure; //임시폐쇄 시작 날짜/시간
+    //String end_closure; //임시폐쇄 종료 날짜/시간
     boolean iscanFp = false;
     long timediffMinutes = 0;
 
@@ -31,6 +38,16 @@ public class Locker {
         this.use=use;
         this.date=date;
         this.confirmbook=confirmbook;
+    }
+
+    public Locker(String locknum, String locksize,String use,String date,String confirmbook,String closeddatestart,String closeddatefinish){
+        this.locknum=locknum;
+        this.locksize=locksize;
+        this.use=use;
+        this.date=date;
+        this.confirmbook=confirmbook;
+        this.closeddatestart=closeddatestart;
+        this.closeddatefinish=closeddatefinish;
     }
 
     public String getLocknum() {
@@ -96,12 +113,12 @@ public class Locker {
         System.out.println("|           |           |           |           |                  |                  |");
         System.out.println("---------------------------------------------------------------------------------------");
 
-        String fileName = "../Locker/User.txt";
+        String fileName = "./Locker/User.txt";
 
         try {
 
             //수정
-            String filePath = "../Locker/User.txt";
+            String filePath = "./Locker/User.txt";
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
