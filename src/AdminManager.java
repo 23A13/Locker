@@ -135,7 +135,7 @@ public class AdminManager {
                 System.out.print(">>");
                String strclosurestartdate = sc.nextLine();
 
-                //Q,q 처리
+                //Q,q 처리 
                 if(Objects.equals(strclosurestartdate, "Q") || Objects.equals(strclosurestartdate, "q")){
                     menu();
                     break;
