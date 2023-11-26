@@ -94,7 +94,9 @@ public class LockerManager {
             }else{
                 FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
                 for(int i=0;i< LockerList.size();i++){
-                    writer.write(LockerList.get(i).locknum+" "+LockerList.get(i).locksize+" "+LockerList.get(i).use+" "+LockerList.get(i).date+" "+LockerList.get(i).confirmbook+"\n");
+                    writer.write(LockerList.get(i).locknum+" "+LockerList.get(i).locksize+" "+LockerList.get(i).use+" "+LockerList.get(i).date
+                            +" "+LockerList.get(i).confirmbook+" "
+                            +LockerList.get(i).closeddatestart+" "+LockerList.get(i).closeddatefinish+"\n");
                     writer.flush();
                 }
                 writer.close();

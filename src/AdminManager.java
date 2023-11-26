@@ -240,24 +240,8 @@ public class AdminManager {
 
         }
     }
-    public void timediffUpdate(Locker lc){
-        Date currentTime = l.StringToDate(Main.currentTimeString);
-        Date startTime = l.StringToDate(lc.date);
-
-        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
-
-        lc.timediffMinutes = timeDiffMinutes;
-    }
 
     public void temporary_closure(){
-        /*
-        해야하는거
-        3. locker에 임시 폐쇄 시작/끝나는 시간 정보 저장(지은이)
-        4. 보관함 print 함수 확인(윤빈이)
-         */
 
         //임시폐쇄 함수에서 필요한 프롬포트들
         String temporary_closure_prompt1 = """
@@ -337,7 +321,6 @@ public class AdminManager {
         if(flow == 2){
             while(true){
 
-                //(상의)보관함 프린트 오류 확인 해야함
                 printAdminLocker();
                 System.out.print(temporary_closure_select_prompt);
                 System.out.print(">>");
@@ -447,9 +430,8 @@ public class AdminManager {
                 for(int i=0; i<l.LockerList.size(); i++){
                     if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
                         l.LockerList.get(i).use = "3";
-                        //(상의)Locker 객체 만들어지면 임시폐쇄 시작, 종료 저장
-                        l.LockerList.get(i).start_closure = String.valueOf(closurestartdate);
-                        l.LockerList.get(i).start_closure = String.valueOf(closureenddate);
+                        l.LockerList.get(i).closeddatestart = String.valueOf(closurestartdate);
+                        l.LockerList.get(i).closeddatefinish= String.valueOf(closureenddate);
                     }
                 }
 
@@ -567,7 +549,17 @@ public class AdminManager {
 
     }
 
+    public void timediffUpdate(Locker lc){
+        Date currentTime = l.StringToDate(Main.currentTimeString);
+        Date startTime = l.StringToDate(lc.date);
 
+        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
+
+        lc.timediffMinutes = timeDiffMinutes;
+    }
     public void printAdminLocker() {
         System.out.println("---------------------- 보관함 목록 ----------------------");
         int timeDiff = 0;
@@ -582,7 +574,7 @@ public class AdminManager {
             else if (lc.locksize.equals("2"))
                 size = "L";
 
-            if (!lc.use.equals("0")) {
+            if (!lc.date.equals("-")) { //date가 비어있지 않으면 {use가 사용중(1)이거나 임시폐쇄예정(3)일때만} @수정필요
                 timediffUpdate(lc);
 
                 if (lc.timediffMinutes/60 > 10) {
@@ -590,7 +582,7 @@ public class AdminManager {
                     lc.iscanFp = true;
                 }
                 System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " +Math.abs(lc.timediffMinutes/60)+ "시간"
-                        +Integer.toString(Math.abs(lc.timediffMinutes)%60)+"분째 사용중 / "+ iscanforce);
+                        +Integer.toString((int)Math.abs(lc.timediffMinutes)%60)+"분째 사용중 / "+ iscanforce);
             } else{
                 System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
 
