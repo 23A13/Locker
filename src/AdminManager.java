@@ -240,17 +240,6 @@ public class AdminManager {
 
         }
     }
-    public void timediffUpdate(Locker lc){
-        Date currentTime = l.StringToDate(Main.currentTimeString);
-        Date startTime = l.StringToDate(lc.date);
-
-        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
-
-        lc.timediffMinutes = timeDiffMinutes;
-    }
 
     public void temporary_closure(){
         /*
@@ -567,7 +556,17 @@ public class AdminManager {
 
     }
 
+    public void timediffUpdate(Locker lc){
+        Date currentTime = l.StringToDate(Main.currentTimeString);
+        Date startTime = l.StringToDate(lc.date);
 
+        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
+
+        lc.timediffMinutes = timeDiffMinutes;
+    }
     public void printAdminLocker() {
         System.out.println("---------------------- 보관함 목록 ----------------------");
         int timeDiff = 0;
@@ -582,7 +581,7 @@ public class AdminManager {
             else if (lc.locksize.equals("2"))
                 size = "L";
 
-            if (!lc.use.equals("0")) {
+            if (lc.use.equals("1")||lc.use.equals("3")) { //사용중(1)이거나 임시폐쇄예정(3)이면 @
                 timediffUpdate(lc);
 
                 if (lc.timediffMinutes/60 > 10) {
