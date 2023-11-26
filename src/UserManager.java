@@ -29,7 +29,7 @@ public class UserManager {
 
     //프로그램 최초 시작 시 user 데이터 txt파일로부터 불러오는 함수
     public void UserFileInput(){
-        String filename="../Locker/User.txt";
+        String filename="./Locker/User.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
                 String str=scan.nextLine();
@@ -51,7 +51,7 @@ public class UserManager {
     //프로그램 종료 시 user 데이터 txt파일에 저장하는 함수
     public void UserFileWrite(){
         try{
-            File file = new File("../Locker/User.txt");
+            File file = new File("./Locker/User.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{
@@ -73,7 +73,7 @@ public class UserManager {
 
     // 날짜시간 입력 시 예약 내역 수정용
     public void dateUserFileInput(Map<String, User> tmpmemMap, Map<String, User> tmpnonmemMap){
-        String filename="../Locker/User.txt";
+        String filename="./Locker/User.txt";
         try(Scanner scan=new Scanner(new File(filename))){
             while(scan.hasNextLine()) {
                 String str=scan.nextLine();
@@ -103,7 +103,7 @@ public class UserManager {
         this.beforeCannotUntilRemove(tmpmemMap, newDate);
 
         try{
-            File file = new File("../Locker/User.txt");
+            File file = new File("./Locker/User.txt");
             if(!file.exists()){
                 System.out.println("파일경로를 다시 확인하세요.");
             }else{

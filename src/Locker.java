@@ -110,12 +110,12 @@ public class Locker {
         System.out.println("|           |           |           |           |                  |                  |");
         System.out.println("---------------------------------------------------------------------------------------");
 
-        String fileName = "../Locker/User.txt";
+        String fileName = "./Locker/User.txt";
 
         try {
 
             //수정
-            String filePath = "../Locker/User.txt";
+            String filePath = "./Locker/User.txt";
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 

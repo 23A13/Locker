@@ -20,8 +20,11 @@ public class AdminManager {
 
 
     public void menu() {
-        if (count == 0)
+        if (count == 0){
             l.LockerFileInput();
+            u.UserFileInput(); //얘도 넣어야 할듯용
+        }
+        count++;
 
         String menu = """
                 ——MENU——\s
@@ -76,10 +79,11 @@ public class AdminManager {
                 break;
             case 5:
                 // 보관함 수정 메소드
+                modifyingLocker();
                 break;
             case 6:
                 // 종료 메소드
-                ExitWrite();
+                Exit();
                 break;
             default:
                 break;
@@ -388,6 +392,132 @@ public class AdminManager {
                 //수정
                 AddLocker();
             }
+        }
+    }
+
+    //보관함 수정
+    public void modifyingLocker(){
+        String sel;
+        int num=100;//보관함 번호 저장할 변수
+        int capacity=0;//현재 보관함 총 용량--->나중에 받아오는 걸로 고치기!!
+
+        //근데 생각해보니 용량 계산 함수 누가 만들지?
+        int flag=0; //flag==0이면 올바르지 않은 입력
+        boolean check=true;//수정가능한 보관함인지 확인-->받아오기!!!
+        boolean capacity_check=true;//사이즈 수정했을 때 용량 초과하는지 아닌지 확인--->계산하는 함수 만들기
+
+        while(flag==0){
+            try{
+                System.out.println("---------보관함 목록---------");
+                //보관함 리스트 출력
+                System.out.println("현재 보관함 총량: <"+capacity+"/50>");
+                System.out.println("수정할 보관함을 선택해주세요.\n");
+                System.out.println("*이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n--------------------------------");
+                System.out.print(">>");
+                sel=sc.nextLine();
+
+                boolean isNum=sel.matches("[+-]?\\d*(\\.\\d+)?");
+                if(isNum){//sel에서 입력받은 문자열이 숫자면 정수형으로 변환
+                    try{
+                        num= Integer.parseInt(sel);
+                    }
+                    catch (NumberFormatException ex){
+                        ex.printStackTrace();
+                    }
+                }
+                if(sel.equals("q")||sel.equals("Q")){//이전 메뉴로 돌아가기
+                    flag=1;
+                }
+                else if(isNum&&(num>=1||num<=99)){//01~99 사이의 정수를 입력한 경우
+                    if(check){//수정가능한 보관함인 경우
+                        String str;
+                        //보관함 수정
+                        try{
+                            System.out.println("수정하려는 보관함은\n-----------------------");
+                            System.out.println("보관함 번호: <"+num+">\n가(이) 맞습니까?\n");
+                            System.out.println("*맞다면 Y또는 y를 입력해주세요.");
+                            System.out.print("----------------------\n>>");
+                            str=sc.nextLine();
+                            if(str.equals("Y")||str.equals("y")){//크기 입력으로 넘어감.
+                                flag=2;//01~99 사이 정수이고, 수정가능+확인 받음
+                            }
+                        }catch(InputMismatchException e){
+                            System.out.println("올바르지 않은 입력입니다.\n");//나중에 바꾸기 그냥 예외처리 한 것.
+                        }
+                        
+                        //Y또는 y가 아닐 시 다시 while문 돌음
+                    }else{//수정 불가능한 보관함인 경우
+                        System.out.println("수정할 수 없는 보관함입니다.");
+                    }
+                }
+                else{//Q 또는 q, 01~99가 아닌 입력, 수정할 수 없는 보관함
+                    System.out.println("올바르지 않은 입력입니다.\n");
+                }
+
+            }catch(InputMismatchException e){
+                System.out.println("올바르지 않은 입력입니다.\n");
+            }
+        }
+
+        if(flag==1){//뒤로 돌아가기(Q 혹은 q)입력
+            menu();
+        }
+        
+        if(flag==2){//크기 입력 받기
+            int flag_=0;
+            String str;
+            while(flag_==0){
+                try{
+
+                    System.out.print("보관함의 크기를 입력해주세요.\n>>");
+                    str=sc.nextLine();
+                    if(str.equals("S")|| str.equals("s")||str.equals("M")||str.equals("m")||str.equals("L")||str.equals("l")){
+                        //올바른 크기 문자열 입력
+                        //****여기에 용량 계산 함수 추가***
+                        if(capacity_check){//용량 초과x
+                            flag_=1;
+                        }
+                        else{//용량초과ㅇ
+                            flag_=2;
+                        }
+                    }
+                    else{
+                        System.out.println("올바르지 않은 입력입니다.\n");
+                    }
+
+                }catch(InputMismatchException e){
+                    System.out.println("올바르지 않은 입력입니다.\n");
+                }
+            }
+            if(flag_==1){
+                //*****보관함 정보 수정 함수 여기에 넣기
+                System.out.println("보관함 정보가 수정되었습니다.");
+            }
+            if(flag_==2){//보관함 입력받는 처음부분으로 돌아가기__재귀함수 주의
+                modifyingLocker();
+            }
+        }
+        
+        ExitWrite();//종료
+    }
+
+
+    //종료
+    public void Exit(){
+        try{
+            String str;
+            System.out.print("종료하시려면 Y또는 y를 입력해주세요.\n>>");
+            str= sc.nextLine();
+            if(str.equals("Y")||str.equals("y")){
+                System.out.println("프로그램을 종료합니다.");
+                ExitWrite();//종료
+            }
+            else{//다시 menu3으로 돌아감
+                menu();
+            }
+        }
+        catch (NumberFormatException ex){
+            ex.printStackTrace();
         }
     }
 }
