@@ -243,7 +243,7 @@ public class AdminManager {
                         //수정!!
                         //저장구조 변경어케함
                         System.out.println("보관함이 삭제되었습니다.");
-                        System.exit(0);
+                        ExitWrite();
                     }
                 } catch (IllegalArgumentException e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
@@ -309,9 +309,9 @@ public class AdminManager {
                 }
 
                 //이미 존재하는 보관함 번호를 입력한 경우
-                Iterator<Locker> it = LockerManager.LockerList.iterator();
-                while (it.hasNext()) {
-                    Locker locker = it.next();
+                Iterator<Locker> iterator1 = LockerManager.LockerList.iterator();
+                while (iterator1.hasNext()) {
+                    Locker locker = iterator1.next();
                     //이미 존재하는 보관함 번호를 입력한 경우
                     if (locker.getLocknum().equals(LockerNum)) {
                         System.out.println("이미 존재하는 보관함 번호입니다.\n");
@@ -364,7 +364,7 @@ public class AdminManager {
         }
 
         if (flow == 3) {
-            System.out.println("추가하려는 보관함은\n" +
+            System.out.print("추가하려는 보관함은\n" +
                     "------------------------------------------\n" +
                     "보관함 번호: " + LockerNum + "\n" +
                     "보관함 크기: " + sizevalue + "\n" +
@@ -373,15 +373,16 @@ public class AdminManager {
                     "\n" +
                     "*맞다면 Y또는 y를 입력해주세요.\n" +
                     "------------------------------------------\n" +
-                    ">>\n");
+                    ">>\s");
             String yn = String.valueOf(sc.next());
             sc.nextLine();
 
             if (Objects.equals(yn, "Y") || Objects.equals(yn, "y")) {
-                System.out.println("보관함이 추가됐습니다.\n");
                 //수정
                 //파일처리
-                System.exit(0);
+
+                System.out.println("보관함이 추가됐습니다.\n");
+                ExitWrite();
             } else {
                 flow = 1;
                 //수정
