@@ -153,7 +153,8 @@ public class AdminManager {
                     삭제할 보관함의 번호를 입력해주세요.
 
                     * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
-                    -------------------------------------------------------------->>\s""");
+                    --------------------------------------------------------------
+                    >>\s""");
             LockerNum = String.valueOf(sc.next());
             sc.nextLine();
 
@@ -181,23 +182,25 @@ public class AdminManager {
                 while (iterator.hasNext()) {
                     Locker locker = iterator.next();
                     if (locker.getLocknum().equals(LockerNum)) {
-                        //삭제 불가인 경우 (10시간 보관 안지남)
-                        //시간 차이 구하기
-                        Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
-                        Date startTime = LockerManager.StringToDate(locker.date);
-                        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-                        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-                        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-                        int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
+                        //보관중
+                        if (locker.getUse().equals("1")) {
+                            //삭제 불가인 경우 (10시간 보관 안지남)
+                            //시간 차이 구하기
+                            Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                            Date startTime = LockerManager.StringToDate(locker.date);
+                            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+                            int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+                            int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
 
-                        //수정
-                        if (timeDiffMinutes <= 6 * 60) { //예약시간 + 6시간 초과했는지 확인
-                            System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
-                            throw new IllegalAccessException();
+                            //수정
+                            if (timeDiffMinutes <= 6 * 60) { //예약시간 + 6시간 초과했는지 확인
+                                System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
+                                throw new IllegalAccessException();
+                            }
                         }
-
                         //삭제 불가인 경우 (예약중인 보관함)
-                        if (locker.getUse().equals("2")) {
+                        else if (locker.getUse().equals("2")) {
                             System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
                             throw new IllegalAccessException();
                         }
@@ -239,7 +242,8 @@ public class AdminManager {
                     else {
                         //수정!!
                         //저장구조 변경어케함
-                        break;
+                        System.out.println("보관함이 삭제되었습니다.");
+                        System.exit(0);
                     }
                 } catch (IllegalArgumentException e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
@@ -295,12 +299,14 @@ public class AdminManager {
 
                 //잘못됩 입력 (0~99 입력 안함)
                 LockerNumber = Integer.parseInt(LockerNum);
-                if (LockerNumber < 1 || LockerNumber > 16)
+                if (LockerNumber < 1 || LockerNumber > 99) {
                     throw new IllegalArgumentException();
+                }
 
                 //형식 예외 처리 (01, 02 등으로 입력하지 않고 1, 2 등으로 입력함)
-                if (LockerNum.length() != 2)
+                if (LockerNum.length() != 2) {
                     throw new IllegalArgumentException();
+                }
 
                 //이미 존재하는 보관함 번호를 입력한 경우
                 Iterator<Locker> it = LockerManager.LockerList.iterator();
@@ -315,19 +321,16 @@ public class AdminManager {
 
                 flow = 2; // 보관함 크기 입력 프롬프트로 넘어가기
                 break;
-
             } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-            } catch (IllegalAccessException e) {
-            }
+            } catch (IllegalAccessException e) {}
         }
 
         if (flow == 2) {
             while (true) {
                 System.out.print("""
                         추가할 보관함의 크기를 입력해주세요.
-                        >>\s
-                        """);
+                        >>\s""");
 
                 sizevalue = String.valueOf(sc.next());
                 sc.nextLine();
@@ -378,6 +381,7 @@ public class AdminManager {
                 System.out.println("보관함이 추가됐습니다.\n");
                 //수정
                 //파일처리
+                System.exit(0);
             } else {
                 flow = 1;
                 //수정
