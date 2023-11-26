@@ -87,6 +87,18 @@ public class AdminManager {
 
     }
 
+    public void timediffUpdate(Locker lc){
+        Date currentTime = l.StringToDate(Main.currentTimeString);
+        Date startTime = l.StringToDate(lc.date);
+
+        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
+
+        lc.timediffMinutes = timeDiffMinutes;
+    }
+
     public void printAdminLocker() {
         System.out.println("---------------------- 보관함 목록 ----------------------");
         int timeDiff = 0;
@@ -102,23 +114,15 @@ public class AdminManager {
                 size = "L";
 
             if (!lc.use.equals("0")) {
-                Date currentTime = l.StringToDate(Main.currentTimeString);
-                Date startTime = l.StringToDate(lc.date);
+                timediffUpdate(lc);
 
-                long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-                int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-                int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-                timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
-
-                lc.timediff = timeDiff;
-
-                if (timeDiff > 10) {
+                if (lc.timediffMinutes/60 > 10) {
                     iscanforce = "강제수거 가능";
                     lc.iscanFp = true;
                 }
-                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " + Math.abs(timeDiffHours) + "시간"
-                        + Integer.toString(Math.abs(timeDiffMinutes) % 60) + "분째 사용중 / " + iscanforce);
-            } else {
+                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " +Math.abs(lc.timediffMinutes/60)+ "시간"
+                        +Integer.toString(Math.abs(lc.timediffMinutes)%60)+"분째 사용중 / "+ iscanforce);
+            } else{
                 System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
 
             }
