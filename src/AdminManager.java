@@ -616,6 +616,8 @@ public class AdminManager {
         String LockerNum = null;    //스트링
         //보관함 비밀번호
         String LockerPwd = null;
+        //삭제할 보관함
+        Locker lc = null;
 
         //수정
         int flow = 1;
@@ -660,7 +662,6 @@ public class AdminManager {
                             //삭제 불가인 경우 (10시간 보관 안지남)
                             //시간 차이 구하기
                             timediffUpdate(locker);
-
                             //수정
                             if (locker.timediffMinutes <= 10 * 60) { //기본 보관 시간 + 6시간 초과했는지 확인
                                 System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
@@ -673,6 +674,7 @@ public class AdminManager {
                             throw new IllegalAccessException();
                         }
                         flow = 2;   //삭제 가능이므로 flow값 2
+                        lc = locker;
                         break;
                     }
                 }
@@ -710,6 +712,7 @@ public class AdminManager {
                     else {
                         //수정!!
                         //저장구조 변경어케함
+                        LockerManager.LockerList.remove(lc);
                         System.out.println("보관함이 삭제되었습니다.");
                         ExitWrite();
                     }
