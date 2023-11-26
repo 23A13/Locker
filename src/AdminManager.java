@@ -20,6 +20,30 @@ public class AdminManager {
     UserManager u = new UserManager();
     LockerManager l = new LockerManager();
 
+    //보관함 용량 계산(근데 사이즈별 용량 S:2 M:3 L:4 맞나영이?---->(지은)이거 바꾸면 용량 관련 다 바꿔야함.
+    int Capacity(String locksize){//보관함 용량을 더했을 때
+        int capacity=0;
+        for(int i=0;i<l.LockerList.size();i++){
+            if(l.LockerList.get(i).locksize.equals("0")){//사이즈가 S
+                capacity=capacity+2;
+            }else if(l.LockerList.get(i).locksize.equals("1")){//사이즈 M
+                capacity=capacity+3;
+            }else{//사이즈 L
+                capacity=capacity+4;
+            }
+        }
+        if(locksize.equals("s")||locksize.equals("S")){
+            capacity=capacity+2;
+        }else if(locksize.equals("m")||locksize.equals("M")){
+            capacity=capacity+3;
+        }else if(locksize.equals("l")||locksize.equals("L")){
+            capacity=capacity+4;
+        }else{//그 외의 입력 무시(계산 안함)--->   기존의 보관함 총 용량만 계산!!!!
+
+        }
+        return capacity;
+    }
+
 
     public void menu() {
         if (count == 0){
@@ -868,19 +892,24 @@ public class AdminManager {
 
     //보관함 수정
     public void modifyingLocker(){
-        String sel;
+        String sel="";
         int num=100;//보관함 번호 저장할 변수
-        int capacity=0;//현재 보관함 총 용량--->나중에 받아오는 걸로 고치기!!
+        int capacity=Capacity("");//현재 보관함 총 용량--->나중에 받아오는 걸로 고치기!!-->고치긴했는데 확인필요
 
-        //근데 생각해보니 용량 계산 함수 누가 만들지?
         int flag=0; //flag==0이면 올바르지 않은 입력
-        boolean check=true;//수정가능한 보관함인지 확인-->받아오기!!!
-        boolean capacity_check=true;//사이즈 수정했을 때 용량 초과하는지 아닌지 확인--->계산하는 함수 만들기
+        
+        
+        boolean check=true;//수정가능한 보관함인지 확인-->받아오기+디폴트 false로 바꾸기!!!
+        boolean exist=false;//존재여부 확인
+        
+        //boolean capacity_check=true;//사이즈 수정했을 때 용량 초과하는지 아닌지 확인--->계산하는 함수 만들기--->필요없는듯??? @삭제예정
 
         while(flag==0){
             try{
                 System.out.println("---------보관함 목록---------");
-                //보관함 리스트 출력
+
+                //보관함 리스트 출력 수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 System.out.println("현재 보관함 총량: <"+capacity+"/50>");
                 System.out.println("수정할 보관함을 선택해주세요.\n");
                 System.out.println("*이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n--------------------------------");
@@ -888,24 +917,39 @@ public class AdminManager {
                 sel=sc.nextLine();
 
                 boolean isNum=sel.matches("[+-]?\\d*(\\.\\d+)?");
+                boolean numscope=false;//01~99사이의 정수인지 판단
+                int strlen=0;
                 if(isNum){//sel에서 입력받은 문자열이 숫자면 정수형으로 변환
                     try{
+                        strlen=sel.length();
                         num= Integer.parseInt(sel);
                     }
                     catch (NumberFormatException ex){
                         ex.printStackTrace();
                     }
                 }
+                if(num>=1&&num<=99){
+                    numscope=true;
+                }
                 if(sel.equals("q")||sel.equals("Q")){//이전 메뉴로 돌아가기
                     flag=1;
                 }
-                else if(isNum&&(num>=1||num<=99)){//01~99 사이의 정수를 입력한 경우
-                    if(check){//수정가능한 보관함인 경우
+                else if((strlen==2)&&isNum&&numscope){//01~99 사이의 정수를 입력한 경우
+                    //존재하는 보관함 번호인지 확인
+                    for(int i=0;i<l.LockerList.size();i++) {//입력받은 보관함 번호로 탐색
+                        if (l.LockerList.get(i).locknum.equals(sel)){
+                            exist=true;//존재하는 보관함 번호
+                        }
+                    }
+
+                    //여기에서 강제수거가능 여부저장@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+                    if(check&&exist){//수정가능한 보관함인 경우(보관함 번호 존재+강제수거가능)
                         String str;
                         //보관함 수정
                         try{
                             System.out.println("수정하려는 보관함은\n-----------------------");
-                            System.out.println("보관함 번호: <"+num+">\n가(이) 맞습니까?\n");
+                            System.out.println("보관함 번호: <"+sel+">\n가(이) 맞습니까?\n");
                             System.out.println("*맞다면 Y또는 y를 입력해주세요.");
                             System.out.print("----------------------\n>>");
                             str=sc.nextLine();
@@ -915,8 +959,10 @@ public class AdminManager {
                         }catch(InputMismatchException e){
                             System.out.println("올바르지 않은 입력입니다.\n");//나중에 바꾸기 그냥 예외처리 한 것.
                         }
-                        
+
                         //Y또는 y가 아닐 시 다시 while문 돌음
+                    }else if(exist==false){
+                        System.out.println("존재하지 않는 보관함입니다.");//------->기획서 수정 필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }else{//수정 불가능한 보관함인 경우
                         System.out.println("수정할 수 없는 보관함입니다.");
                     }
@@ -936,7 +982,9 @@ public class AdminManager {
         
         if(flag==2){//크기 입력 받기
             int flag_=0;
-            String str;
+            int size=0;
+            String str="";
+            int cap=0;
             while(flag_==0){
                 try{
 
@@ -944,8 +992,22 @@ public class AdminManager {
                     str=sc.nextLine();
                     if(str.equals("S")|| str.equals("s")||str.equals("M")||str.equals("m")||str.equals("L")||str.equals("l")){
                         //올바른 크기 문자열 입력
-                        //****여기에 용량 계산 함수 추가***
-                        if(capacity_check){//용량 초과x
+
+                        //수정했을 때 용량 계산--->용량 기준 바뀌면 바꾸기!!!!!!!!!!!
+
+                        for(int i=0;i<l.LockerList.size();i++){//수정전 용량 확인
+                            if(l.LockerList.get(i).locknum.equals(sel)){
+                                if(l.LockerList.get(i).locksize.equals("0")){
+                                    size=2;
+                                }else if(l.LockerList.get(i).locksize.equals("1")){
+                                    size=3;
+                                }else{
+                                    size=4;
+                                }
+                            }
+                        }
+                        cap=Capacity(str)-size;//Capacity{기존용량(수정전 보관함 용량 포함) + 수정후 보관함 용량} - 수정전 보관함 용량
+                        if(cap<=50){//용량 초과x
                             flag_=1;
                         }
                         else{//용량초과ㅇ
@@ -960,11 +1022,34 @@ public class AdminManager {
                     System.out.println("올바르지 않은 입력입니다.\n");
                 }
             }
+            int index=-1;
             if(flag_==1){
-                //*****보관함 정보 수정 함수 여기에 넣기
+                //*****보관함 정보 수정 함수 여기에 넣기-->수정완료,확인 필요
+                for(int i=0;i<l.LockerList.size();i++){//입력받은 보관함 번호로 탐색
+                    if(l.LockerList.get(i).locknum.equals(sel)){//수정하려는 보관함 번호면
+
+                        //용량 기준 바뀌면 toString(size-머시기) 바꿔야함!!!!!!!!!
+                        index=i;
+
+                    }
+                }
+
+                String size_="";
+                if(str.equals("S")||str.equals("s")){
+                    size_="0";
+                }else if(str.equals("M")||str.equals("m")){
+                    size_="1";
+                }else{
+                    size_="2";
+                }
+                //보관함 크기 수정
+                l.LockerList.set(index,new Locker(l.LockerList.get(index).locknum,size_,l.LockerList.get(index).use
+                        ,l.LockerList.get(index).date,l.LockerList.get(index).confirmbook
+                        ,l.LockerList.get(index).closeddatestart,l.LockerList.get(index).closeddatefinish));
                 System.out.println("보관함 정보가 수정되었습니다.");
             }
             if(flag_==2){//보관함 입력받는 처음부분으로 돌아가기__재귀함수 주의
+                System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
                 modifyingLocker();
             }
         }
