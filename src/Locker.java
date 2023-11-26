@@ -8,14 +8,21 @@ public class Locker {
     String locknum; //보관함 번호
     String locksize; //보관함 크기(0/1/2-S/M/L)
     String use; //사용여부(0/1/2/3/4-미사용/사용중/예약중/임시폐쇄예정/임시폐쇄중)
+
+     //
     String date; //사용자보관/예약시작 날짜시각
     String confirmbook; //예약확정 여부(0/1-미확/확정)
-    //2차때 추가된 변수들
+
+
+    //2차때 추가된 변수들.
     String closeddatestart="-";//폐쇄시작 시각
     String closeddatefinish="-";//폐쇄종료 시각
     //
+
+
+    //
     boolean iscanFp = false;
-    int timediff = 0;
+    long timediffMinutes = 0;
 
 
 
