@@ -242,11 +242,6 @@ public class AdminManager {
     }
 
     public void temporary_closure(){
-        /*
-        해야하는거
-        3. locker에 임시 폐쇄 시작/끝나는 시간 정보 저장(지은이)
-        4. 보관함 print 함수 확인(윤빈이)
-         */
 
         //임시폐쇄 함수에서 필요한 프롬포트들
         String temporary_closure_prompt1 = """
@@ -326,7 +321,6 @@ public class AdminManager {
         if(flow == 2){
             while(true){
 
-                //(상의)보관함 프린트 오류 확인 해야함
                 printAdminLocker();
                 System.out.print(temporary_closure_select_prompt);
                 System.out.print(">>");
@@ -436,7 +430,6 @@ public class AdminManager {
                 for(int i=0; i<l.LockerList.size(); i++){
                     if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
                         l.LockerList.get(i).use = "3";
-                        //(상의)Locker 객체 만들어지면 임시폐쇄 시작, 종료 저장
                         l.LockerList.get(i).closeddatestart = String.valueOf(closurestartdate);
                         l.LockerList.get(i).closeddatefinish= String.valueOf(closureenddate);
                     }

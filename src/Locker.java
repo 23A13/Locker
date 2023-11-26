@@ -16,9 +16,6 @@ public class Locker {
     String closeddatefinish="-";//폐쇄종료 시각
     //
 
-
-    //String start_closure; //임시폐쇄 시작 날짜/시간
-    //String end_closure; //임시폐쇄 종료 날짜/시간
     boolean iscanFp = false;
     long timediffMinutes = 0;
 
