@@ -659,15 +659,10 @@ public class AdminManager {
                         if (locker.getUse().equals("1")) {
                             //삭제 불가인 경우 (10시간 보관 안지남)
                             //시간 차이 구하기
-                            Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
-                            Date startTime = LockerManager.StringToDate(locker.date);
-                            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-                            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-                            int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-                            int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
+                            timediffUpdate(locker);
 
                             //수정
-                            if (timeDiffMinutes <= 6 * 60) { //예약시간 + 6시간 초과했는지 확인
+                            if (locker.timediffMinutes <= 10 * 60) { //기본 보관 시간 + 6시간 초과했는지 확인
                                 System.out.println("삭제할 수 없는 보관함 번호입니다.\n");
                                 throw new IllegalAccessException();
                             }
