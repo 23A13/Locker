@@ -271,7 +271,7 @@ public class AdminManager {
                     lc.iscanFp = true;
                 }
                 System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " +Math.abs(lc.timediffMinutes/60)+ "시간"
-                        +Integer.toString(Math.abs(lc.timediffMinutes)%60)+"분째 사용중 / "+ iscanforce);
+                        +Integer.toString((int)Math.abs(lc.timediffMinutes)%60)+"분째 사용중 / "+ iscanforce);
             } else{
                 System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
 

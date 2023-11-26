@@ -11,7 +11,7 @@ public class Locker {
     String date; //날짜시각
     String confirmbook; //예약확정 여부(0/1-미확/확정)
     boolean iscanFp = false;
-    int timediffMinutes = 0;
+    long timediffMinutes = 0;
 
     //constructor
     public Locker() {
