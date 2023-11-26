@@ -13,7 +13,7 @@ public class Locker {
     String start_closure; //임시폐쇄 시작 날짜/시간
     String end_closure; //임시폐쇄 종료 날짜/시간
     boolean iscanFp = false;
-    int timediffMinutes = 0;
+    long timediffMinutes = 0;
 
     //constructor
     public Locker() {
