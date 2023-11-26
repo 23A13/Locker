@@ -19,117 +19,118 @@ public class LockerManager {
     //로그인한 사용자 아이디
     String loguser;
     User memUser; //유저 아이디로 해당되는 user 찾기
-    static int count=0;
+    static int count = 0;
+
     //Constructor
-    public LockerManager(){
+    public LockerManager() {
 
     }
-    public LockerManager(String loguser)
-    {
+
+    public LockerManager(String loguser) {
         this.loguser = loguser;
-        memUser=u.memMap.get(loguser);
+        memUser = u.memMap.get(loguser);
     }
 
 
     //안내문구들
     static String tariff = """
-                ——————요금표——————————————————————————\s
-                기본 4시간\s
-                S : 2000원 / M : 3000원 / L : 4000원\s
-                시간당 추가요금\s
-                회원 - S : 500원 / M : 800원 / L : 1000원\s
-                비회원 - S : 1000원 / M : 1600원 / L : 2000원\s
+            ——————요금표——————————————————————————\s
+            기본 4시간\s
+            S : 2000원 / M : 3000원 / L : 4000원\s
+            시간당 추가요금\s
+            회원 - S : 500원 / M : 800원 / L : 1000원\s
+            비회원 - S : 1000원 / M : 1600원 / L : 2000원\s
+                        
+            —————————————————————————————————————\s
                             
-                —————————————————————————————————————\s
-                                
-                ——물품보관함 사이즈 안내————————\s
-                S : 01~08번 보관함 (총 8개)\s
-                M : 09~12번 보관함 (총 4개)\s
-                L : 13~16번 보관함 (총 4개)\s
-                ————————————————————————————\s
-                
-                ———————————예약 서비스 이용 시 주의사항————————————
-                * 예약 시 4시간 선결제 후 보관함에 도착하여 물품을 보관해주세요.\s
-                * 예약 후 2시간 내로 물품 보관이 완료되지 않을 경우, 예약이 자동 취소됩니다. (환불 불가)
-                * 기본 4시간 초과 시 수거하는 시점까지 자동으로 시간 당 추가 요금이 부과됩니다. (추가요금은 요금표 참고)
-                * 추가 요금은 보관함 수거 시 부과됩니다.\s
-                * 결제 수단은 카드만 사용 가능합니다.\s
-                * 이용 중인 보관함은 예약이 불가합니다.\s
-                * 예약은 보관함 한 개만 가능합니다.\s
-                * 이미 보관함을 이용 중이라면 예약이 불가합니다.\s
-                * 이전 이용에서 회원이 기본 4시간 초과 후 수거를 했다면, 초과된 시간의 2배 동안 예약이 불가합니다.\s
-                ————————————————————————————————————\s
-                                
-                이용하실 보관함의 번호를 입력하세요.\s
-                                
-                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\s
-                ————————————————————————————————————————\s
-                                
-                                
-                """;
+            ——물품보관함 사이즈 안내————————\s
+            S : 01~08번 보관함 (총 8개)\s
+            M : 09~12번 보관함 (총 4개)\s
+            L : 13~16번 보관함 (총 4개)\s
+            ————————————————————————————\s
+                            
+            ———————————예약 서비스 이용 시 주의사항————————————
+            * 예약 시 4시간 선결제 후 보관함에 도착하여 물품을 보관해주세요.\s
+            * 예약 후 2시간 내로 물품 보관이 완료되지 않을 경우, 예약이 자동 취소됩니다. (환불 불가)
+            * 기본 4시간 초과 시 수거하는 시점까지 자동으로 시간 당 추가 요금이 부과됩니다. (추가요금은 요금표 참고)
+            * 추가 요금은 보관함 수거 시 부과됩니다.\s
+            * 결제 수단은 카드만 사용 가능합니다.\s
+            * 이용 중인 보관함은 예약이 불가합니다.\s
+            * 예약은 보관함 한 개만 가능합니다.\s
+            * 이미 보관함을 이용 중이라면 예약이 불가합니다.\s
+            * 이전 이용에서 회원이 기본 4시간 초과 후 수거를 했다면, 초과된 시간의 2배 동안 예약이 불가합니다.\s
+            ————————————————————————————————————\s
+                            
+            이용하실 보관함의 번호를 입력하세요.\s
+                            
+            * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\s
+            ————————————————————————————————————————\s
+                            
+                            
+            """;
 
     //pwd_prompt1
     String pwd_prompt1 = "사용하실 보관함 비밀번호(PIN) 네자리를 입력하세요.\n";
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
-    public void LockerFileInput(){
-        String filename="../Locker/Locker.txt";
-        try(Scanner scan=new Scanner(new File(filename))){
-            while(scan.hasNextLine()) {
-                String str=scan.nextLine();
-                String[] temp=str.split(" ");
-                LockerList.add(new Locker(temp[0].trim(),temp[1].trim(),temp[2].trim(),temp[3].trim(),temp[4].trim()));//최초로 저장구조에 locker정보 저장
+    public void LockerFileInput() {
+        String filename = "../Locker/Locker.txt";
+        try (Scanner scan = new Scanner(new File(filename))) {
+            while (scan.hasNextLine()) {
+                String str = scan.nextLine();
+                String[] temp = str.split(" ");
+                LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//최초로 저장구조에 locker정보 저장
             }
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("파일 입력이 잘못되었습니다.");
         }
     }
 
     //프로그램 종료 시 locker 데이터 txt파일에 저장하는 함수
-    public void LockerFileWrite(){
-        try{
+    public void LockerFileWrite() {
+        try {
             File file = new File("../Locker/Locker.txt");
-            if(!file.exists()){
+            if (!file.exists()) {
                 System.out.println("파일경로를 다시 확인하세요.");
-            }else{
-                FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for(int i=0;i< LockerList.size();i++){
-                    writer.write(LockerList.get(i).locknum+" "+LockerList.get(i).locksize+" "+LockerList.get(i).use+" "+LockerList.get(i).date
-                            +" "+LockerList.get(i).confirmbook+" "
-                            +LockerList.get(i).closeddatestart+" "+LockerList.get(i).closeddatefinish+"\n");
+            } else {
+                FileWriter writer = new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
+                for (int i = 0; i < LockerList.size(); i++) {
+                    writer.write(LockerList.get(i).locknum + " " + LockerList.get(i).locksize + " " + LockerList.get(i).use + " " + LockerList.get(i).date
+                                 + " " + LockerList.get(i).confirmbook + " "
+                                 + LockerList.get(i).closeddatestart + " " + LockerList.get(i).closeddatefinish + "\n");
                     writer.flush();
                 }
                 writer.close();
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     //날짜시간 입력 시 무효 예약 내역 수정용
-    public void dateLockerFileWrite(ArrayList<Locker> List){
-        try{
+    public void dateLockerFileWrite(ArrayList<Locker> List) {
+        try {
             File file = new File("../Locker/Locker.txt");
-            if(!file.exists()){
+            if (!file.exists()) {
                 System.out.println("파일경로를 다시 확인하세요.");
-            }else{
-                FileWriter writer =new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
-                for(int i=0;i< List.size();i++){
-                    writer.write(List.get(i).locknum+" "+List.get(i).locksize+" "+List.get(i).use+" "+List.get(i).date+" "+List.get(i).confirmbook+"\n");
+            } else {
+                FileWriter writer = new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
+                for (int i = 0; i < List.size(); i++) {
+                    writer.write(List.get(i).locknum + " " + List.get(i).locksize + " " + List.get(i).use + " " + List.get(i).date + " " + List.get(i).confirmbook + "\n");
                     writer.flush();
                 }
                 writer.close();
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     //회원 메뉴
-    public void Menu_Mem(){
+    public void Menu_Mem() {
 
         //LockerFileInput();
-        if(count==0)LockerFileInput();
+        if (count == 0) LockerFileInput();
 
         String menu = """
                 --MENU--\s
@@ -144,21 +145,21 @@ public class LockerManager {
 
         System.out.print(menu);
 
-        int number=0;
+        int number = 0;
 
-        while(true){
+        while (true) {
 
-            try{
+            try {
                 System.out.print(">>");
                 number = sc.nextInt();
                 sc.nextLine();
 
-                if(number<1||number>6) throw new InputMismatchException();
+                if (number < 1 || number > 6) throw new InputMismatchException();
 
                 //올바른 입력시
                 break;
 
-            }catch(InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                 sc.nextLine();
             }
@@ -167,7 +168,7 @@ public class LockerManager {
 
         System.out.println();
 
-        switch(number){
+        switch (number) {
             case 1:
                 Storage(true);
                 break;
@@ -195,7 +196,7 @@ public class LockerManager {
 
     //비회원메뉴
     public void Menu_Nonmem() {
-        if(count==0)LockerFileInput();
+        if (count == 0) LockerFileInput();
         //LockerFileInput();
 
         String menu = """
@@ -209,27 +210,26 @@ public class LockerManager {
 
         System.out.print(menu);
 
-        int number=0;
+        int number = 0;
 
-        while(true){
+        while (true) {
 
-            try{
+            try {
                 System.out.print(">>");
                 number = sc.nextInt();
                 sc.nextLine();
 
-                if(number<1||number>4) throw new InputMismatchException();
+                if (number < 1 || number > 4) throw new InputMismatchException();
 
                 //올바른 입력시
                 break;
 
-            }catch(InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                 sc.nextLine();
             }
 
         }
-
 
 
         switch (number) {
@@ -263,7 +263,7 @@ public class LockerManager {
                 """;
 
         //보관함 번호 입력받기
-        int LockerNumber =  0;
+        int LockerNumber = 0;
         while (true) {
             //notice 2 출력
             System.out.println(notice2);
@@ -276,9 +276,9 @@ public class LockerManager {
                 sc.nextLine();
 
                 //Q,q 처리
-                if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
+                if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     count++;
-                    if(isLogin) Menu_Mem();
+                    if (isLogin) Menu_Mem();
                     else Menu_Nonmem();
                     //ExitWrite();
                     return;
@@ -294,8 +294,8 @@ public class LockerManager {
                     throw new IllegalArgumentException();
 
                 //사용중이지 않은 보관함을 선택했을 때 처리
-                for(Locker l : LockerList){
-                    if(Integer.parseInt(l.locknum)==LockerNumber) {
+                for (Locker l : LockerList) {
+                    if (Integer.parseInt(l.locknum) == LockerNumber) {
                         if (Integer.parseInt(l.use) == 0)
                             throw new IllegalAccessException();
                     }
@@ -319,9 +319,9 @@ public class LockerManager {
 
         //해당 번호(LockerNum)의 보관함 정보 찾기
         //LockerList에서 찾기
-        int target=0;
-        for (int i=0; i<LockerList.size(); i++){
-            if(LockerNumber == Integer.parseInt(LockerList.get(i).locknum) ){ //보관함 번호가 맞으면
+        int target = 0;
+        for (int i = 0; i < LockerList.size(); i++) {
+            if (LockerNumber == Integer.parseInt(LockerList.get(i).locknum)) { //보관함 번호가 맞으면
                 target = i;
                 //test확인용출력-나중에삭제
                 //System.out.println("LockerList에서 찾기 성공 "+LockerList.get(target).locknum);
@@ -329,11 +329,11 @@ public class LockerManager {
         }
 
         //mem과 nonmem에서 찾기 (회원<User> 정보 저장구조)
-        String targetKey=null;
+        String targetKey = null;
         boolean isMemLocker = false;
 
-        for(String id : u.memMap.keySet()) {
-            if(!u.memMap.get(id).locknum.equals("-")) {
+        for (String id : u.memMap.keySet()) {
+            if (!u.memMap.get(id).locknum.equals("-")) {
                 if (LockerNumber == Integer.parseInt(u.memMap.get(id).locknum)) {
                     targetKey = id;
 
@@ -344,9 +344,9 @@ public class LockerManager {
                 }
             }
         }
-        if(targetKey!=null) {
+        if (targetKey != null) {
             isMemLocker = true;
-        }else{
+        } else {
             isMemLocker = false;
             for (String lnum : u.nonmemMap.keySet()) {
                 if (Integer.parseInt(u.nonmemMap.get(lnum).locknum) == LockerNumber) {
@@ -366,11 +366,10 @@ public class LockerManager {
         boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 0);
         if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
             count++;
-            if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
+            if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
             //System.exit(0);
         }
-
 
 
         //보관함 비밀번호가 올바른 경우
@@ -380,16 +379,16 @@ public class LockerManager {
         Date startTime = StringToDate(LockerList.get(target).date);
         long timeDiffMillis = currentTime.getTime() - startTime.getTime();
         int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-        int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-        int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+        int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
 
         //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
-        if (timeDiffMinutes > 4*60 ){
-            while(true){
-                String timeShowPrompt = "\n기본 이용 시간에서 "+ Integer.toString(timeDiffHours-4)+"시간이 초과됐습니다.\n";
-                if(isMemLocker){ //"회원"이 사용했던 보관함인경우
-                    timeShowPrompt += "수거 완료시, "+ u.memMap.get(targetKey).memberID +"님은 "+ Integer.toString((timeDiffHours-4)*2)+"시간 동안 예약이 불가합니다.\n";
-                }else{
+        if (timeDiffMinutes > 4 * 60) {
+            while (true) {
+                String timeShowPrompt = "\n기본 이용 시간에서 " + Integer.toString(timeDiffHours - 4) + "시간이 초과됐습니다.\n";
+                if (isMemLocker) { //"회원"이 사용했던 보관함인경우
+                    timeShowPrompt += "수거 완료시, " + u.memMap.get(targetKey).memberID + "님은 " + Integer.toString((timeDiffHours - 4) * 2) + "시간 동안 예약이 불가합니다.\n";
+                } else {
                     timeShowPrompt += "비회원용 추가 금액이 적용됩니다.\n";
                 }
                 System.out.println(timeShowPrompt);
@@ -397,21 +396,20 @@ public class LockerManager {
                 Print_AddPayPrompt(timeDiffHours, target, isMemLocker);
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
-                try{
+                try {
                     // Y or y 말고 다른 것을 입력한 경우
-                    if(!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
+                    if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y")))
                         throw new IllegalArgumentException();
                     break;
-                }catch  (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                 }
             }
             System.out.println("결제가 완료되었습니다.");
 
 
-
-            if(isMemLocker) { //"회원"이 사용했던 보관함인경우 - user객체에 cannotUntil 날짜 저장
-                Date limitDate = new Date (currentTime.getTime()+2*(timeDiffHours-4)*3600000);
+            if (isMemLocker) { //"회원"이 사용했던 보관함인경우 - user객체에 cannotUntil 날짜 저장
+                Date limitDate = new Date(currentTime.getTime() + 2 * (timeDiffHours - 4) * 3600000);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
                 u.memMap.get(targetKey).cannotUntil = sdf.format(limitDate);
             }
@@ -419,25 +417,23 @@ public class LockerManager {
 
 
         //수거완료
-        String pwd_prompt3 = "물품 수거가 가능합니다. \n"+
-                "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 보관함 비밀번호(PIN) 4자리를 입력해주세요.\n"+
-                "수거완료 처리가 되지 않은 이용 건은 자동 초과 요금이 부과됩니다. \n";
+        String pwd_prompt3 = "물품 수거가 가능합니다. \n" +
+                             "\n* 보관하신 물품 수거 후에 수거완료를 위해 반드시 보관함 비밀번호(PIN) 4자리를 입력해주세요.\n" +
+                             "수거완료 처리가 되지 않은 이용 건은 자동 초과 요금이 부과됩니다. \n";
 
         pwdCheck(pwd_prompt3, isMemLocker, targetKey, 0);
-
 
 
         //수거완료한 보관함 정보 삭제 & File Write
         LockerList.get(target).use = "0";
         LockerList.get(target).date = "-";
         LockerList.get(target).confirmbook = "0";
-        if(isMemLocker){
+        if (isMemLocker) {
             u.memMap.get(targetKey).locknum = "-";
             u.memMap.get(targetKey).lockPW = "-";
-        }else{
+        } else {
             u.nonmemMap.remove(targetKey);
         }
-
 
 
         System.out.println("물품 수거가 완료되었습니다.");
@@ -450,11 +446,11 @@ public class LockerManager {
     }
 
     //예약 메소드
-    public void Booking(){
+    public void Booking() {
 
 
         //기존 예약 내역 확인
-        if(!u.memMap.get(loguser).locknum.equals("-")){
+        if (!u.memMap.get(loguser).locknum.equals("-")) {
             System.out.println("이미 예약 내역이 존재합니다.\n\n");
             count++;
             Menu_Mem();
@@ -462,12 +458,12 @@ public class LockerManager {
         }
 
         //이전 이용 기본 4시간 이산 초과했을 경우 확인
-        if(!(u.memMap.get(loguser).cannotUntil).equals("-")){
+        if (!(u.memMap.get(loguser).cannotUntil).equals("-")) {
             int cannotUntil = Integer.parseInt(u.memMap.get(loguser).cannotUntil);
             String cantUntil = u.memMap.get(loguser).cannotUntil;
             int currentTime = Integer.parseInt(Main.currentTimeString);
-            if( cannotUntil >= currentTime){
-                System.out.println("지난 예약 건 초과 보관으로 "+u.memMap.get(loguser).cannotUntil+"까지 보관함 이용이 불가합니다.\n\n");
+            if (cannotUntil >= currentTime) {
+                System.out.println("지난 예약 건 초과 보관으로 " + u.memMap.get(loguser).cannotUntil + "까지 보관함 이용이 불가합니다.\n\n");
                 Menu_Mem();
                 return;
             }
@@ -478,22 +474,22 @@ public class LockerManager {
         Locker.print();
 
         //입력
-        int LockerNumber=0;
-        String LockerNum=" ";
+        int LockerNumber = 0;
+        String LockerNum = " ";
 
         //흐름에 따라 flow 값 변경. 보관함 선택 (1) -> 사이즈 별 안내, 결제 확인 (2) -> 결제 (3)
         int flow = 1;
         //보관함 번호 입력
-        while(true){
+        while (true) {
             System.out.println(tariff);
 
             //입력
             System.out.print(">>");
             LockerNum = String.valueOf(sc.next());
 
-            try{
+            try {
                 //Q,q 처리
-                if(Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")){
+                if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     count++;
                     Menu_Mem();
                     break;
@@ -505,13 +501,13 @@ public class LockerManager {
 
                 //범위 예외 처리(01~16)
                 LockerNumber = parseInt(LockerNum);
-                if (LockerNumber<1 || LockerNumber > 16) throw new IllegalArgumentException();
+                if (LockerNumber < 1 || LockerNumber > 16) throw new IllegalArgumentException();
 
                 //예약 확인 처리
-                boolean bookingcheck=false;
-                for(int i=0; i<LockerList.size(); i++){
-                    if(parseInt(LockerList.get(i).locknum) == LockerNumber){
-                        if(parseInt(LockerList.get(i).use) != 0){
+                boolean bookingcheck = false;
+                for (int i = 0; i < LockerList.size(); i++) {
+                    if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
+                        if (parseInt(LockerList.get(i).use) != 0) {
                             throw new IllegalAccessException();
                         }
                     }
@@ -521,17 +517,17 @@ public class LockerManager {
                 flow = 2;
                 break;
 
-            }catch(IllegalArgumentException e){ //나머지 입력 예외 처리
+            } catch (IllegalArgumentException e) { //나머지 입력 예외 처리
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
 
-            }catch(IllegalAccessException e){
+            } catch (IllegalAccessException e) {
                 System.out.println("이용 중인 보관함입니다.\n");
             }
 
         }
         //비밀번호 입력
-        String LockerPwd =" ";
-        if(flow==2){
+        String LockerPwd = " ";
+        if (flow == 2) {
             while (true) {
                 //비밀번호 입력하시오 프롬프트 출력
                 System.out.println(pwd_prompt1);
@@ -562,20 +558,20 @@ public class LockerManager {
 
         //결제 확인 입력
         String payment = "";
-        if(flow==3){
-            while(true){
+        if (flow == 3) {
+            while (true) {
                 System.out.print(StoragePaymentPrompt(LockerNumber));
                 payment = String.valueOf(sc.next());
                 sc.nextLine();
 
-                try{
-                    if(!(payment.equals("Y")||payment.equals("N")||payment.equals("y")||payment.equals("n")))
+                try {
+                    if (!(payment.equals("Y") || payment.equals("N") || payment.equals("y") || payment.equals("n")))
                         throw new IllegalArgumentException();
 
                     //아무 문제 없다면 결제 알림 창으로 이동
                     flow = 4;
                     break;
-                }catch(Exception e){
+                } catch (Exception e) {
                     System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                 }
 
@@ -583,8 +579,8 @@ public class LockerManager {
 
         }
         //마지막
-        if(flow==4){
-            if(payment.equals("Y")||payment.equals("y")){
+        if (flow == 4) {
+            if (payment.equals("Y") || payment.equals("y")) {
                 System.out.println("\n보관함 예약이 완료되었습니다. ");
                 System.out.println("* 2시간 내로 물품 보관(예약 확정)을 완료해주시기 바랍니다.");
                 System.out.println("(물품 보관이 완료 되지 않을 경우 예약 자동 취소 및 환불 불가)");
@@ -594,12 +590,12 @@ public class LockerManager {
 
                 //Locker 사용여부 예약중(2), 보관함 크기 저장
                 String lockersize;
-                if(LockerNumber <= 8) lockersize="0";
-                else if (LockerNumber <= 12) lockersize="1";
-                else lockersize="2";
+                if (LockerNumber <= 8) lockersize = "0";
+                else if (LockerNumber <= 12) lockersize = "1";
+                else lockersize = "2";
 
-                for(int i=0; i<LockerList.size(); i++){
-                    if(LockerList.get(i).locknum.equals(LockerNum)){
+                for (int i = 0; i < LockerList.size(); i++) {
+                    if (LockerList.get(i).locknum.equals(LockerNum)) {
                         LockerList.get(i).use = "2";
                         LockerList.get(i).locksize = lockersize;
                         LockerList.get(i).date = Main.currentTimeString;
@@ -610,8 +606,7 @@ public class LockerManager {
                 u.memMap.get(loguser).locknum = LockerNum;
                 u.memMap.get(loguser).lockPW = LockerPwd;
                 ExitWrite();
-            }
-            else{
+            } else {
                 count++;
                 Menu_Mem();
                 //System.exit(0);
@@ -627,25 +622,24 @@ public class LockerManager {
         storage_payment_prompt 를 출력하는 메서드
          */
         String strLockerNum = String.valueOf(lockerNum);
-        if(lockerNum < 10) {
+        if (lockerNum < 10) {
             strLockerNum = "0" + strLockerNum;
         }
         //보관함 크기에 따른 금액 차등
         int payment = 0;
-        if(lockerNum <= 8)
+        if (lockerNum <= 8)
             payment = 2000;
         else if (lockerNum <= 12) {
             payment = 3000;
-        }
-        else
+        } else
             payment = 4000;
 
         String str = "<" + strLockerNum + ">번 보관함 선택하셨습니다. \n" +
-                "기본(4시간) 금액 <" + payment + ">원 결제하시겠습니까? (y/n) \n" +
-                "\n" +
-                "* 초과 시간에 따른 요금은 수거 시 추가결제됩니다.\n" +
-                "—————————————————————————— \n" +
-                ">>";
+                     "기본(4시간) 금액 <" + payment + ">원 결제하시겠습니까? (y/n) \n" +
+                     "\n" +
+                     "* 초과 시간에 따른 요금은 수거 시 추가결제됩니다.\n" +
+                     "—————————————————————————— \n" +
+                     ">>";
 
         return str;
     }
@@ -678,7 +672,7 @@ public class LockerManager {
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //수정
                     //회원 유무에 따라 돌아갈 메뉴 결정
-                    if(isLogin) {
+                    if (isLogin) {
                         System.out.println("\n\nmenu2.1로 돌아가기\n");
                         count++;
                         Menu_Mem();
@@ -764,7 +758,7 @@ public class LockerManager {
                 try {
                     // Y or y or N or n 말고 다른 것을 입력한 경우
                     if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y") ||
-                            Objects.equals(yn, "N") || Objects.equals(yn, "n")))
+                          Objects.equals(yn, "N") || Objects.equals(yn, "n")))
                         throw new IllegalArgumentException();
 
                     //N or n 입력한 경우
@@ -774,7 +768,7 @@ public class LockerManager {
 
                         //수정
                         //회원 유무에 따라 돌아갈 메뉴 결정
-                        if(isLogin) {
+                        if (isLogin) {
                             System.out.println("\n\nmenu2.1로 돌아가기\n");
                             count++;
                             Menu_Mem();
@@ -801,11 +795,11 @@ public class LockerManager {
 
                         //수정
                         //보관함 비밀번호 저장도 해야한다
-                        if(isLogin) {
+                        if (isLogin) {
                             memUser.setLocknum(LockerNum);
                             memUser.setLockPW(LockerPwd);
                             u.memMap.put(loguser, memUser);
-                        }else {
+                        } else {
                             u.nonmemMap.put(LockerNum, new User(LockerNum, LockerPwd));
                         }
                         //locker.setLockpwd(LockerPwd);
@@ -847,15 +841,13 @@ public class LockerManager {
                 String[] temp = str.split(" ");
 
                 //이용 중인 보관함이 아니라서 날짜 부분이 "-" 일 경우
-                if(temp[3].length() <= 1)
-                {
+                if (temp[3].length() <= 1) {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                     continue;
                 }
 
                 //예약 확정된 and 사용중인 보관내역의 경우
-                if(temp[2].equals("1"))
-                {
+                if (temp[2].equals("1")) {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                     continue;
                 }
@@ -867,22 +859,19 @@ public class LockerManager {
                 int num = 0;
 
                 // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
-                for(int i=0; i<5; i++) {
-                    if(i==0)
-                    {
-                        dateStrTemp[i] = dateStr.substring(num, num+4);
+                for (int i = 0; i < 5; i++) {
+                    if (i == 0) {
+                        dateStrTemp[i] = dateStr.substring(num, num + 4);
                         num += 4;
-                    }
-                    else
-                    {
-                        dateStrTemp[i] = dateStr.substring(num, num+2);
+                    } else {
+                        dateStrTemp[i] = dateStr.substring(num, num + 2);
                         num += 2;
                     }
                 }
 
                 // 배열에 저장한 숫자 이용해서 날짜 객체 생성
                 Calendar oldCalendar = new GregorianCalendar(Integer.parseInt(dateStrTemp[0]),
-                        Integer.parseInt(dateStrTemp[1])-1, Integer.parseInt(dateStrTemp[2]));
+                        Integer.parseInt(dateStrTemp[1]) - 1, Integer.parseInt(dateStrTemp[2]));
 
                 //예약 내역이라서 2시간을 더한 값으로 날짜 비교를 해야함
                 oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateStrTemp[3]));
@@ -899,9 +888,9 @@ public class LockerManager {
                 lockerDate = oldCalendar.getTime();
 
                 // 예약 날짜가 입력 받은 날보다 앞이거나 같을 경우에만 저장
-                if((lockerDate.after(newDate))){
+                if ((lockerDate.after(newDate))) {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
-                } else if(lockerDate.equals(newDate)) {
+                } else if (lockerDate.equals(newDate)) {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                 } else {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", "-", "0"));//저장구조에 보관/예약 정보를 수정해서 locker정보 저장
@@ -918,26 +907,25 @@ public class LockerManager {
         dateLockerFileWrite(tmpLockerList);
     }
 
-    public static Date StringToDate(String str){
+    public static Date StringToDate(String str) {
 
         // 년, 월, 일, 시간, 분 5구간으로 잘라서 배열에 저장
         String[] temp = new String[5];
         int num = 0;
-        for(int i=0; i<5; i++) {
-            if(i==0) //yyyy
+        for (int i = 0; i < 5; i++) {
+            if (i == 0) //yyyy
             {
-                temp[i] = str.substring(num, num+4);
+                temp[i] = str.substring(num, num + 4);
                 num += 4;
-            }
-            else //mm, dd, hh, mm
+            } else //mm, dd, hh, mm
             {
-                temp[i] = str.substring(num, num+2);
+                temp[i] = str.substring(num, num + 2);
                 num += 2;
             }
         }
 
         Calendar cal = new GregorianCalendar(Integer.parseInt(temp[0]),
-                Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
+                Integer.parseInt(temp[1]) - 1, Integer.parseInt(temp[2]));
         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
         cal.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
         cal.set(Calendar.SECOND, 0);
@@ -968,13 +956,13 @@ public class LockerManager {
             System.exit(0);
         } else {
             count++;
-            if(isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
+            if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
             System.exit(0);
         }
     }
 
-    public void ExitWrite(){
+    public void ExitWrite() {
         u.UserFileWrite();
         LockerFileWrite();
         System.exit(0);
@@ -990,13 +978,13 @@ public class LockerManager {
      */
 
     public boolean pwdCheck(String prompt, boolean ismemLocker, String targetKey, int chance) {
-        int th=0;
+        int th = 0;
         String LockerPwd;
 
         while (true) {
-            if(chance!=0) {
+            if (chance != 0) {
                 if (th > chance) {
-                    System.out.println("보관함 비밀번호를 "+chance+"회 틀리셨습니다. 메뉴로 돌아갑니다.");
+                    System.out.println("보관함 비밀번호를 " + chance + "회 틀리셨습니다. 메뉴로 돌아갑니다.");
                     return false;
                     //break;
                 }
@@ -1044,11 +1032,11 @@ public class LockerManager {
     }
 
 
-    private void Print_AddPayPrompt(int timeDiff, int target, boolean isMemLocker){
+    private void Print_AddPayPrompt(int timeDiff, int target, boolean isMemLocker) {
         /*
         addtional_payment_prompt를 출력하는 메서드
          */
-        int additional=0;
+        int additional = 0;
         switch (Integer.parseInt(LockerList.get(target).locksize)) {
             case 0:
                 additional = 500;
@@ -1060,119 +1048,116 @@ public class LockerManager {
                 additional = 1000;
                 break;
         }
-        if(!isMemLocker) //비회원일 경우 시간당 요금이 2배
-            additional = additional*2;
+        if (!isMemLocker) //비회원일 경우 시간당 요금이 2배
+            additional = additional * 2;
 
 
-        String str = "초과 시간에 따른 추가 금액 결제를 진행합니다. \n"+
-                (timeDiff-4)*additional + "원 \n"+
-                "결제하시려면 Y 또는 y를 입력해주세요. \n"+
-                "———————————————————————————\n";
+        String str = "초과 시간에 따른 추가 금액 결제를 진행합니다. \n" +
+                     (timeDiff - 4) * additional + "원 \n" +
+                     "결제하시려면 Y 또는 y를 입력해주세요. \n" +
+                     "———————————————————————————\n";
 
         System.out.println(str);
 
     }
 
-    public void ConfirmBooking(){
+    public void ConfirmBooking() {
         String str;//메뉴 입력(1.예약확정/ Q,q
 
         String password; //비밀번호 입력받는 변수
 
-        String u_locknum=u.memMap.get(loguser).locknum;//로그인한 회원이 예약한 보관함 번호
-        String u_payment="0";//회원이 지불해야하는 금액
-        String u_password=u.memMap.get(loguser).lockPW; //회원이 저장한 보관함 비밀번호
-        Locker temL=null;
+        String u_locknum = u.memMap.get(loguser).locknum;//로그인한 회원이 예약한 보관함 번호
+        String u_payment = "0";//회원이 지불해야하는 금액
+        String u_password = u.memMap.get(loguser).lockPW; //회원이 저장한 보관함 비밀번호
+        Locker temL = null;
 
-        if(u_locknum.equals("-")){//예약한 보관함이 없다면
+        if (u_locknum.equals("-")) {//예약한 보관함이 없다면
             System.out.println("예약 내역이 존재하지 않습니다.");// 출력 후 함수 종료-->변경: 이전 메뉴로 돌아가기
             count++;
             Menu_Mem();
-        }else{//예약된 내역이 있다면 함수 계속 진행
-            
+        } else {//예약된 내역이 있다면 함수 계속 진행
+
             //보관함 정보 가져옴
-            int index=0;
-            for(int i=0;i< LockerList.size();i++){//해당 락커 정보 저장
-                if(LockerList.get(i).locknum.equals((u_locknum))){
-                    temL=new Locker(u_locknum,LockerList.get(i).locksize,LockerList.get(i).use,Main.currentTimeString,LockerList.get(i).confirmbook);
-                    index=i;
+            int index = 0;
+            for (int i = 0; i < LockerList.size(); i++) {//해당 락커 정보 저장
+                if (LockerList.get(i).locknum.equals((u_locknum))) {
+                    temL = new Locker(u_locknum, LockerList.get(i).locksize, LockerList.get(i).use, Main.currentTimeString, LockerList.get(i).confirmbook);
+                    index = i;
                 }
             }
 
-            if(temL.confirmbook.equals("1")){ // 이미 확정된 예약건 처리+보관함 이미 이용중
+            if (temL.confirmbook.equals("1")) { // 이미 확정된 예약건 처리+보관함 이미 이용중
                 System.out.println("이미 예약이 확정되었거나 이용중인 보관함이 존재합니다.");  // 출력 후 함수 종료
                 count++;
                 Menu_Mem();
 
-            }else{
+            } else {
                 //예외에 해당 사항 없다면 예약확정 처리 시작
-                
+
                 //가격측정
-                int payment=0;
-                if(temL.locksize.equals("0")){
-                    payment=2000;
-                }else if(temL.locksize.equals("1")){
-                    payment=3000;
+                int payment = 0;
+                if (temL.locksize.equals("0")) {
+                    payment = 2000;
+                } else if (temL.locksize.equals("1")) {
+                    payment = 3000;
+                } else {
+                    payment = 4000;
                 }
-                else{
-                    payment=4000;
-                }
-                u_payment=Integer.toString(payment);//이거 4빼야되나????
+                u_payment = Integer.toString(payment);//이거 4빼야되나????
 
                 //예약확정
-                int flag=0; //flag==0이면 올바르지 않은 입력
-                while(flag==0){
-                    try{
+                int flag = 0; //flag==0이면 올바르지 않은 입력
+                while (flag == 0) {
+                    try {
                         System.out.println("-----예약 내역------");
-                        System.out.println("보관함 번호 : "+u_locknum+"번"); //사용자의 사물함 객체 정보 받아야함
-                        System.out.println("결제 금액: "+u_payment+"원"); //사용자의 사물함 객체 정보 받아야함
+                        System.out.println("보관함 번호 : " + u_locknum + "번"); //사용자의 사물함 객체 정보 받아야함
+                        System.out.println("결제 금액: " + u_payment + "원"); //사용자의 사물함 객체 정보 받아야함
                         System.out.println("------------------");
                         System.out.println("1. 예약 확정");
                         System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
                         //메인메뉴에 nextInt()하고 나서 추가하기@@@@@@@ github 에 push!!
-                        str=sc.nextLine();
-                        if(str.equals("Q")|| str.equals("q")){
-                            flag=1;
-                        }
-                        else if(str.equals("1")){
-                            flag=2;
-                        }
-                        else{
+                        str = sc.nextLine();
+                        if (str.equals("Q") || str.equals("q")) {
+                            flag = 1;
+                        } else if (str.equals("1")) {
+                            flag = 2;
+                        } else {
                             //flag=0;
                             //System.out.println("1"); 확인용. 나중에 지우기
                             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                         }
 
-                    }catch(InputMismatchException e){
+                    } catch (InputMismatchException e) {
                         //flag=0;
                         //System.out.println("2"); 확인용. 나중에 지우기
                         System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                     }
                 }
-                int flag_=5;//flag_ !=1 이면 올바르지 않은 입력
-                if(flag==1){//이전 메뉴로 돌아감
+                int flag_ = 5;//flag_ !=1 이면 올바르지 않은 입력
+                if (flag == 1) {//이전 메뉴로 돌아감
                     count++;
                     Menu_Mem();
                 }
-                if(flag==2){//예약확정하기->종료
-                    while(flag_!=1){
-                        try{
+                if (flag == 2) {//예약확정하기->종료
+                    while (flag_ != 1) {
+                        try {
                             System.out.print("비밀번호(PIN) 4자리를 입력하세요.>>");
-                            password=sc.nextLine();
-                            if(password.equals(u_password)){
-                                flag_=1;//예약확정 성공
-                            }else{
-                                flag_=2;//비밀번호가 올바르지 않은 경우
+                            password = sc.nextLine();
+                            if (password.equals(u_password)) {
+                                flag_ = 1;//예약확정 성공
+                            } else {
+                                flag_ = 2;//비밀번호가 올바르지 않은 경우
                                 System.out.println("비밀번호(PIN)가 올바르지 않습니다.\n");
                             }
 
-                        }catch(InputMismatchException e){
-                            flag_=0;//잘못된 입력을 받은 경우(문법적 오류)
+                        } catch (InputMismatchException e) {
+                            flag_ = 0;//잘못된 입력을 받은 경우(문법적 오류)
                             sc.nextLine();
                             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
                         }
                     }
                     System.out.println("예약이 확정되었습니다.");
-                    LockerList.set(index,new Locker(temL.locknum, temL.locksize,"1" , temL.date,"1" ));
+                    LockerList.set(index, new Locker(temL.locknum, temL.locksize, "1", temL.date, "1"));
                     //System.out.println(LockerList.get(index).confirmbook);
                     //LockerList의 사용여부-2,예약확정-1로 변경
 
@@ -1182,7 +1167,7 @@ public class LockerManager {
             }
 
         }
-        
+
     }
 
 

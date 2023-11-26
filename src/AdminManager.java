@@ -241,23 +241,23 @@ public class AdminManager {
         }
     }
 
-    public void temporary_closure(){
+    public void temporary_closure() {
 
         //임시폐쇄 함수에서 필요한 프롬포트들
         String temporary_closure_prompt1 = """
-                --------------------------------------------------------------
-                물품을 임시폐쇄 시작할 날짜와 시각을 12자리의 수로 공백 없이 입력해주세요. (ex. 202309151730)
-                                
-                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
-                --------------------------------------------------------------
-               """;
+                 --------------------------------------------------------------
+                 물품을 임시폐쇄 시작할 날짜와 시각을 12자리의 수로 공백 없이 입력해주세요. (ex. 202309151730)
+                                 
+                 * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
+                 --------------------------------------------------------------
+                """;
         String temporary_closure_prompt2 = """
-                --------------------------------------------------------------
-                물품을 임시폐쇄 종료할 날짜와 시각을 12자리의 수로 공백 없이 입력해주세요. (ex. 202309151730)
-                                
-                * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
-                --------------------------------------------------------------
-               """;
+                 --------------------------------------------------------------
+                 물품을 임시폐쇄 종료할 날짜와 시각을 12자리의 수로 공백 없이 입력해주세요. (ex. 202309151730)
+                                 
+                 * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
+                 --------------------------------------------------------------
+                """;
         String temporary_closure_select_prompt = """
                 --------------------------------------------------------------
                 임시폐쇄할 보관함 번호를 입력해주세요.
@@ -278,20 +278,20 @@ public class AdminManager {
 
 
         //11. 임시 폐쇄 시작 기간 입력
-        if(flow == 11){
-            while(true){
+        if (flow == 11) {
+            while (true) {
                 System.out.print(temporary_closure_prompt1);
                 System.out.print(">>");
                 String strclosurestartdate = sc.nextLine();
 
                 //Q,q 처리
-                if(Objects.equals(strclosurestartdate, "Q") || Objects.equals(strclosurestartdate, "q")){
+                if (Objects.equals(strclosurestartdate, "Q") || Objects.equals(strclosurestartdate, "q")) {
                     menu();
                     break;
                 }
 
                 //예외1. 과거 예외2. 형식 처리
-                if(closure_DateCheck(0L, strclosurestartdate)){
+                if (closure_DateCheck(0L, strclosurestartdate)) {
                     closurestartdate = Long.parseLong(strclosurestartdate);
                     flow = 12;
                     break;
@@ -300,14 +300,14 @@ public class AdminManager {
         }
 
         //2. 임시 폐쇄 종료 기간 입력
-        if(flow == 12){
-            while(true){
+        if (flow == 12) {
+            while (true) {
                 System.out.print(temporary_closure_prompt2);
                 System.out.print(">>");
                 String strclosuresenddate = sc.nextLine();
 
                 //과거, 형식 예외처리
-                if(closure_DateCheck(closurestartdate, strclosuresenddate)){
+                if (closure_DateCheck(closurestartdate, strclosuresenddate)) {
                     closureenddate = Long.parseLong(strclosuresenddate);
                     flow = 2;
                     break;
@@ -318,8 +318,8 @@ public class AdminManager {
 
 
         //2. 임시 폐쇠 보관함 선택
-        if(flow == 2){
-            while(true){
+        if (flow == 2) {
+            while (true) {
 
                 printAdminLocker();
                 System.out.print(temporary_closure_select_prompt);
@@ -329,40 +329,40 @@ public class AdminManager {
                 //sc.nextLine();
 
                 //예외처리
-                try{
+                try {
                     //형식예외
                     if (strclosureLockerNum.length() != 2) throw new IllegalArgumentException();
 
                     //범위 예외 처리(01~16)
 
                     closureLockerNum = parseInt(strclosureLockerNum);
-                    if (closureLockerNum<1 || closureLockerNum > 99) throw new IllegalArgumentException();
+                    if (closureLockerNum < 1 || closureLockerNum > 99) throw new IllegalArgumentException();
 
                     //예외1. 존재하지 않는 보관함일 경우
                     boolean isexist = false;
-                    for(int i=0; i<l.LockerList.size(); i++){
-                        if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
+                    for (int i = 0; i < l.LockerList.size(); i++) {
+                        if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
                             isexist = true;
                         }
                     }
-                    if(!isexist)
+                    if (!isexist)
                         throw new IllegalStateException();
 
                     //예외2. 임시폐쇄를 할 수 없는 보관함일 경우
                     //보관함의 보관내역이 존재하며 보관 시작 시간으로부터 기본 보관 시간 + 6시간이 지나지 않는 보관함
-                    for(int i=0; i<l.LockerList.size(); i++){
-                        if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
-                            if(parseInt(l.LockerList.get(i).use) == 1){ //사용중일때
+                    for (int i = 0; i < l.LockerList.size(); i++) {
+                        if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
+                            if (parseInt(l.LockerList.get(i).use) == 1) { //사용중일때
 
                                 //시간 차이 구하기
                                 Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
                                 Date startTime = LockerManager.StringToDate(l.LockerList.get(i).date);
                                 long timeDiffMillis = currentTime.getTime() - startTime.getTime();
                                 int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-                                int timeDiffHours = (int)(Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-                                int timeDiff = (int) (currentTime.getTime() - startTime.getTime())/3600000;
+                                int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+                                int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
 
-                                if(timeDiffMinutes <= 6*60) //예약시간 + 6시간 초과했는지 확인
+                                if (timeDiffMinutes <= 6 * 60) //예약시간 + 6시간 초과했는지 확인
                                     throw new IllegalAccessException();
 
                             }
@@ -370,10 +370,10 @@ public class AdminManager {
                     }
 
                     //예약 중, 임시 패쇄 중, 임시 폐쇄 예정인 보관함일 경우
-                    for(int i=0; i<l.LockerList.size(); i++){
-                        if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
-                            if(parseInt(l.LockerList.get(i).use) == 2 || parseInt(l.LockerList.get(i).use) == 3 ||
-                                    parseInt(l.LockerList.get(i).use) == 4){
+                    for (int i = 0; i < l.LockerList.size(); i++) {
+                        if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
+                            if (parseInt(l.LockerList.get(i).use) == 2 || parseInt(l.LockerList.get(i).use) == 3 ||
+                                parseInt(l.LockerList.get(i).use) == 4) {
                                 throw new IllegalAccessException();
                             }
                         }
@@ -383,17 +383,17 @@ public class AdminManager {
                     flow = 3;
                     break;
 
-                }catch(IllegalArgumentException e){ //형식 예외
+                } catch (IllegalArgumentException e) { //형식 예외
                     System.out.println("올바른 입력이 아닙니다.");
-                }catch(IllegalAccessException e) { //예외2. 임시폐쇄 할 수 없는 보관함.
+                } catch (IllegalAccessException e) { //예외2. 임시폐쇄 할 수 없는 보관함.
                     System.out.println("임시폐쇄할 수 없는 보관함 번호입니다.\n");
-                }catch(IllegalStateException e){ //예외1. 존재하지 않는 보관함
+                } catch (IllegalStateException e) { //예외1. 존재하지 않는 보관함
                     System.out.println("존재하지 않는 보관함 번호입니다.\n");
                 }
             }
 
-            if(flow ==3){
-                temporary_clousure_check_prompt += strclosureLockerNum+">\n";
+            if (flow == 3) {
+                temporary_clousure_check_prompt += strclosureLockerNum + ">\n";
                 temporary_clousure_check_prompt += """
                         ------------------------------------------
                         가(이) 맞습니까?
@@ -401,7 +401,7 @@ public class AdminManager {
                         *맞다면 Y또는 y를 입력해주세요.
                         ------------------------------------------
                         """;
-                while(true){
+                while (true) {
 
                     System.out.println();
                     System.out.print(temporary_clousure_check_prompt);
@@ -411,27 +411,27 @@ public class AdminManager {
                     checking = String.valueOf(sc.next());
                     sc.nextLine();
 
-                    try{
-                        if(!(checking.equals("Y")||checking.equals("y")))
+                    try {
+                        if (!(checking.equals("Y") || checking.equals("y")))
                             throw new IllegalArgumentException();
 
                         //아무 문제 없다면 결제 알림 창으로 이동
                         flow = 4;
                         break;
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("올바른 입력이 아닙니다.\n");
                     }
 
                 }
             }
 
-            if(flow ==4){
+            if (flow == 4) {
                 //Locker 설정
-                for(int i=0; i<l.LockerList.size(); i++){
-                    if(parseInt(l.LockerList.get(i).locknum) == closureLockerNum){
+                for (int i = 0; i < l.LockerList.size(); i++) {
+                    if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
                         l.LockerList.get(i).use = "3";
                         l.LockerList.get(i).closeddatestart = String.valueOf(closurestartdate);
-                        l.LockerList.get(i).closeddatefinish= String.valueOf(closureenddate);
+                        l.LockerList.get(i).closeddatefinish = String.valueOf(closureenddate);
                     }
                 }
 
@@ -444,29 +444,28 @@ public class AdminManager {
         }
 
 
-
     }
 
     private static boolean closure_DateCheck(Long start, String inputdate) {
 
         boolean flag = false;
-        Date oldDate = Main.currentTimeDate;	// 현재 날짜
-        Date newDate = null;	// 새로 입력 받은 날짜
+        Date oldDate = Main.currentTimeDate;    // 현재 날짜
+        Date newDate = null;    // 새로 입력 받은 날짜
 
-        String oldD = Main.currentTimeString; 	// 현재 날짜
-        String dTrim = inputdate.trim();	//입력 받은 string의 공백 제거
+        String oldD = Main.currentTimeString;    // 현재 날짜
+        String dTrim = inputdate.trim();    //입력 받은 string의 공백 제거
 
 
         // 글자 수가 12가 아닐 경우 false 반환
-        if(dTrim.length() != 12) {
+        if (dTrim.length() != 12) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
         }
 
         // 2050년 이상인지 아닌지 확인
-        int testYear = parseInt(dTrim.substring(0,4));
-        if(testYear > 2050) {
+        int testYear = parseInt(dTrim.substring(0, 4));
+        if (testYear > 2050) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
@@ -477,15 +476,12 @@ public class AdminManager {
             int num = 0;
             String[] temp = new String[5];
 
-            for(int i=0; i<5; i++) {
-                if(i==0)
-                {
-                    temp[i] = dTrim.substring(num, num+4);
+            for (int i = 0; i < 5; i++) {
+                if (i == 0) {
+                    temp[i] = dTrim.substring(num, num + 4);
                     num += 4;
-                }
-                else
-                {
-                    temp[i] = dTrim.substring(num, num+2);
+                } else {
+                    temp[i] = dTrim.substring(num, num + 2);
                     num += 2;
                 }
 
@@ -503,7 +499,7 @@ public class AdminManager {
             newCalendar.set(Calendar.MILLISECOND, 0);
             newDate = newCalendar.getTime();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
@@ -511,17 +507,17 @@ public class AdminManager {
 
 
         //시작날짜입력일때
-        if(start==0){
+        if (start == 0) {
             // 현재 날짜가 입력 받은 날보다 이전일 경우 true
-            if(oldDate.before(newDate)){
+            if (oldDate.before(newDate)) {
                 flag = true;
-            } else if(oldDate.equals(newDate)){ // 같은 날일 경우
+            } else if (oldDate.equals(newDate)) { // 같은 날일 경우
                 flag = false;
             } else { // 이외의 모든 경우
                 flag = false;
             }
 
-            if(!flag){
+            if (!flag) {
                 System.out.println("지난 날짜입니다. 기간을 확인해주세요.");
                 System.out.println();
                 return flag;
@@ -529,16 +525,15 @@ public class AdminManager {
 
         }
         //종료날짜입력일때
-        else if(start!=0){
+        else if (start != 0) {
             long endclosuretime = Long.parseLong(inputdate);
 
-            if(start>=endclosuretime){
+            if (start >= endclosuretime) {
                 flag = false;
                 System.out.println("올바르지 않은 기간입니다. 기간을 확인해주세요.");
                 System.out.println();
                 return flag;
-            }
-            else flag = true;
+            } else flag = true;
         }
 
         System.out.println();
@@ -549,7 +544,7 @@ public class AdminManager {
 
     }
 
-    public void timediffUpdate(Locker lc){
+    public void timediffUpdate(Locker lc) {
         Date currentTime = l.StringToDate(Main.currentTimeString);
         Date startTime = l.StringToDate(lc.date);
 
@@ -560,6 +555,7 @@ public class AdminManager {
 
         lc.timediffMinutes = timeDiffMinutes;
     }
+
     public void printAdminLocker() {
         System.out.println("---------------------- 보관함 목록 ----------------------");
         int timeDiff = 0;
@@ -577,13 +573,13 @@ public class AdminManager {
             if (!lc.date.equals("-")) { //date가 비어있지 않으면 {use가 사용중(1)이거나 임시폐쇄예정(3)일때만} @수정필요
                 timediffUpdate(lc);
 
-                if (lc.timediffMinutes/60 > 10) {
+                if (lc.timediffMinutes / 60 > 10) {
                     iscanforce = "강제수거 가능";
                     lc.iscanFp = true;
                 }
-                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " +Math.abs(lc.timediffMinutes/60)+ "시간"
-                        +Integer.toString((int)Math.abs(lc.timediffMinutes)%60)+"분째 사용중 / "+ iscanforce);
-            } else{
+                System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " + Math.abs(lc.timediffMinutes / 60) + "시간"
+                                   + Integer.toString((int) Math.abs(lc.timediffMinutes) % 60) + "분째 사용중 / " + iscanforce);
+            } else {
                 System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
 
             }
@@ -685,14 +681,14 @@ public class AdminManager {
             //삭제 가능인 경우
             if (flow == 2) {
                 System.out.print("삭제하려는 보관함은\n" +
-                        "------------------------------------------\n" +
-                        "보관함 번호: <" + LockerNum + ">\n" +
-                        "------------------------------------------\n" +
-                        "가(이) 맞습니까?\n" +
-                        "\n" +
-                        "*맞다면 Y또는 y를 입력해주세요.\n" +
-                        "------------------------------------------\n" +
-                        ">> ");
+                                 "------------------------------------------\n" +
+                                 "보관함 번호: <" + LockerNum + ">\n" +
+                                 "------------------------------------------\n" +
+                                 "가(이) 맞습니까?\n" +
+                                 "\n" +
+                                 "*맞다면 Y또는 y를 입력해주세요.\n" +
+                                 "------------------------------------------\n" +
+                                 ">> ");
                 String yn = String.valueOf(sc.next());
                 sc.nextLine();
 
@@ -744,10 +740,10 @@ public class AdminManager {
             printAdminLocker();
             //수정
             System.out.print("(현재 보관함 총 용량: " + totalsize + "/50)\n\n" +
-                    "추가할 보관함의 번호를 입력해주세요.\n\n" +
-                    "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
-                    "--------------------------------------------------------------\n" +
-                    ">> ");
+                             "추가할 보관함의 번호를 입력해주세요.\n\n" +
+                             "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
+                             "--------------------------------------------------------------\n" +
+                             ">> ");
 
             LockerNum = String.valueOf(sc.next());
             sc.nextLine();
@@ -786,7 +782,8 @@ public class AdminManager {
                 break;
             } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
-            } catch (IllegalAccessException e) {}
+            } catch (IllegalAccessException e) {
+            }
         }
 
         if (flow == 2) {
@@ -801,8 +798,8 @@ public class AdminManager {
                 try {
                     // S or s or M or m or L or l 말고 다른 것을 입력한 경우
                     if (!(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s") ||
-                            Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m") ||
-                            Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l"))) {
+                          Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m") ||
+                          Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l"))) {
                         System.out.println("올바른 입력이 아닙니다.");
                         System.out.println("다시 한번 입력해주세요.\n");
                         throw new IllegalArgumentException();
@@ -828,15 +825,15 @@ public class AdminManager {
 
         if (flow == 3) {
             System.out.print("추가하려는 보관함은\n" +
-                    "------------------------------------------\n" +
-                    "보관함 번호: " + LockerNum + "\n" +
-                    "보관함 크기: " + sizevalue + "\n" +
-                    "------------------------------------------\n" +
-                    "가(이) 맞습니까?\n" +
-                    "\n" +
-                    "*맞다면 Y또는 y를 입력해주세요.\n" +
-                    "------------------------------------------\n" +
-                    ">>\s");
+                             "------------------------------------------\n" +
+                             "보관함 번호: " + LockerNum + "\n" +
+                             "보관함 크기: " + sizevalue + "\n" +
+                             "------------------------------------------\n" +
+                             "가(이) 맞습니까?\n" +
+                             "\n" +
+                             "*맞다면 Y또는 y를 입력해주세요.\n" +
+                             "------------------------------------------\n" +
+                             ">>\s");
             String yn = String.valueOf(sc.next());
             sc.nextLine();
 
@@ -845,8 +842,8 @@ public class AdminManager {
                 //파일처리
                 //보관함 크기(0/1/2-S/M/L)
                 String sizenum = null;
-                if(Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) sizenum = "0";
-                else if(Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) sizenum = "1";
+                if (Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) sizenum = "0";
+                else if (Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) sizenum = "1";
                 else sizenum = "2";
 
                 Locker lc = new Locker(LockerNum, sizenum, "-");

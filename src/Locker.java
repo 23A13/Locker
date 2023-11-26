@@ -12,8 +12,8 @@ public class Locker {
     String confirmbook; //예약확정 여부(0/1-미확/확정)
 
     //2차때 추가된 변수들
-    String closeddatestart="-";//폐쇄시작 시각
-    String closeddatefinish="-";//폐쇄종료 시각
+    String closeddatestart = "-";//폐쇄시작 시각
+    String closeddatefinish = "-";//폐쇄종료 시각
     //
 
     boolean iscanFp = false;
@@ -22,29 +22,31 @@ public class Locker {
     //constructor
     public Locker() {
     }
-    public Locker(String locknum, String locksize,String date){
-        this.locknum=locknum;
-        this.locksize=locksize;
-        this.use="0";
-        this.date=date;
-        this.confirmbook="0";
-    }
-    public Locker(String locknum, String locksize,String use,String date,String confirmbook){
-        this.locknum=locknum;
-        this.locksize=locksize;
-        this.use=use;
-        this.date=date;
-        this.confirmbook=confirmbook;
+
+    public Locker(String locknum, String locksize, String date) {
+        this.locknum = locknum;
+        this.locksize = locksize;
+        this.use = "0";
+        this.date = date;
+        this.confirmbook = "0";
     }
 
-    public Locker(String locknum, String locksize,String use,String date,String confirmbook,String closeddatestart,String closeddatefinish){
-        this.locknum=locknum;
-        this.locksize=locksize;
-        this.use=use;
-        this.date=date;
-        this.confirmbook=confirmbook;
-        this.closeddatestart=closeddatestart;
-        this.closeddatefinish=closeddatefinish;
+    public Locker(String locknum, String locksize, String use, String date, String confirmbook) {
+        this.locknum = locknum;
+        this.locksize = locksize;
+        this.use = use;
+        this.date = date;
+        this.confirmbook = confirmbook;
+    }
+
+    public Locker(String locknum, String locksize, String use, String date, String confirmbook, String closeddatestart, String closeddatefinish) {
+        this.locknum = locknum;
+        this.locksize = locksize;
+        this.use = use;
+        this.date = date;
+        this.confirmbook = confirmbook;
+        this.closeddatestart = closeddatestart;
+        this.closeddatefinish = closeddatefinish;
     }
 
     public String getLocknum() {
@@ -87,7 +89,7 @@ public class Locker {
         this.confirmbook = confirmbook;
     }
 
-    public static void print(){
+    public static void print() {
         System.out.println("---------------------------------------------------------------------------------------");
         System.out.println("| 01        | 02        | 03        | 04        | 13               | 14               |");
         System.out.println("|           |           |           |           |                  |                  |");
@@ -131,19 +133,18 @@ public class Locker {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] parts = line.split(" ");
                 if (parts[0].equals("1")) {
-                    if(!parts[3].equals("-"))
-                    {
+                    if (!parts[3].equals("-")) {
                         String lockerNumber = parts[3];
                         System.out.println("이용중인 보관함 번호: " + lockerNumber);
                         found = true;
                     }
-                }
-                else if (parts[0].equals("0")) {
+                } else if (parts[0].equals("0")) {
                     String lockerNumber = parts[1];
                     System.out.println("이용중인 보관함 번호: " + lockerNumber);
                     found = true;
                 }
-            } bufferedReader.close();
+            }
+            bufferedReader.close();
 
             if (!found) {
                 System.out.print("이용 중인 보관함이 존재하지 않습니다.");

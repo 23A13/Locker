@@ -9,6 +9,7 @@ public class Main {
     public static String currentTimeString;
     public static Date currentTimeDate;
     static Scanner scan = new Scanner(System.in);
+
     public static void main(String[] args) {
 
         System.out.println("정상 실행 확인");
@@ -21,18 +22,18 @@ public class Main {
     }
 
     // 날짜 체크 함수
-    public static void date_check(){
+    public static void date_check() {
         System.out.print("현재 날짜와 시각(00:00~23:59)을 12자리의 수로 공백 없이 입력해주세요. (ex.202309151730) : ");
 
         String today = scan.nextLine();
 
         boolean flag = todayCheck(today);
 
-        while(!flag) {
+        while (!flag) {
             System.out.print("현재 날짜와 시각(00:00~23:59)을 12자리의 수로 공백 없이 입력해주세요. (ex.202309151730) : ");
             today = scan.nextLine();
-            flag =	todayCheck(today);
-            if(flag) {
+            flag = todayCheck(today);
+            if (flag) {
                 break;
             }
         }
@@ -44,57 +45,50 @@ public class Main {
     private static boolean todayCheck(String today) {
 
         boolean flag = false;
-        Date oldDate = null;	// 기존 날짜
-        Date newDate = null;	// 새로 입력 받은 날짜
+        Date oldDate = null;    // 기존 날짜
+        Date newDate = null;    // 새로 입력 받은 날짜
 
-        String oldD = null; 	// 기존 날짜 데이터 저장용
-        String dTrim = today.trim();	//입력 받은 string의 공백 제거
+        String oldD = null;    // 기존 날짜 데이터 저장용
+        String dTrim = today.trim();    //입력 받은 string의 공백 제거
 
         File timeFile = new File("../Locker/Date.txt");
 
         // 글자 수가 12가 아닐 경우 false 반환
-        if(dTrim.length() != 12) {
+        if (dTrim.length() != 12) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
         }
 
         // 2050년 이상인지 아닌지 확인
-        int testYear = Integer.parseInt(dTrim.substring(0,4));
-        if(testYear > 2050) {
+        int testYear = Integer.parseInt(dTrim.substring(0, 4));
+        if (testYear > 2050) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
         }
 
         //기존 날짜 불러오기
-        try(Scanner scan = new Scanner(timeFile))
-        {
+        try (Scanner scan = new Scanner(timeFile)) {
             String str = null;
             String[] temp = new String[5];
 
-            while(scan.hasNextLine())
-            {
+            while (scan.hasNextLine()) {
                 str = scan.nextLine();
                 oldD = str;
                 int num = 0;
 
                 // 년, 월, 일, 시간, 분 5구간으로 잘라서 배열에 저장
-                for(int i=0; i<5; i++) {
-                    if(i==0)
-                    {
-                        temp[i] = str.substring(num, num+4);
+                for (int i = 0; i < 5; i++) {
+                    if (i == 0) {
+                        temp[i] = str.substring(num, num + 4);
                         num += 4;
-                    }
-                    else
-                    {
-                        temp[i] = str.substring(num, num+2);
+                    } else {
+                        temp[i] = str.substring(num, num + 2);
                         num += 2;
                     }
                 }
             }
-
-
 
 
             // 파일이 비었을 경우는 고려 안함
@@ -102,7 +96,7 @@ public class Main {
 
             // 배열에 저장한 숫자 이용해서 날짜 객체 생성
             Calendar oldCalendar = new GregorianCalendar(Integer.parseInt(temp[0]),
-                    Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
+                    Integer.parseInt(temp[1]) - 1, Integer.parseInt(temp[2]));
             oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(temp[3]));
             //00~09는 한 자리 수로 바꾸기
             oldCalendar.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
@@ -111,9 +105,7 @@ public class Main {
             oldCalendar.set(Calendar.MILLISECOND, 0);
             oldDate = oldCalendar.getTime();
 
-        }
-        catch(FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             System.out.println("파일 명을 확인하세요.");
         }
 
@@ -122,15 +114,12 @@ public class Main {
             int num = 0;
             String[] temp = new String[5];
 
-            for(int i=0; i<5; i++) {
-                if(i==0)
-                {
-                    temp[i] = dTrim.substring(num, num+4);
+            for (int i = 0; i < 5; i++) {
+                if (i == 0) {
+                    temp[i] = dTrim.substring(num, num + 4);
                     num += 4;
-                }
-                else
-                {
-                    temp[i] = dTrim.substring(num, num+2);
+                } else {
+                    temp[i] = dTrim.substring(num, num + 2);
                     num += 2;
                 }
 
@@ -148,26 +137,25 @@ public class Main {
             newCalendar.set(Calendar.MILLISECOND, 0);
             newDate = newCalendar.getTime();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.");
             System.out.println();
             return flag;
         }
 
         // 기존 날짜가 입력 받은 날보다 이전일 경우 true
-        if(oldDate.before(newDate)){
+        if (oldDate.before(newDate)) {
             flag = true;
-        } else if(oldDate.equals(newDate)){
-            flag = true;	// 같은 날일 경우
+        } else if (oldDate.equals(newDate)) {
+            flag = true;    // 같은 날일 경우
         } else {
-            flag = false;	// 이외의 모든 경우
+            flag = false;    // 이외의 모든 경우
         }
 
-        if(flag) {
+        if (flag) {
             // 날짜 올바름
             System.out.println("올바른 입력입니다.");
-        }
-        else {
+        } else {
             // 날짜 틀림
             System.out.println("지난 날짜입니다. 다시 한 번 입력해주세요.");
             System.out.println();
