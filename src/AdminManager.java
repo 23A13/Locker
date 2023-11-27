@@ -909,6 +909,7 @@ public class AdminManager {
                 System.out.println("---------보관함 목록---------");
 
                 //보관함 리스트 출력 수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                printAdminLocker();
 
                 System.out.println("현재 보관함 총량: <"+capacity+"/50>");
                 System.out.println("수정할 보관함을 선택해주세요.\n");
@@ -939,6 +940,11 @@ public class AdminManager {
                     for(int i=0;i<l.LockerList.size();i++) {//입력받은 보관함 번호로 탐색
                         if (l.LockerList.get(i).locknum.equals(sel)){
                             exist=true;//존재하는 보관함 번호
+                            if(l.LockerList.get(i).use.equals("0")){//사용중이지 않은 보관함
+                                check=true;
+                            }else{//그 외의 경우
+                                check=l.LockerList.get(i).iscanFp;//강제수거 가능한지 아닌지 저장
+                            }
                         }
                     }
 
