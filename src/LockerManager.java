@@ -512,6 +512,19 @@ public class LockerManager {
                         }
                     }
                 }
+                //임시폐쇄
+                for (int i = 0; i < LockerList.size(); i++) {
+                    if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
+                        //임시 폐쇄 중
+                        if (parseInt(LockerList.get(i).use) != 3)
+                            throw new IllegalStateException();
+
+                            if (parseInt(LockerList.get(i).use) != 0) {
+                                throw new IllegalStateException();
+                        }
+                    }
+                }
+
 
                 //아무 문제 없다면 비민번호 창으로 이동
                 flow = 2;
@@ -522,7 +535,10 @@ public class LockerManager {
 
             } catch (IllegalAccessException e) {
                 System.out.println("이용 중인 보관함입니다.\n");
+            } catch (IllegalStateException e) {
+                System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.\n");
             }
+
 
         }
         //비밀번호 입력
