@@ -79,7 +79,8 @@ public class LockerManager {
             while (scan.hasNextLine()) {
                 String str = scan.nextLine();
                 String[] temp = str.split(" ");
-                LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//최초로 저장구조에 locker정보 저장
+                LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()
+                , temp[5].trim(), temp[6].trim()));//최초로 저장구조에 locker정보 저장
             }
         } catch (FileNotFoundException e) {
             System.out.println("파일 입력이 잘못되었습니다.");
@@ -116,7 +117,9 @@ public class LockerManager {
             } else {
                 FileWriter writer = new FileWriter(file, false);//기존 내용 없애고 쓰려면 false
                 for (int i = 0; i < List.size(); i++) {
-                    writer.write(List.get(i).locknum + " " + List.get(i).locksize + " " + List.get(i).use + " " + List.get(i).date + " " + List.get(i).confirmbook + "\n");
+                    writer.write(List.get(i).locknum + " " + List.get(i).locksize + " " + List.get(i).use + " " + List.get(i).date + " "
+                            + List.get(i).confirmbook + " "
+                            + List.get(i).closeddatestart + " " + List.get(i).closeddatefinish + "\n");
                     writer.flush();
                 }
                 writer.close();
@@ -840,13 +843,79 @@ public class LockerManager {
 
                 String[] temp = str.split(" ");
 
+                // 임시 폐쇄 중인 보관함 확인
+                if(temp[2].equals("4"))
+                {
+                    // 임시 폐쇄 중인 보관함의 임시 폐쇄 종료 날짜 확인
+                    String tmpEnd = temp[6].trim();
+                    System.out.println(tmpEnd);
+                    Date closureEndTime = StringToDate(tmpEnd);
+
+                    // 임시 폐쇄 종료 날짜가 새로 입력 받은 날짜보다 이후일 경우
+                    if (closureEndTime.after(newDate))
+                    {
+                        tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(),
+                                temp[4].trim(), temp[5].trim(), temp[6].trim()));
+                    } else if(closureEndTime.equals(newDate)){
+                        tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(),
+                                temp[4].trim(), temp[5].trim(), temp[6].trim()));
+                    } else // 임시 폐쇄 종료 날짜가 새로 입력 받은 날짜보다 전일 경우 (임시 폐쇄 끝남)
+                    {
+                        tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", temp[3].trim(),
+                                temp[4].trim()));
+                    }
+                    continue;
+                }
+
+                // 임시 폐쇄 예정인 보관함 확인
+                if(temp[2].equals("3"))
+                {
+                    // 임시 폐쇄 예정인 보관함의 임시 폐쇄 시작 & 종료 날짜 확인
+                    String tmpStart = temp[5].trim();
+                    System.out.println(tmpStart);
+                    String tmpEnd = temp[6].trim();
+                    System.out.println(tmpEnd);
+
+                    Date closureStartTime = StringToDate(tmpStart);
+                    Date closureEndTime = StringToDate(tmpEnd);
+
+                    // 임시 폐쇄 종료 날짜가 새로 입력 받은 날짜보다 이후일 경우
+                    if (closureEndTime.after(newDate))
+                    {
+                        //  임시 폐쇄 시작 날짜가 새로 입력 받은 날짜보다 이후일 경우
+                        if (closureStartTime.after(newDate))
+                        {
+                            tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(),
+                                    temp[4].trim(), temp[5].trim(), temp[6].trim()));
+                        } else if(closureStartTime.equals(newDate))
+                        {
+                            tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(),
+                                    temp[4].trim(), temp[5].trim(), temp[6].trim()));
+                        } else  //  임시 폐쇄 시작 날짜가 새로 입력 받은 날짜보다 전일 경우 (임시 폐쇄 시작)
+                        {
+                            tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "4", temp[3].trim(),
+                                    temp[4].trim(), temp[5].trim(), temp[6].trim()));
+                        }
+                    } else if(closureEndTime.equals(newDate)){
+                        // 임시 폐쇄 종료 날짜가 새로 입력 받은 날짜와 같음 -> 임시 폐쇄 중으로 판단
+                        tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "4", temp[3].trim(),
+                                temp[4].trim(), temp[5].trim(), temp[6].trim()));
+                    } else // 임시 폐쇄 종료 날짜가 새로 입력 받은 날짜보다 전일 경우 (임시 폐쇄 끝남)
+                    {
+                        tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), "0", temp[3].trim(),
+                                temp[4].trim()));
+                    }
+
+                    continue;
+                }
+
                 //이용 중인 보관함이 아니라서 날짜 부분이 "-" 일 경우
                 if (temp[3].length() <= 1) {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                     continue;
                 }
 
-                //예약 확정된 and 사용중인 보관내역의 경우
+                //예약 확정된 and 사용 중인 보관 내역의 경우
                 if (temp[2].equals("1")) {
                     tmpLockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()));//저장구조에 기존 locker정보 저장
                     continue;
@@ -854,11 +923,11 @@ public class LockerManager {
 
                 // 날짜만 가져와 비교
                 Date lockerDate;
-                String dateStr = temp[3];
+                String dateStr = temp[4];
                 String[] dateStrTemp = new String[5];
                 int num = 0;
 
-                // 년, 월, 일, 시간 4구간으로 잘라서 배열에 저장
+                // 년, 월, 일, 시간, 분 5구간으로 잘라서 배열에 저장
                 for (int i = 0; i < 5; i++) {
                     if (i == 0) {
                         dateStrTemp[i] = dateStr.substring(num, num + 4);
@@ -875,7 +944,7 @@ public class LockerManager {
 
                 //예약 내역이라서 2시간을 더한 값으로 날짜 비교를 해야함
                 oldCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateStrTemp[3]));
-                oldCalendar.set(Calendar.MINUTE, (Integer.parseInt(temp[4], 10)));
+                oldCalendar.set(Calendar.MINUTE, (Integer.parseInt(dateStrTemp[4], 10)));
                 oldCalendar.set(Calendar.SECOND, 0);
                 oldCalendar.set(Calendar.MILLISECOND, 0);
                 oldCalendar.add(Calendar.HOUR_OF_DAY, 2);

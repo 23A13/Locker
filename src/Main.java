@@ -165,7 +165,7 @@ public class Main {
         // Date.txt 파일에 기존 날짜 지우고 새로 날짜 입력
         beforeDateRemove(dTrim, oldD);
 
-        // 예약 내역 수정 함수
+        // 예약 내역 & 임시폐쇄 보관함 수정 함수
         deleteUserLockerBeforeDate(newDate);
 
         // 오늘 날짜 변수에 string, Date 값 저장
