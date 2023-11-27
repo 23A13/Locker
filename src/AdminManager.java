@@ -10,7 +10,7 @@ import static java.lang.Integer.parseInt;
 public class AdminManager {
     static Scanner sc = new Scanner(System.in);
 
-    private String pw = "admin1234";
+    private final String pw = "admin1234";
 
     public AdminManager() {
     }
@@ -24,6 +24,7 @@ public class AdminManager {
     public void menu() {
         if (count == 0)
             l.LockerFileInput();
+        count++;
 
         String menu = """
                 ——MENU——\s
@@ -33,7 +34,7 @@ public class AdminManager {
                 4. 보관함 추가\s
                 5. 보관함 수정\s
                 6. 종료\s
-                 ———————\s                         
+                 ———————                         
                 """;
 
         System.out.print(menu);
@@ -136,7 +137,7 @@ public class AdminManager {
                 //일단 for문으로 찾고
                 int i = 0;
                 targetLocker = null;
-                for (Locker lc : l.LockerList) {
+                for (Locker lc : LockerManager.LockerList) {
                     if (parseInt(lc.locknum) == LockerNumber) {
                         targetLocker = lc;
                         target = i;
@@ -156,9 +157,9 @@ public class AdminManager {
                 }
 
                 //강제수거가 가능하지 않은 보관함을 선택했을 때 처리
-                for (Locker lc : l.LockerList) {
+                for (Locker lc : LockerManager.LockerList) {
                     if (parseInt(lc.locknum) == LockerNumber) {
-                        if (lc.iscanFp == false) {
+                        if (!lc.iscanFp) {
                             System.out.println("강제수거를 할 수 없는 보관함입니다. 강제수거 가능여부를 확인해주세요.\n");
                             throw new IllegalAccessException();
                         }
@@ -177,12 +178,13 @@ public class AdminManager {
         System.out.println();
         String FpCheckNotice = targetLocker.locknum + "번 보관함을 선택하셨습니다.\n";
         FpCheckNotice += targetLocker.locknum + "번 / " + targetLocker.date + " / " + (int) (Math.ceil((double) targetLocker.timediffMinutes / 60)) + "시간 / ";
-        if (targetLocker.iscanFp == true)
+        if (targetLocker.iscanFp)
             FpCheckNotice += "강제수거 가능";
         else
             FpCheckNotice += "강제수거 불가능";
         FpCheckNotice += """
-                \n\n강제수거 하시려면 Y또는 y를 입력해주세요.
+                \n
+                강제수거 하시려면 Y또는 y를 입력해주세요.
                 ------------------------------------------             
                 >> """;
 
@@ -193,15 +195,15 @@ public class AdminManager {
 
         if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y"))) {
             System.out.println("강제수거를 취소하셨습니다. \n");
-            return; //menu3으로 돌아감
+            //menu3으로 돌아감
         } else { //Y나 y를 입력한경우
             //mem과 nonmem에서 해당 보관함 찾기 (회원<User> 정보 저장구조)
             String targetKey = null;
             boolean isMemLocker = false;
 
-            for (String id : u.memMap.keySet()) {
-                if (!u.memMap.get(id).locknum.equals("-")) {
-                    if (LockerNumber == parseInt(u.memMap.get(id).locknum)) {
+            for (String id : UserManager.memMap.keySet()) {
+                if (!UserManager.memMap.get(id).locknum.equals("-")) {
+                    if (LockerNumber == parseInt(UserManager.memMap.get(id).locknum)) {
                         targetKey = id;
                         break;
                     }
@@ -211,8 +213,8 @@ public class AdminManager {
                 isMemLocker = true;
             } else {
                 isMemLocker = false;
-                for (String lnum : u.nonmemMap.keySet()) {
-                    if (parseInt(u.nonmemMap.get(lnum).locknum) == LockerNumber) {
+                for (String lnum : UserManager.nonmemMap.keySet()) {
+                    if (parseInt(UserManager.nonmemMap.get(lnum).locknum) == LockerNumber) {
                         targetKey = lnum;
                         break;
                     }
@@ -220,17 +222,17 @@ public class AdminManager {
             }
 
             //강제수거 완료한 보관함 정보 삭제 & File Write
-            l.LockerList.get(target).use = "0";
-            l.LockerList.get(target).date = "-";
-            l.LockerList.get(target).confirmbook = "0";
-            l.LockerList.get(target).iscanFp = false;
-            l.LockerList.get(target).timediffMinutes = 0;
+            LockerManager.LockerList.get(target).use = "0";
+            LockerManager.LockerList.get(target).date = "-";
+            LockerManager.LockerList.get(target).confirmbook = "0";
+            LockerManager.LockerList.get(target).iscanFp = false;
+            LockerManager.LockerList.get(target).timediffMinutes = 0;
 
             if (isMemLocker) {
-                u.memMap.get(targetKey).locknum = "-";
-                u.memMap.get(targetKey).lockPW = "-";
+                UserManager.memMap.get(targetKey).locknum = "-";
+                UserManager.memMap.get(targetKey).lockPW = "-";
             } else {
-                u.nonmemMap.remove(targetKey);
+                UserManager.nonmemMap.remove(targetKey);
             }
 
             System.out.println("물품 강제 수거가 완료되었습니다. \n이용해주셔서 감사합니다.\n");
@@ -340,8 +342,8 @@ public class AdminManager {
 
                     //예외1. 존재하지 않는 보관함일 경우
                     boolean isexist = false;
-                    for (int i = 0; i < l.LockerList.size(); i++) {
-                        if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
+                    for (int i = 0; i < LockerManager.LockerList.size(); i++) {
+                        if (parseInt(LockerManager.LockerList.get(i).locknum) == closureLockerNum) {
                             isexist = true;
                         }
                     }
@@ -350,13 +352,13 @@ public class AdminManager {
 
                     //예외2. 임시폐쇄를 할 수 없는 보관함일 경우
                     //보관함의 보관내역이 존재하며 보관 시작 시간으로부터 기본 보관 시간 + 6시간이 지나지 않는 보관함
-                    for (int i = 0; i < l.LockerList.size(); i++) {
-                        if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
-                            if (parseInt(l.LockerList.get(i).use) == 1) { //사용중일때
+                    for (int i = 0; i < LockerManager.LockerList.size(); i++) {
+                        if (parseInt(LockerManager.LockerList.get(i).locknum) == closureLockerNum) {
+                            if (parseInt(LockerManager.LockerList.get(i).use) == 1) { //사용중일때
 
                                 //시간 차이 구하기
                                 Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
-                                Date startTime = LockerManager.StringToDate(l.LockerList.get(i).date);
+                                Date startTime = LockerManager.StringToDate(LockerManager.LockerList.get(i).date);
                                 long timeDiffMillis = currentTime.getTime() - startTime.getTime();
                                 int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
                                 int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
@@ -370,10 +372,10 @@ public class AdminManager {
                     }
 
                     //예약 중, 임시 패쇄 중, 임시 폐쇄 예정인 보관함일 경우
-                    for (int i = 0; i < l.LockerList.size(); i++) {
-                        if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
-                            if (parseInt(l.LockerList.get(i).use) == 2 || parseInt(l.LockerList.get(i).use) == 3 ||
-                                parseInt(l.LockerList.get(i).use) == 4) {
+                    for (int i = 0; i < LockerManager.LockerList.size(); i++) {
+                        if (parseInt(LockerManager.LockerList.get(i).locknum) == closureLockerNum) {
+                            if (parseInt(LockerManager.LockerList.get(i).use) == 2 || parseInt(LockerManager.LockerList.get(i).use) == 3 ||
+                                parseInt(LockerManager.LockerList.get(i).use) == 4) {
                                 throw new IllegalAccessException();
                             }
                         }
@@ -427,11 +429,11 @@ public class AdminManager {
 
             if (flow == 4) {
                 //Locker 설정
-                for (int i = 0; i < l.LockerList.size(); i++) {
-                    if (parseInt(l.LockerList.get(i).locknum) == closureLockerNum) {
-                        l.LockerList.get(i).use = "3";
-                        l.LockerList.get(i).closeddatestart = String.valueOf(closurestartdate);
-                        l.LockerList.get(i).closeddatefinish = String.valueOf(closureenddate);
+                for (int i = 0; i < LockerManager.LockerList.size(); i++) {
+                    if (parseInt(LockerManager.LockerList.get(i).locknum) == closureLockerNum) {
+                        LockerManager.LockerList.get(i).use = "3";
+                        LockerManager.LockerList.get(i).closeddatestart = String.valueOf(closurestartdate);
+                        LockerManager.LockerList.get(i).closeddatefinish = String.valueOf(closureenddate);
                     }
                 }
 
@@ -545,8 +547,8 @@ public class AdminManager {
     }
 
     public void timediffUpdate(Locker lc) {
-        Date currentTime = l.StringToDate(Main.currentTimeString);
-        Date startTime = l.StringToDate(lc.date);
+        Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+        Date startTime = LockerManager.StringToDate(lc.date);
 
         long timeDiffMillis = currentTime.getTime() - startTime.getTime();
         int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
@@ -560,7 +562,7 @@ public class AdminManager {
         System.out.println("---------------------- 보관함 목록 ----------------------");
         int timeDiff = 0;
         String iscanforce = "강제수거 불가능";
-        for (Locker lc : l.LockerList) {
+        for (Locker lc : LockerManager.LockerList) {
             String size = "";
             iscanforce = "강제수거 불가능";
             if (lc.locksize.equals("0"))
@@ -578,7 +580,7 @@ public class AdminManager {
                     lc.iscanFp = true;
                 }
                 System.out.println(lc.locknum + "번 / " + size + " / " + lc.date + " / " + Math.abs(lc.timediffMinutes / 60) + "시간"
-                                   + Integer.toString((int) Math.abs(lc.timediffMinutes) % 60) + "분째 사용중 / " + iscanforce);
+                                   + (int) Math.abs(lc.timediffMinutes) % 60 + "분째 사용중 / " + iscanforce);
             } else {
                 System.out.println(lc.locknum + "번 / " + size + " / - / " + iscanforce);
 
@@ -833,7 +835,7 @@ public class AdminManager {
                              "\n" +
                              "*맞다면 Y또는 y를 입력해주세요.\n" +
                              "------------------------------------------\n" +
-                             ">>\s");
+                             ">> ");
             String yn = String.valueOf(sc.next());
             sc.nextLine();
 
