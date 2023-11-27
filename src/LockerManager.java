@@ -848,7 +848,6 @@ public class LockerManager {
                 {
                     // 임시 폐쇄 중인 보관함의 임시 폐쇄 종료 날짜 확인
                     String tmpEnd = temp[6].trim();
-                    System.out.println(tmpEnd);
                     Date closureEndTime = StringToDate(tmpEnd);
 
                     // 임시 폐쇄 종료 날짜가 새로 입력 받은 날짜보다 이후일 경우
@@ -872,9 +871,7 @@ public class LockerManager {
                 {
                     // 임시 폐쇄 예정인 보관함의 임시 폐쇄 시작 & 종료 날짜 확인
                     String tmpStart = temp[5].trim();
-                    System.out.println(tmpStart);
                     String tmpEnd = temp[6].trim();
-                    System.out.println(tmpEnd);
 
                     Date closureStartTime = StringToDate(tmpStart);
                     Date closureEndTime = StringToDate(tmpEnd);
