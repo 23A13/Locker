@@ -507,7 +507,7 @@ public class LockerManager {
                 boolean bookingcheck = false;
                 for (int i = 0; i < LockerList.size(); i++) {
                     if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
-                        if (parseInt(LockerList.get(i).use) != 0) {
+                        if (parseInt(LockerList.get(i).use) == 1 || parseInt(LockerList.get(i).use) == 2) {
                             throw new IllegalAccessException();
                         }
                     }
@@ -518,8 +518,15 @@ public class LockerManager {
                         //임시 폐쇄 중
                         if (parseInt(LockerList.get(i).use) != 3)
                             throw new IllegalStateException();
-
-                            if (parseInt(LockerList.get(i).use) != 0) {
+                        
+                        //임시폐쇄 예정
+                        if (parseInt(LockerList.get(i).use) != 4) {
+                            Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                            Date startTime = LockerManager.StringToDate(LockerManager.LockerList.get(i).closeddatestart);
+                            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+                            
+                            if(timeDiffMinutes < 12 *60) //12시간보다 작을때 예약불가
                                 throw new IllegalStateException();
                         }
                     }
