@@ -496,7 +496,6 @@ public class LockerManager {
                     count++;
                     Menu_Mem();
                     break;
-
                 }
 
                 //형식 예외 처리(00, 01, 02 등으로 입력)
@@ -725,8 +724,21 @@ public class LockerManager {
                     //선택한 보관함과 번호가 같은 보관함 찾기
                     if (locker.getLocknum().equals(LockerNum)) {
                         //이용중 or 예약중인 보관함이라면 catch
-                        if (!locker.getUse().equals("0"))
+                        if (!locker.getUse().equals("0")) {
+                            System.out.println("이용 중인 보관함입니다. 다른 보관함을 선택해주세요.");
                             throw new IllegalAccessException();
+                        }
+
+                        //임시폐쇄중 or 임시폐쇄 예정 이라면 catch
+                        Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                        Date startTime = LockerManager.StringToDate(locker.closeddatestart);
+                        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+
+                        if(timeDiffMinutes < 10 *60) {//10시간보다 작을때 예약불가
+                            System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.");
+                            throw new IllegalStateException();
+                        }
                     }
                 }
 
@@ -734,13 +746,11 @@ public class LockerManager {
                 flow = 2;
                 break;
 
-
             } catch (IllegalArgumentException e) { //나머지 입력 예외 처리
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             } catch (IllegalAccessException e) {
-                System.out.println("이용 중인 보관함입니다. 다른 보관함을 선택해주세요.\n\n");
+                System.out.println();
             }
-
         }
 
         if (flow == 2) {
