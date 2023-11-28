@@ -281,8 +281,6 @@ public class AdminManager {
         String temporary_closure_prompt2 = """
                  --------------------------------------------------------------
                  임시폐쇄를 종료할 날짜와 시각을 12자리의 수로 공백 없이 입력해주세요. (ex. 202309151730)
-                                 
-                 * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.
                  --------------------------------------------------------------
                 """;
         String temporary_closure_select_prompt = """
@@ -428,28 +426,50 @@ public class AdminManager {
                         *맞다면 Y또는 y를 입력해주세요.
                         ------------------------------------------
                         """;
-                while (true) {
 
-                    System.out.println();
-                    System.out.print(temporary_clousure_check_prompt);
-                    System.out.print(">>");
 
-                    String checking;
-                    checking = String.valueOf(sc.next());
-                    sc.nextLine();
+                System.out.print(temporary_clousure_check_prompt);
+                System.out.print(">>");
 
-                    try {
-                        if (!(checking.equals("Y") || checking.equals("y")))
-                            throw new IllegalArgumentException();
+                String checking;
+                checking = String.valueOf(sc.next());
+                sc.nextLine();
 
-                        //아무 문제 없다면 결제 알림 창으로 이동
-                        flow = 4;
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("올바른 입력이 아닙니다.\n");
-                    }
+                try {
+                    if (!(checking.equals("Y") || checking.equals("y")))
+                        throw new IllegalArgumentException();
 
+                    //아무 문제 없다면 결제 알림 창으로 이동
+                    flow = 4;
+                } catch (Exception e) {
+                    System.out.println("올바른 입력이 아닙니다.\n");
+                    //아니라면 다시 보관함 선택 창으로 이동
+                    flow = 2;
                 }
+//
+//
+//                while (true) {
+//
+//                    System.out.println();
+//                    System.out.print(temporary_clousure_check_prompt);
+//                    System.out.print(">>");
+//
+//                    String checking;
+//                    checking = String.valueOf(sc.next());
+//                    sc.nextLine();
+//
+//                    try {
+//                        if (!(checking.equals("Y") || checking.equals("y")))
+//                            throw new IllegalArgumentException();
+//
+//                        //아무 문제 없다면 결제 알림 창으로 이동
+//                        flow = 4;
+//                        break;
+//                    } catch (Exception e) {
+//                        System.out.println("올바른 입력이 아닙니다.\n");
+//                    }
+//
+//                }
             }
 
             if (flow == 4) {
