@@ -269,6 +269,8 @@ public class LockerManager {
 
         //보관함 번호 입력받기
         int LockerNumber = 0;
+        Locker targetLocker = null;
+        int target = 0;
         while (true) {
             //notice 2 출력
             System.out.println(notice2);
@@ -293,27 +295,40 @@ public class LockerManager {
                 if (LockerNum.length() != 2)
                     throw new IllegalArgumentException();
 
-                //범위 예외 처리(01~16)
+                //범위 예외 처리(01~99)
                 LockerNumber = Integer.parseInt(LockerNum);
-                if (LockerNumber < 1 || LockerNumber > 16)
+                if (LockerNumber < 1 || LockerNumber > 99)
                     throw new IllegalArgumentException();
 
-                //사용중이지 않은 보관함을 선택했을 때 처리
+                //LockerList에서 보관함 찾기
+                int i=0;
                 for (Locker l : LockerList) {
                     if (Integer.parseInt(l.locknum) == LockerNumber) {
-                        if (Integer.parseInt(l.use) != 1)
-                            throw new IllegalAccessException();
+                        targetLocker = l;
+                        target = i;
                     }
+                    i++;
                 }
 
+                //존재하지 않는 보관함의 번호를 입력한 경우 처리
+                if (targetLocker == null) {
+                    System.out.println("해당 번호의 보관함이 존재하지 않습니다.\n");
+                    throw new IllegalAccessException();
+                }
+
+                //사용중이지 않은 보관함을 선택했을 때 처리
+                if (Integer.parseInt(targetLocker.use) != 1) {
+                    System.out.println("이용 중이지 않은 보관함입니다.");
+                    System.out.println("보관함 번호를 확인해주세요.\n");
+                    throw new IllegalAccessException();
+                }
                 break;
 
             } catch (IllegalArgumentException e) { //나머지 입력 예외 처리
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
 
             } catch (IllegalAccessException e) {
-                System.out.println("이용 중이지 않은 보관함입니다.");
-                System.out.println("보관함 번호를 확인해주세요.\n");
+
             }
 
         }
@@ -323,15 +338,6 @@ public class LockerManager {
 
 
         //해당 번호(LockerNum)의 보관함 정보 찾기
-        //LockerList에서 찾기
-        int target = 0;
-        for (int i = 0; i < LockerList.size(); i++) {
-            if (LockerNumber == Integer.parseInt(LockerList.get(i).locknum)) { //보관함 번호가 맞으면
-                target = i;
-                //test확인용출력-나중에삭제
-                //System.out.println("LockerList에서 찾기 성공 "+LockerList.get(target).locknum);
-            }
-        }
 
         //mem과 nonmem에서 찾기 (회원<User> 정보 저장구조)
         String targetKey = null;
