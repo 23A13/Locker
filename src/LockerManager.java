@@ -941,7 +941,7 @@ public class LockerManager {
 
                 // 날짜만 가져와 비교
                 Date lockerDate;
-                String dateStr = temp[4];
+                String dateStr = temp[3];
                 String[] dateStrTemp = new String[5];
                 int num = 0;
 
