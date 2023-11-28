@@ -527,7 +527,7 @@ public class LockerManager {
                         if (parseInt(LockerList.get(i).use) == 3) {
                             Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
                             Date startTime = LockerManager.StringToDate(LockerManager.LockerList.get(i).closeddatestart);
-                            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                            long timeDiffMillis = startTime.getTime() - currentTime.getTime();
                             int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
 
                             if(timeDiffMinutes < 12 *60) //12시간보다 작을때 예약불가
