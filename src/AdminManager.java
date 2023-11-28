@@ -444,7 +444,8 @@ public class AdminManager {
                 } catch (Exception e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
                     //아니라면 다시 보관함 선택 창으로 이동
-                    flow = 2;
+                    temporary_closure();
+                    return;
                 }
 //
 //
