@@ -49,6 +49,7 @@ public class AdminManager {
         if (count == 0)
             l.LockerFileInput();
         count++;
+        LockerManager.Icount++; //@
 
         String menu = """
                 ——MENU——\s
@@ -144,7 +145,6 @@ public class AdminManager {
 
                 //Q,q 처리
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
-                    count++; //@지은 이거 무한안걸리게 하는거였는데 어떤 원리인지 설명듣고 수정해야할듯
                     menu();
                     return;
                 }
@@ -220,7 +220,6 @@ public class AdminManager {
 
         if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y"))) {
             System.out.println("강제수거를 취소하셨습니다. \n");
-            count++; //@
             //menu3으로 돌아감
         } else { //Y나 y를 입력한경우
             //mem과 nonmem에서 해당 보관함 찾기 (회원<User> 정보 저장구조)
@@ -312,7 +311,6 @@ public class AdminManager {
 
                 //Q,q 처리
                 if (Objects.equals(strclosurestartdate, "Q") || Objects.equals(strclosurestartdate, "q")) {
-                    count++; //@
                     menu();
                     break;
                 }
@@ -620,7 +618,7 @@ public class AdminManager {
             else if (lc.locksize.equals("2"))
                 size = "L";
 
-            if (!lc.date.equals("-")) { //date가 비어있지 않으면 {use가 사용중(1)이거나 임시폐쇄예정(3)일때만} @수정필요
+            if (!lc.date.equals("-")) { //date가 비어있지 않으면 {use가 사용중(1)이거나 임시폐쇄예정(3)일때만}
                 timediffUpdate(lc);
 
                 if (lc.timediffMinutes / 60 > 10) {
@@ -676,7 +674,6 @@ public class AdminManager {
                 //Q 입력
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //menu3으로 복귀
-                    count++; //@
                     menu();
                     break;
                 }
@@ -803,7 +800,6 @@ public class AdminManager {
                 //Q 입력
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //menu3으로 복귀
-                    count++; //@
                     menu();
                     break;
                 }
@@ -1009,7 +1005,6 @@ public class AdminManager {
         }
 
         if(flag==1){//뒤로 돌아가기(Q 혹은 q)입력
-            count++; //@
             menu();
         }
 
@@ -1101,7 +1096,6 @@ public class AdminManager {
                 ExitWrite();//종료
             }
             else{//다시 menu3으로 돌아감
-                count++; //@
                 menu();
             }
         }
