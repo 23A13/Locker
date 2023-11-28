@@ -696,11 +696,11 @@ public class LockerManager {
                     //수정
                     //회원 유무에 따라 돌아갈 메뉴 결정
                     if (isLogin) {
-                        System.out.println("\n\nmenu2.1로 돌아가기\n");
+                        //System.out.println("\n\nmenu2.1로 돌아가기\n");
                         count++;
                         Menu_Mem();
                     } else {
-                        System.out.println("\n\nmenu2.2로 돌아가기\n");
+                        //System.out.println("\n\nmenu2.2로 돌아가기\n");
                         count++;
                         Menu_Nonmem();
                     }
