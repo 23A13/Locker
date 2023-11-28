@@ -520,11 +520,11 @@ public class LockerManager {
                 for (int i = 0; i < LockerList.size(); i++) {
                     if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
                         //임시 폐쇄 중
-                        if (parseInt(LockerList.get(i).use) == 3)
+                        if (parseInt(LockerList.get(i).use) == 4)
                             throw new IllegalStateException();
 
                         //임시폐쇄 예정
-                        if (parseInt(LockerList.get(i).use) == 4) {
+                        if (parseInt(LockerList.get(i).use) == 3) {
                             Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
                             Date startTime = LockerManager.StringToDate(LockerManager.LockerList.get(i).closeddatestart);
                             long timeDiffMillis = currentTime.getTime() - startTime.getTime();
