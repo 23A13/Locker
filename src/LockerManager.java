@@ -510,11 +510,31 @@ public class LockerManager {
                 boolean bookingcheck = false;
                 for (int i = 0; i < LockerList.size(); i++) {
                     if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
-                        if (parseInt(LockerList.get(i).use) != 0) {
+                        if (parseInt(LockerList.get(i).use) == 1 || parseInt(LockerList.get(i).use) == 2) {
                             throw new IllegalAccessException();
                         }
                     }
                 }
+                //임시폐쇄
+                for (int i = 0; i < LockerList.size(); i++) {
+                    if (parseInt(LockerList.get(i).locknum) == LockerNumber) {
+                        //임시 폐쇄 중
+                        if (parseInt(LockerList.get(i).use) == 3)
+                            throw new IllegalStateException();
+
+                        //임시폐쇄 예정
+                        if (parseInt(LockerList.get(i).use) == 4) {
+                            Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                            Date startTime = LockerManager.StringToDate(LockerManager.LockerList.get(i).closeddatestart);
+                            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+
+                            if(timeDiffMinutes < 12 *60) //12시간보다 작을때 예약불가
+                                throw new IllegalStateException();
+                        }
+                    }
+                }
+
 
                 //아무 문제 없다면 비민번호 창으로 이동
                 flow = 2;
@@ -525,8 +545,9 @@ public class LockerManager {
 
             } catch (IllegalAccessException e) {
                 System.out.println("이용 중인 보관함입니다.\n");
+            } catch (IllegalStateException e) {
+                System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.\n");
             }
-
         }
         //비밀번호 입력
         String LockerPwd = " ";
