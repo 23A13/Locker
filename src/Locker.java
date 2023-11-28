@@ -90,65 +90,57 @@ public class Locker {
     }
 
     public static void print() {
-        System.out.println("---------------------------------------------------------------------------------------");
-        System.out.println("| 01        | 02        | 03        | 04        | 13               | 14               |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|-----------------------------------------------|                  |                  |");
-        System.out.println("| 05        | 06        | 07        | 08        |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|-----------|-----------|-----------|-----------|------------------|------------------|");
-        System.out.println("| 09        | 10        | 11        | 12        | 15               | 16               |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("|           |           |           |           |                  |                  |");
-        System.out.println("---------------------------------------------------------------------------------------");
 
-        String fileName = "../Locker/User.txt";
+
+        String fileName = "../Locker/Locker.txt";
+        String print = "";
+        String close = "";
 
         try {
 
             //수정
-            String filePath = "../Locker/User.txt";
+            String filePath = "../Locker/Locker.txt";
             FileReader fileReader = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-//            System.out.print("이용중인 보관함 번호:");
-
 
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
             String line;
+            close += "임시폐쇄 예정: ";
 
-            boolean found = false;
 
             while ((line = bufferedReader.readLine()) != null) {
+
+
                 String[] parts = line.split(" ");
-                if (parts[0].equals("1")) {
-                    if (!parts[3].equals("-")) {
-                        String lockerNumber = parts[3];
-                        System.out.println("이용중인 보관함 번호: " + lockerNumber);
-                        found = true;
-                    }
-                } else if (parts[0].equals("0")) {
-                    String lockerNumber = parts[1];
-                    System.out.println("이용중인 보관함 번호: " + lockerNumber);
-                    found = true;
+
+                print += "<"+parts[0]+"> ";
+
+                if(parts[1].equals("0")) print += "S ";
+                else if(parts[1].equals("1")) print += "M ";
+                else print += "L ";
+
+                if(parts[2].equals("0")) print+= "미사용 ";
+                else if(parts[2].equals("1")) print+= "사용중 ";
+                else if(parts[2].equals("2")) print+= "예약중 ";
+                else if(parts[2].equals("3")){
+                    print+= "미사용 ";
+                    close += "<"+parts[0]+"> ";
+                    close += "("+parts[5]+" ~ "+parts[6]+")\n";
                 }
+                else if(parts[2].equals("4")){
+                    print += "임시폐쇄중 ";
+                    print += "("+parts[5]+" ~ "+parts[6]+")";
+                }
+
+
+                print += "\n";
             }
+
+
+
             bufferedReader.close();
 
-            if (!found) {
-                System.out.print("이용 중인 보관함이 존재하지 않습니다.");
-            }
         } catch (FileNotFoundException e) {
             System.err.println("파일을 찾을 수 없습니다: " + e.getMessage());
         } catch (IOException e) {
@@ -156,6 +148,14 @@ public class Locker {
         } catch (Exception e) {
             System.err.println("예외가 발생했습니다: " + e.getMessage());
         }
+
+        print += """
+                ————————————————————————————————————————
+                *임시폐쇄 예정 기간 10시간 이전부터는 보관이 불가합니다.
+                """;
+
+        print += close;
+        System.out.println(print);
         System.out.println();
     }
 }
