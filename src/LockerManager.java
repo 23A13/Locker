@@ -732,14 +732,16 @@ public class LockerManager {
                         }
 
                         //임시폐쇄중 or 임시폐쇄 예정 이라면 catch
-                        Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
-                        Date startTime = LockerManager.StringToDate(locker.closeddatestart);
-                        long timeDiffMillis = currentTime.getTime() - startTime.getTime();
-                        int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
+                        if(!locker.closeddatestart.equals("-")) { //@
+                            Date currentTime = LockerManager.StringToDate(Main.currentTimeString);
+                            Date startTime = LockerManager.StringToDate(locker.closeddatestart);
+                            long timeDiffMillis = currentTime.getTime() - startTime.getTime();
+                            int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
 
-                        if(timeDiffMinutes < 10 *60) {//10시간보다 작을때 예약불가
-                            System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.");
-                            throw new IllegalStateException();
+                            if (timeDiffMinutes < 10 * 60) {//10시간보다 작을때 예약불가
+                                System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.");
+                                throw new IllegalStateException();
+                            }
                         }
                     }
                 }
