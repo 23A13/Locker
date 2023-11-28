@@ -220,6 +220,7 @@ public class AdminManager {
 
         if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y"))) {
             System.out.println("강제수거를 취소하셨습니다. \n");
+            count++; //@
             //menu3으로 돌아감
         } else { //Y나 y를 입력한경우
             //mem과 nonmem에서 해당 보관함 찾기 (회원<User> 정보 저장구조)
@@ -311,6 +312,7 @@ public class AdminManager {
 
                 //Q,q 처리
                 if (Objects.equals(strclosurestartdate, "Q") || Objects.equals(strclosurestartdate, "q")) {
+                    count++; //@
                     menu();
                     break;
                 }
@@ -674,6 +676,7 @@ public class AdminManager {
                 //Q 입력
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //menu3으로 복귀
+                    count++; //@
                     menu();
                     break;
                 }
@@ -800,6 +803,7 @@ public class AdminManager {
                 //Q 입력
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
                     //menu3으로 복귀
+                    count++; //@
                     menu();
                     break;
                 }
@@ -1005,6 +1009,7 @@ public class AdminManager {
         }
 
         if(flag==1){//뒤로 돌아가기(Q 혹은 q)입력
+            count++; //@
             menu();
         }
 
@@ -1096,6 +1101,7 @@ public class AdminManager {
                 ExitWrite();//종료
             }
             else{//다시 menu3으로 돌아감
+                count++; //@
                 menu();
             }
         }

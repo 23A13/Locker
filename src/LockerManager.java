@@ -130,6 +130,7 @@ public class LockerManager {
         //LockerFileInput();
         if (count == 0) LockerFileInput();
 
+
         String menu = """
                 --MENU--\s
                 1. 보관하기\s
@@ -196,6 +197,7 @@ public class LockerManager {
     public void Menu_Nonmem() {
         if (count == 0) LockerFileInput();
         //LockerFileInput();
+        count++;
 
         String menu = """
                 --MENU--\s
