@@ -20,6 +20,7 @@ public class LockerManager {
     String loguser;
     User memUser; //유저 아이디로 해당되는 user 찾기
     static int count = 0;
+    static int Icount = 0;
 
     //Constructor
     public LockerManager() {
@@ -69,16 +70,18 @@ public class LockerManager {
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput() {
-        String filename = "../Locker/Locker.txt";
-        try (Scanner scan = new Scanner(new File(filename))) {
-            while (scan.hasNextLine()) {
-                String str = scan.nextLine();
-                String[] temp = str.split(" ");
-                LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()
-                , temp[5].trim(), temp[6].trim()));//최초로 저장구조에 locker정보 저장
+        if(Icount == 0) {
+            String filename = "../Locker/Locker.txt";
+            try (Scanner scan = new Scanner(new File(filename))) {
+                while (scan.hasNextLine()) {
+                    String str = scan.nextLine();
+                    String[] temp = str.split(" ");
+                    LockerList.add(new Locker(temp[0].trim(), temp[1].trim(), temp[2].trim(), temp[3].trim(), temp[4].trim()
+                            , temp[5].trim(), temp[6].trim()));//최초로 저장구조에 locker정보 저장
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("파일 입력이 잘못되었습니다.");
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("파일 입력이 잘못되었습니다.");
         }
     }
 
@@ -129,7 +132,8 @@ public class LockerManager {
 
         //LockerFileInput();
         if (count == 0) LockerFileInput();
-
+        count++;
+        Icount++; //@
 
         String menu = """
                 --MENU--\s
@@ -197,7 +201,8 @@ public class LockerManager {
     public void Menu_Nonmem() {
         if (count == 0) LockerFileInput();
         //LockerFileInput();
-        count++;
+        count++; //@
+        Icount++; //@
 
         String menu = """
                 --MENU--\s
@@ -277,7 +282,7 @@ public class LockerManager {
 
                 //Q,q 처리
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
-                    count++;
+//                    count++;
                     if (isLogin) Menu_Mem();
                     else Menu_Nonmem();
                     //ExitWrite();
@@ -365,7 +370,7 @@ public class LockerManager {
         String pwd_prompt2 = "사용하신 보관함의 비밀번호(PIN) 네자리를 입력하세요.";
         boolean pwdCheck2 = pwdCheck(pwd_prompt2, isMemLocker, targetKey, 0);
         if (!pwdCheck2) { //보관함 비밀번호 입력 3회 실패시
-            count++;
+//            count++;
             if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
             //System.exit(0);
@@ -452,7 +457,7 @@ public class LockerManager {
         //기존 예약 내역 확인
         if (!u.memMap.get(loguser).locknum.equals("-")) {
             System.out.println("이미 예약 내역이 존재합니다.\n\n");
-            count++;
+//            count++;
             Menu_Mem();
             //System.exit(0);
         }
@@ -490,7 +495,7 @@ public class LockerManager {
             try {
                 //Q,q 처리
                 if (Objects.equals(LockerNum, "Q") || Objects.equals(LockerNum, "q")) {
-                    count++;
+//                    count++;
                     Menu_Mem();
                     break;
                 }
@@ -627,7 +632,7 @@ public class LockerManager {
                 u.memMap.get(loguser).lockPW = LockerPwd;
                 ExitWrite();
             } else {
-                count++;
+//                count++;
                 Menu_Mem();
                 //System.exit(0);
             }
@@ -694,11 +699,11 @@ public class LockerManager {
                     //회원 유무에 따라 돌아갈 메뉴 결정
                     if (isLogin) {
                         //System.out.println("\n\nmenu2.1로 돌아가기\n");
-                        count++;
+//                        count++;
                         Menu_Mem();
                     } else {
                         //System.out.println("\n\nmenu2.2로 돌아가기\n");
-                        count++;
+//                        count++;
                         Menu_Nonmem();
                     }
                     break;
@@ -800,12 +805,12 @@ public class LockerManager {
                         //수정
                         //회원 유무에 따라 돌아갈 메뉴 결정
                         if (isLogin) {
-                            System.out.println("\n\nmenu2.1로 돌아가기\n");
-                            count++;
+//                            System.out.println("\n\nmenu2.1로 돌아가기\n");
+//                            count++;
                             Menu_Mem();
                         } else {
-                            System.out.println("\n\nmenu2.2로 돌아가기\n");
-                            count++;
+//                            System.out.println("\n\nmenu2.2로 돌아가기\n");
+//                            count++;
                             Menu_Nonmem();
                         }
                         break;
@@ -1049,7 +1054,7 @@ public class LockerManager {
             System.out.println("프로그램을 종료합니다.");
             System.exit(0);
         } else {
-            count++;
+//            count++;
             if (isLogin) Menu_Mem(); //이전 메뉴로 돌아가기
             else Menu_Nonmem();
             System.exit(0);
@@ -1167,7 +1172,7 @@ public class LockerManager {
 
         if (u_locknum.equals("-")) {//예약한 보관함이 없다면
             System.out.println("예약 내역이 존재하지 않습니다.");// 출력 후 함수 종료-->변경: 이전 메뉴로 돌아가기
-            count++;
+//            count++;
             Menu_Mem();
         } else {//예약된 내역이 있다면 함수 계속 진행
 
@@ -1182,7 +1187,7 @@ public class LockerManager {
 
             if (temL.confirmbook.equals("1")) { // 이미 확정된 예약건 처리+보관함 이미 이용중
                 System.out.println("이미 예약이 확정되었거나 이용중인 보관함이 존재합니다.");  // 출력 후 함수 종료
-                count++;
+//                count++;
                 Menu_Mem();
 
             } else {
@@ -1229,7 +1234,7 @@ public class LockerManager {
                 }
                 int flag_ = 5;//flag_ !=1 이면 올바르지 않은 입력
                 if (flag == 1) {//이전 메뉴로 돌아감
-                    count++;
+//                    count++;
                     Menu_Mem();
                 }
                 if (flag == 2) {//예약확정하기->종료
