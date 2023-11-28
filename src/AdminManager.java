@@ -804,17 +804,15 @@ public class AdminManager {
                         throw new IllegalAccessException();
                     }
                 }
-
                 flow = 2; // 보관함 크기 입력 프롬프트로 넘어가기
-                break;
+
             } catch (IllegalArgumentException e) {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             } catch (IllegalAccessException e) {
             }
-        }
 
-        if (flow == 2) {
-            while (true) {
+
+            if (flow == 2) {
                 System.out.print("""
                         추가할 보관함의 크기를 입력해주세요.
                         >>\s""");
@@ -832,20 +830,27 @@ public class AdminManager {
                         throw new IllegalArgumentException();
                     }
 
-                    if (Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) if (totalsize > 48) {
-                        System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
-                        throw new IllegalArgumentException();
-                    } else if (Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) if (totalsize > 47) {
-                        System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
-                        throw new IllegalArgumentException();
-                    } else if (Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l")) if (totalsize > 46) {
-                        System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
-                        throw new IllegalArgumentException();
+                    if (Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) {
+                        if (totalsize > 48) {
+                            System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
+                            throw new IllegalArgumentException();
+                        }
+                    } else if (Objects.equals(sizevalue, "M") || Objects.equals(sizevalue, "m")) {
+                        if (totalsize > 47) {
+                            System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
+                            throw new IllegalArgumentException();
+                        }
+                    } else if (Objects.equals(sizevalue, "L") || Objects.equals(sizevalue, "l")) {
+                        if (totalsize > 46) {
+                            System.out.println("용량 초과 문제로 보관함을 추가할 수 없습니다.");
+                            throw new IllegalArgumentException();
+                        }
                     }
 
                     flow = 3; //보관함 번호 크기 재확인 프롬프트로 이동
                     break;
                 } catch (IllegalArgumentException e) {
+                    System.out.println("\n");
                 }
             }
         }
