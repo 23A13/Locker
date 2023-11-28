@@ -301,7 +301,7 @@ public class LockerManager {
                 //사용중이지 않은 보관함을 선택했을 때 처리
                 for (Locker l : LockerList) {
                     if (Integer.parseInt(l.locknum) == LockerNumber) {
-                        if (Integer.parseInt(l.use) == 0)
+                        if (Integer.parseInt(l.use) != 1)
                             throw new IllegalAccessException();
                     }
                 }
