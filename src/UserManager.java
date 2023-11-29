@@ -198,7 +198,6 @@ public class UserManager {
                         menuEndFlag = signup();
                     } else if (choice.equals("2")) {
                         menuEndFlag = login();
-                        System.out.println();
 
                         if (menuEndFlag) {
                             LockerManager memLockerManager = new LockerManager(loguser.memberID);
@@ -227,12 +226,12 @@ public class UserManager {
                         // 프로그램 종료 메소드
                         menuEndFlag = programEnd();
                     } else {
-                        System.out.println("올바른 입력이 아닙니다");
+                        System.out.println("올바른 입력이 아닙니다.\n");
                     }
                 }
 
             } catch (InputMismatchException e) {
-                System.out.println("올바른 입력이 아닙니다");
+                System.out.println("올바른 입력이 아닙니다.\n");
                 scan.nextLine();
             }
         }
@@ -240,7 +239,7 @@ public class UserManager {
 
     private boolean adminLogin() {
 
-        System.out.print("비밀번호를 입력해주세요 >>");
+        System.out.print("비밀번호를 입력해주세요 >> ");
 
         String pw = scan.nextLine();
 
@@ -249,7 +248,7 @@ public class UserManager {
         if (pw.trim().equals(tmpAdmin.getPW())) {
             return true;
         } else {
-            System.out.println("비밀번호가 일치하지 않습니다.");
+            System.out.println("비밀번호가 일치하지 않습니다.\n");
             return false;
         }
 
@@ -280,16 +279,17 @@ public class UserManager {
         String id = scan.nextLine();
 
         if (id.equals("q") || id.equals("Q")) {
+            System.out.println();
             return false;
         }
 
         if (memMap.get(id) != null) {
-            System.out.println("이미 사용 중인 아이디입니다\n");
+            System.out.println("이미 사용 중인 아이디입니다.\n");
             return false;
         }
 
         if (!isNumberLetterCheck(id)) {
-            System.out.println("아이디는 영문자와 숫자만 사용 가능합니다.");
+            System.out.println("아이디는 영문자와 숫자만 사용 가능합니다.\n");
             return false;
         }
 
@@ -314,7 +314,7 @@ public class UserManager {
 
         while (!pwRe.equals(pw)) {
             System.out.println("비밀번호가 일치하지 않습니다. 다시 시도해 보세요.");
-            System.out.print("비밀번호 재확인>> ");
+            System.out.print("비밀번호 재확인 >> ");
             pwRe = scan.nextLine();
         }
 
@@ -344,7 +344,7 @@ public class UserManager {
         System.out.print("——ID 로그인——\n" +
                          "* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n" +
                          "아이디를 입력하세요.\n" +
-                         "\n아이디>>");
+                         "\n아이디 >> ");
 
         String id = scan.nextLine();
 
@@ -352,7 +352,7 @@ public class UserManager {
             return false;
         }
 
-        System.out.print("비밀번호 >>");
+        System.out.print("비밀번호 >> ");
 
         String pw = scan.nextLine();
 

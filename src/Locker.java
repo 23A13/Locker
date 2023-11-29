@@ -93,7 +93,7 @@ public class Locker {
 
 
         String fileName = "../Locker/Locker.txt";
-        String print = "";
+        String print = "————————————————보관함 목록—————————————————\n";
         String close = "";
 
         try {
@@ -156,6 +156,5 @@ public class Locker {
 
         print += close;
         System.out.println(print);
-        System.out.println();
     }
 }
