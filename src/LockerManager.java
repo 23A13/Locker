@@ -536,7 +536,7 @@ public class LockerManager {
                             long timeDiffMillis = startTime.getTime() - currentTime.getTime();
                             int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
 
-                            if(timeDiffMinutes < 12 *60) //12시간보다 작을때 예약불가
+                            if(timeDiffMinutes < 12 * 60) //12시간보다 작을때 예약불가
                                 throw new IllegalStateException();
                         }
                     }

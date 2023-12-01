@@ -387,7 +387,7 @@ public class AdminManager {
                                 int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
                                 int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
 
-                                if (timeDiffMinutes <= 6 * 60) //예약시간 + 6시간 초과했는지 확인
+                                if (timeDiffMinutes <= 10 * 60) //이용시간 10시간 초과했는지 확인
                                     throw new IllegalAccessException();
 
                             }
