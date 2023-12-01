@@ -439,7 +439,6 @@ public class AdminManager {
                     if (!(checking.equals("Y") || checking.equals("y")))
                         throw new IllegalArgumentException();
 
-                    //아무 문제 없다면 결제 알림 창으로 이동
                     flow = 4;
                 } catch (Exception e) {
                     System.out.println("올바른 입력이 아닙니다.\n");
@@ -447,30 +446,6 @@ public class AdminManager {
                     temporary_closure();
                     return;
                 }
-//
-//
-//                while (true) {
-//
-//                    System.out.println();
-//                    System.out.print(temporary_clousure_check_prompt);
-//                    System.out.print(">>");
-//
-//                    String checking;
-//                    checking = String.valueOf(sc.next());
-//                    sc.nextLine();
-//
-//                    try {
-//                        if (!(checking.equals("Y") || checking.equals("y")))
-//                            throw new IllegalArgumentException();
-//
-//                        //아무 문제 없다면 결제 알림 창으로 이동
-//                        flow = 4;
-//                        break;
-//                    } catch (Exception e) {
-//                        System.out.println("올바른 입력이 아닙니다.\n");
-//                    }
-//
-//                }
             }
 
             if (flow == 4) {
