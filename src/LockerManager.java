@@ -35,17 +35,15 @@ public class LockerManager {
 
     //안내문구들
     static String tariff = """
-            ——————요금표——————————————————————————\s
+            ———————————————요금표—————————————————\s
             기본 4시간\s
             S : 2000원 / M : 3000원 / L : 4000원\s
             시간당 추가요금\s
             회원 - S : 500원 / M : 800원 / L : 1000원\s
             비회원 - S : 1000원 / M : 1600원 / L : 2000원\s
-                        
             —————————————————————————————————————\s
-                         
                             
-            ———————————예약 서비스 이용 시 주의사항————————————
+            ———————————예약 서비스 이용 시 주의사항——————
             * 예약 시 4시간 선결제 후 보관함에 도착하여 물품을 보관해주세요.\s
             * 예약 후 2시간 내로 물품 보관이 완료되지 않을 경우, 예약이 자동 취소됩니다. (환불 불가)
             * 기본 4시간 초과 시 수거하는 시점까지 자동으로 시간 당 추가 요금이 부과됩니다. (추가요금은 요금표 참고)
@@ -56,17 +54,13 @@ public class LockerManager {
             * 이미 보관함을 이용 중이라면 예약이 불가합니다.\s
             * 이전 이용에서 회원이 기본 4시간 초과 후 수거를 했다면, 초과된 시간의 2배 동안 예약이 불가합니다.\s
             ————————————————————————————————————\s
-                            
             이용하실 보관함의 번호를 입력하세요.\s
                             
             * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\s
-            ————————————————————————————————————————\s
-                            
-                            
-            """;
+            ————————————————————————————————————————\s """;
 
     //pwd_prompt1
-    String pwd_prompt1 = "사용하실 보관함 비밀번호(PIN) 네자리를 입력하세요.\n";
+    String pwd_prompt1 = "\n사용하실 보관함 비밀번호(PIN) 네자리를 입력하세요.";
 
     //프로그램 최초 시작 시 locker 데이터 txt파일로부터 불러오는 함수
     public void LockerFileInput() {
@@ -136,14 +130,14 @@ public class LockerManager {
         Icount++; //@
 
         String menu = """
-                --MENU--\s
+                \n——MENU——\s
                 1. 보관하기\s
                 2. 수거하기\s
                 3. 예약하기\s
                 4. 예약 확인 및 예약 확정\s
                 5. 로그아웃\s
                 6. 종료
-                ---------                             
+                ———————                             
                 """;
 
         System.out.print(menu);
@@ -153,7 +147,7 @@ public class LockerManager {
         while (true) {
 
             try {
-                System.out.print(">>");
+                System.out.print(">> ");
                 number = sc.nextInt();
                 sc.nextLine();
 
@@ -205,12 +199,12 @@ public class LockerManager {
         Icount++; //@
 
         String menu = """
-                --MENU--\s
+                \n——MENU——\s
                 1. 보관하기\s
                 2. 수거하기\s
                 3. 이전 메뉴로 돌아가기\s
                 4. 종료
-                ---------
+                ———————
                 """;
 
         System.out.print(menu);
@@ -220,7 +214,7 @@ public class LockerManager {
         while (true) {
 
             try {
-                System.out.print(">>");
+                System.out.print(">> ");
                 number = sc.nextInt();
                 sc.nextLine();
 
@@ -264,8 +258,7 @@ public class LockerManager {
                 이용하신 보관함의 번호를 입력하세요. (ex: 01)\s
                 \s
                 * 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\s
-                ——————————————————————————————————————————————\s
-                """;
+                ——————————————————————————————————————————————""";
 
         //보관함 번호 입력받기
         int LockerNumber = 0;
@@ -276,7 +269,7 @@ public class LockerManager {
             System.out.println(notice2);
 
             //보관함 번호 입력받기
-            System.out.print(">>");
+            System.out.print(">> ");
 
             try {
                 String LockerNum = String.valueOf(sc.next());
@@ -495,7 +488,7 @@ public class LockerManager {
             System.out.println(tariff);
 
             //입력
-            System.out.print(">>");
+            System.out.print(">> ");
             LockerNum = String.valueOf(sc.next());
 
             try {
@@ -564,7 +557,7 @@ public class LockerManager {
                 System.out.println(pwd_prompt1);
 
                 //비밀번호 입력
-                System.out.print(">>");
+                System.out.print(">> ");
                 LockerPwd = String.valueOf(sc.next());
                 sc.nextLine();
 
@@ -665,12 +658,12 @@ public class LockerManager {
         } else
             payment = 4000;
 
-        String str = "<" + strLockerNum + ">번 보관함 선택하셨습니다. \n" +
+        String str = "\n<" + strLockerNum + ">번 보관함 선택하셨습니다. \n" +
                      "기본(4시간) 금액 <" + payment + ">원 결제하시겠습니까? (y/n) \n" +
                      "\n" +
                      "* 초과 시간에 따른 요금은 수거 시 추가결제됩니다.\n" +
                      "—————————————————————————— \n" +
-                     ">>";
+                     ">> ";
 
         return str;
     }
@@ -694,7 +687,7 @@ public class LockerManager {
             System.out.println(tariff);
 
             //보관함 번호 입력
-            System.out.print(">>");
+            System.out.print(">> ");
             LockerNum = String.valueOf(sc.next());
             sc.nextLine();
 
@@ -769,7 +762,7 @@ public class LockerManager {
                 System.out.println(pwd_prompt1);
 
                 //비밀번호 입력
-                System.out.print(">>");
+                System.out.print(">> ");
                 LockerPwd = String.valueOf(sc.next());
                 sc.nextLine();
 
@@ -1099,7 +1092,7 @@ public class LockerManager {
 
             //보관함 비밀번호 입력
             System.out.println(prompt);
-            System.out.print(">>");
+            System.out.print(">> ");
             th++;
 
             //보관함 비밀번호 입력받기
@@ -1162,9 +1155,10 @@ public class LockerManager {
         String str = "초과 시간에 따른 추가 금액 결제를 진행합니다. \n" +
                      (timeDiff - 4) * additional + "원 \n" +
                      "결제하시려면 Y 또는 y를 입력해주세요. \n" +
-                     "———————————————————————————\n";
+                     "———————————————————————————\n" +
+                     ">> ";
 
-        System.out.println(str);
+        System.out.print(str);
 
     }
 
@@ -1221,7 +1215,7 @@ public class LockerManager {
                         System.out.println("결제 금액: " + u_payment + "원"); //사용자의 사물함 객체 정보 받아야함
                         System.out.println("------------------");
                         System.out.println("1. 예약 확정");
-                        System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>>");
+                        System.out.print("\n\n* 이전 메뉴로 돌아가려면 Q 또는 q를 입력하세요.\n>> ");
                         //메인메뉴에 nextInt()하고 나서 추가하기@@@@@@@ github 에 push!!
                         str = sc.nextLine();
                         if (str.equals("Q") || str.equals("q")) {
@@ -1248,7 +1242,7 @@ public class LockerManager {
                 if (flag == 2) {//예약확정하기->종료
                     while (flag_ != 1) {
                         try {
-                            System.out.print("비밀번호(PIN) 4자리를 입력하세요.>>");
+                            System.out.print("비밀번호(PIN) 4자리를 입력하세요 >> ");
                             password = sc.nextLine();
                             if (password.equals(u_password)) {
                                 flag_ = 1;//예약확정 성공
