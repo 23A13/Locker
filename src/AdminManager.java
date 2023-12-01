@@ -594,7 +594,7 @@ public class AdminManager {
             else if (lc.locksize.equals("2"))
                 size = "L";
 
-            if (!lc.date.equals("-")) { //date가 비어있지 않으면 {use가 사용중(1)이거나 임시폐쇄예정(3)일때만}
+            if ((lc.use.equals("1")||lc.use.equals("3"))&&!lc.date.equals("-")) { //{use가 사용중(1)이거나 임시폐쇄예정(3)이고 date가 비어있지 않으면
                 timediffUpdate(lc);
 
                 if (lc.timediffMinutes / 60 > 10) {
