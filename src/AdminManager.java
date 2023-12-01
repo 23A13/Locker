@@ -458,8 +458,9 @@ public class AdminManager {
                     }
                 }
 
-                ExitWrite();
+
                 System.out.println("임시 폐쇄 기간이 설정되었습니다.");
+                ExitWrite();
                 System.out.println();
             }
 
