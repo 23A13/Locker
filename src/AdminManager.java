@@ -217,6 +217,7 @@ public class AdminManager {
         if (!(Objects.equals(yn, "Y") || Objects.equals(yn, "y"))) {
             System.out.println("강제수거를 취소하셨습니다. \n");
             //menu3으로 돌아감
+            menu();
         } else { //Y나 y를 입력한경우
             //mem과 nonmem에서 해당 보관함 찾기 (회원<User> 정보 저장구조)
             String targetKey = null;
