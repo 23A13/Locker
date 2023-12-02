@@ -574,8 +574,8 @@ public class AdminManager {
 
         long timeDiffMillis = currentTime.getTime() - startTime.getTime();
         int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
-        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
+//        int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
+//        int timeDiff = (int) Math.ceil((double) (currentTime.getTime() - startTime.getTime()) / 3600000);
 
         lc.timediffMinutes = timeDiffMinutes;
     }
