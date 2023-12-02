@@ -725,7 +725,7 @@ public class LockerManager {
                     //선택한 보관함과 번호가 같은 보관함 찾기
                     if (locker.getLocknum().equals(LockerNum)) {
                         //이용중 or 예약중인 보관함이라면 catch
-                        if (!locker.getUse().equals("0")) {
+                        if (locker.getUse().equals("1") || locker.getUse().equals("2")) {
                             System.out.println("이용 중인 보관함입니다. 다른 보관함을 선택해주세요.");
                             throw new IllegalAccessException();
                         }
