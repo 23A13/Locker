@@ -176,7 +176,7 @@ public class AdminManager {
                 }
 
                 //사용 중이지 않은 보관함의 번호를 입력한 경우
-                if (targetLocker.use.equals("0")) {
+                if (!targetLocker.use.equals("1")) {
                     System.out.println("보관 중인 물품이 없습니다. \n");
                     throw new IllegalAccessException();
                 }
