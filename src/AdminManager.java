@@ -582,7 +582,7 @@ public class AdminManager {
 
     public void printAdminLocker() {
         System.out.println("---------------------- 보관함 목록 ----------------------");
-        int timeDiff = 0;
+//        int timeDiff = 0;
         String iscanforce = "강제수거 불가능";
         for (Locker lc : LockerManager.LockerList) {
             String size = "";
