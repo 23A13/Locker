@@ -622,8 +622,6 @@ public class AdminManager {
         //입력받은 보관함 번호
         int LockerNumber = 0;   //정수형
         String LockerNum = null;    //스트링
-        //보관함 비밀번호
-        String LockerPwd = null;
         //삭제할 보관함
         Locker lc = null;
 
