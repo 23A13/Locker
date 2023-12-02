@@ -182,13 +182,9 @@ public class AdminManager {
                 }
 
                 //강제수거가 가능하지 않은 보관함을 선택했을 때 처리
-                for (Locker lc : LockerManager.LockerList) {
-                    if (parseInt(lc.locknum) == LockerNumber) {
-                        if (!lc.iscanFp) {
-                            System.out.println("강제수거를 할 수 없는 보관함입니다. 강제수거 가능여부를 확인해주세요.\n");
-                            throw new IllegalAccessException();
-                        }
-                    }
+                if(!targetLocker.iscanFp){
+                    System.out.println("강제수거를 할 수 없는 보관함입니다. 강제수거 가능여부를 확인해주세요.\n");
+                    throw new IllegalAccessException();
                 }
                 break;
             } catch (IllegalArgumentException e) { //나머지 입력 예외 처리
