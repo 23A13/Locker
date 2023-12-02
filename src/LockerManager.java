@@ -1049,7 +1049,7 @@ public class LockerManager {
 
     public void Exit(boolean isLogin) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("종료하시려면 Y 또는 y를 입력해주세요: ");
+        System.out.print("종료하시려면 Y 또는 y를 입력해주세요 >> ");
         String exit = sc.next();
         if (Objects.equals(exit, "Y") || Objects.equals(exit, "y")) {
             System.out.println("프로그램을 종료합니다.");
