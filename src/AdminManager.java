@@ -861,8 +861,6 @@ public class AdminManager {
             sc.nextLine();
 
             if (Objects.equals(yn, "Y") || Objects.equals(yn, "y")) {
-                //수정
-                //파일처리
                 //보관함 크기(0/1/2-S/M/L)
                 String sizenum = null;
                 if (Objects.equals(sizevalue, "S") || Objects.equals(sizevalue, "s")) sizenum = "0";
@@ -876,7 +874,6 @@ public class AdminManager {
                 ExitWrite();
             } else {
                 flow = 1;
-                //수정
                 AddLocker();
             }
         }
