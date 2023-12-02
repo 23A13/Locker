@@ -384,7 +384,6 @@ public class LockerManager {
         long timeDiffMillis = currentTime.getTime() - startTime.getTime();
         int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
         int timeDiffHours = (int) (Math.ceil((double) timeDiffMillis / (60 * 60 * 1000)));
-        int timeDiff = (int) (currentTime.getTime() - startTime.getTime()) / 3600000;
 
         //추가 결제가 필요한 경우 : 현재시간 = 예약시간+4시간 초과인 경우
         if (timeDiffMinutes > 4 * 60) {
