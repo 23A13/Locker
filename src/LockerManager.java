@@ -737,6 +737,7 @@ public class LockerManager {
                             int timeDiffMinutes = (int) (timeDiffMillis / (60 * 1000));
 
                             if (timeDiffMinutes < 10 * 60) {//10시간보다 작을때 예약불가
+                                System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.");
                                 throw new IllegalStateException();
                             }
                         }
@@ -751,8 +752,6 @@ public class LockerManager {
                 System.out.println("올바른 입력이 아닙니다. 다시 한 번 입력해주세요.\n");
             } catch (IllegalAccessException e) {
                 System.out.println();
-            } catch (IllegalStateException e) {
-                System.out.println("임시폐쇄 예정이거나 임시폐쇄중인 보관함이므로 사용하실 수 없습니다.\n");
             }
         }
 
