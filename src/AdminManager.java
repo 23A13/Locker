@@ -889,12 +889,13 @@ public class AdminManager {
         int flag=0; //flag==0이면 올바르지 않은 입력
 
 
-        boolean check=true;//수정가능한 보관함인지 확인-->받아오기+디폴트 false로 바꾸기!!!
-        boolean exist=false;//존재여부 확인
 
-        //boolean capacity_check=true;//사이즈 수정했을 때 용량 초과하는지 아닌지 확인--->계산하는 함수 만들기--->필요없는듯??? @삭제예정
+
+
 
         while(flag==0){
+            boolean check=true;//수정가능한 보관함인지 확인-->받아오기+디폴트 false로 바꾸기!!!
+            boolean exist=false;//존재여부 확인
             try{
                 System.out.println("---------보관함 목록---------");
 
@@ -958,7 +959,7 @@ public class AdminManager {
 
                         //Y또는 y가 아닐 시 다시 while문 돌음
                     }else if(exist==false){
-                        System.out.println("존재하지 않는 보관함입니다.");//------->기획서 수정 필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        System.out.println("존재하지 않는 보관함입니다.");
                     }else{//수정 불가능한 보관함인 경우
                         System.out.println("수정할 수 없는 보관함입니다.");
                     }
